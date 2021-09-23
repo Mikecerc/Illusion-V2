@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 const { MessageEmbed } = require("discord.js");
+const defaultResponseChannel = '701930944101089301';
 let surveyActive = false;
 let threadNameGlobal;
+let surveyResponseChannel;
 
 module.exports = {
     name: 'survey',
@@ -39,8 +41,14 @@ module.exports = {
                     required: true,
                 },
                 {
-                    name: 'channel',
+                    name: 'surveychannel',
                     description: 'optional: select a channel to post the poll in.',
+                    type: 'CHANNEL',
+                    required: false,
+                },
+                {
+                    name: 'responsechannel',
+                    description: 'optional: set a specif channel to log the responses',
                     type: 'CHANNEL',
                     required: false,
                 },
@@ -101,7 +109,7 @@ module.exports = {
                     .setDescription("Your Poll has been created");
 
                 const channelId = interaction.channel.id;
-                const channelOption = interaction.options.getChannel('channel');
+                const channelOption = interaction.options.getChannel('surveychannel');
                 const channelDefault = interaction.guild.channels.cache.find(c => c.id === channelId);
                 let channelPost;
                 if (channelOption) {
@@ -115,11 +123,19 @@ module.exports = {
                 console.log(`survey active: ${surveyActive}`);
                 interaction.followUp({ embeds: [pollConf] });
 
+                const responseChannelDefault = interaction.guild.channels.cache.find(c => c.id === defaultResponseChannel);
+                const responseChannelOption = interaction.options.getChannel('responsechannel');
+                if (responseChannelOption) {
+                    surveyResponseChannel = responseChannelOption;
+                }
+                else {
+                    surveyResponseChannel = responseChannelDefault;
+                }
+
                 const threadName = `${surveytitle}`;
-                const threadChannel = interaction.guild.channels.cache.find(c => c.id === '701930944101089301');
                 threadNameGlobal = threadName;
 
-                const threadCreate = await threadChannel.threads.create({
+                const threadCreate = await surveyResponseChannel.threads.create({
                     name: threadName,
                     autoArchiveDuration: 1440,
                     reason: 'Survey',
@@ -147,8 +163,7 @@ module.exports = {
                             .setColor('GOLD')
                             .setTitle('Sucess! the survey has ended');
 
-                            const channel = interaction.guild.channels.cache.find(c => c.id === '701930944101089301');
-                            const thread = channel.threads.cache.find(x => x.name === threadNameGlobal);
+                            const thread = surveyResponseChannel.threads.cache.find(x => x.name === threadNameGlobal);
                             await thread.setArchived(true);
 
                         surveyActive = false;
@@ -194,8 +209,7 @@ module.exports = {
                 .setDescription(`${interaction.user.username}'s repsonse to the survey:`)
                 .addFields({ name: 'Response', value: `${response}` });
 
-                const threadChannel = interaction.guild.channels.cache.find(c => c.id === '701930944101089301');
-                const surveyLog = threadChannel.threads.cache.find(t => t.name === threadNameGlobal);
+                const surveyLog = surveyResponseChannel.threads.cache.find(t => t.name === threadNameGlobal);
 
                 surveyLog.send({ embeds: [responseLog] });
                 return interaction.followUp('Your response has been saved');
