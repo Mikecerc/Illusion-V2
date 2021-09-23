@@ -6,9 +6,8 @@ module.exports = {
 
     async execute(interaction) {
         const embed = new MessageEmbed()
-        .setauthor('Illusion')
         .setColor('RANDOM')
-        .setdescription('Get Gud lol');
+        .setDescription('Get Gud lol');
 
         interaction.followUp({ embeds: [embed] });
     },
