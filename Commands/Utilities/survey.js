@@ -40,7 +40,7 @@ module.exports = {
                 },
                 {
                     name: 'channel',
-                    description: 'optional: select a channel to post the poll in',
+                    description: 'optional: select a channel to post the poll in.',
                     type: 'CHANNEL',
                     required: false,
                 },
@@ -189,7 +189,7 @@ module.exports = {
                 const responseLog = new MessageEmbed()
                 .setColor("RANDOM")
                 .setTitle("Survey Result")
-                .setAuthor(`${interaction.user.userTag}`, interaction.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
                 .setThumbnail(interaction.user.displayAvatarURL({ dynamic: false }))
                 .setDescription(`${interaction.user.username}'s repsonse to the survey:`)
                 .addFields({ name: 'Response', value: `${response}` });
