@@ -93,7 +93,7 @@ module.exports = {
                     .setAuthor(`${interaction.user.username}`, interaction.user.displayAvatarURL({ dynamic: true }))
                     .setTitle(`${surveytitle}`)
                     .setDescription(`${question}`)
-                    .setFooter(`to respond to this survey, please use /survey respond `)
+                    .setFooter(`to respond to this survey, please use /survey reply`)
                     .setThumbnail(interaction.guild.iconURL({ dynamic: false }));
 
                 const pollConf = new MessageEmbed()
