@@ -4,6 +4,11 @@ const defaultResponseChannel = '701930944101089301';
 let surveyActive = false;
 let threadNameGlobal;
 let surveyResponseChannel;
+let canRespond1;
+let canRespond2;
+let canRespond3;
+let canRespond4;
+let canRespond5;
 
 module.exports = {
     name: 'survey',
@@ -52,6 +57,40 @@ module.exports = {
                     type: 'CHANNEL',
                     required: false,
                 },
+                {
+                    name: 'restrictsurveyrole1',
+                    description: 'Optional: restrict a survey to upto 5 rolls (role 1)',
+                    type: 'ROLE',
+                    required: false,
+
+                },
+                {
+                    name: 'restrictsurveyrole2',
+                    description: 'Optional: restrict a survey to upto 5 rolls (role 2)',
+                    type: 'ROLE',
+                    required: false,
+
+                },
+                {
+                    name: 'restrictsurveyrole3',
+                    description: 'Optional: restrict a survey to upto 5 rolls (role 3)',
+                    type: 'ROLE',
+                    required: false,
+
+                },
+                {
+                    name: 'restrictsurveyrole4',
+                    description: 'Optional: restrict a survey to upto 5 rolls (role 4)',
+                    type: 'ROLE',
+                    required: false,
+                },
+                {
+                    name: 'restrictsurveyrole5',
+                    description: 'Optional: restrict a survey to upto 5 rolls (role 5)',
+                    type: 'ROLE',
+                    required: false,
+
+                },
             ],
         },
         {
@@ -92,6 +131,21 @@ module.exports = {
 
             if (!surveyActive === false) return interaction.followUp({ embeds: [surveyInSession] });
             if (canInitSrv) {
+
+                const role1 = interaction.options.getRole('restrictsurveyrole1');
+                const role2 = interaction.options.getRole('restrictsurveyrole2');
+                const role3 = interaction.options.getRole('restrictsurveyrole3');
+                const role4 = interaction.options.getRole('restrictsurveyrole4');
+                const role5 = interaction.options.getRole('restrictsurveyrole5');
+
+                if (role1) {canRespond1 = role1.id;}
+                if (role2) {canRespond2 = role2.id;}
+                if (role3) {canRespond3 = role3.id;}
+                if (role4) {canRespond4 = role4.id;}
+                if (role5) {canRespond5 = role5.id;}
+                if (interaction.member.roles.cache.has(role1)) {
+                    console.log('ok');
+                }
 
                 const question = interaction.options.getString('question');
                 const surveytitle = interaction.options.getString('surveytitle');
@@ -163,8 +217,8 @@ module.exports = {
                             .setColor('GOLD')
                             .setTitle('Sucess! the survey has ended');
 
-                            const thread = surveyResponseChannel.threads.cache.find(x => x.name === threadNameGlobal);
-                            await thread.setArchived(true);
+                        const thread = surveyResponseChannel.threads.cache.find(x => x.name === threadNameGlobal);
+                        await thread.setArchived(true);
 
                         surveyActive = false;
                         return interaction.followUp({ embeds: [conf] });
@@ -192,27 +246,53 @@ module.exports = {
 
 
         else if (interaction.options.getSubcommand() === 'reply') {
-            const surveyNotInSession = new MessageEmbed()
-                .setColor("RED")
-                .setTitle('There was an error!')
-                .setDescription('there is no survey in session!');
+            let canRespond = false;
+            if (canRespond1 || canRespond2 || canRespond3 || canRespond4 || canRespond5) {
+                const canRepSurvey1 = interaction.member.roles.cache.some(r => r.id === canRespond1);
+                const canRepSurvey2 = interaction.member.roles.cache.some(r => r.id === canRespond2);
+                const canRepSurvey3 = interaction.member.roles.cache.some(r => r.id === canRespond3);
+                const canRepSurvey4 = interaction.member.roles.cache.some(r => r.id === canRespond4);
+                const canRepSurvey5 = interaction.member.roles.cache.some(r => r.id === canRespond5);
+                console.log(canRespond1);
+                if (canRepSurvey1 || canRepSurvey2 || canRepSurvey3 || canRepSurvey4 || canRepSurvey5) {
+                    canRespond = true;
+                }
+                else {
+                    const error = new MessageEmbed()
+                        .setColor("RED")
+                        .setTitle('Error!')
+                        .setDescription('Oh no! you cannont respond to this survey.');
+
+                    interaction.followUp({ embeds: [error] });
+                }
+            }
+            else {
+                canRespond = true;
+            }
+
+            if (canRespond == true) {
+                const surveyNotInSession = new MessageEmbed()
+                    .setColor("RED")
+                    .setTitle('There was an error!')
+                    .setDescription('there is no survey in session!');
 
                 if (!surveyActive === true) return interaction.followUp({ embeds: [surveyNotInSession] });
 
                 const response = interaction.options.getString('response');
 
                 const responseLog = new MessageEmbed()
-                .setColor("RANDOM")
-                .setTitle("Survey Result")
-                .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
-                .setThumbnail(interaction.user.displayAvatarURL({ dynamic: false }))
-                .setDescription(`${interaction.user.username}'s repsonse to the survey:`)
-                .addFields({ name: 'Response', value: `${response}` });
+                    .setColor("RANDOM")
+                    .setTitle("Survey Result")
+                    .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
+                    .setThumbnail(interaction.user.displayAvatarURL({ dynamic: false }))
+                    .setDescription(`${interaction.user.username}'s repsonse to the survey:`)
+                    .addFields({ name: 'Response', value: `${response}` });
 
                 const surveyLog = surveyResponseChannel.threads.cache.find(t => t.name === threadNameGlobal);
 
                 surveyLog.send({ embeds: [responseLog] });
                 return interaction.followUp('Your response has been saved');
+            }
         }
     },
 };
