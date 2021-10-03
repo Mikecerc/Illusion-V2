@@ -4,7 +4,7 @@ module.export = client;
 const { token } = require('./config.json');
 
 client.commands = new Collection();
-
+client.setMaxListeners(20);
 
 ['Events', 'Commands'].forEach(handler => {
 require(`./Handlers/${handler}`)(client);
