@@ -32,7 +32,7 @@ module.exports = {
                 },
                 {
                     name: 'Eric',
-                    value: 'ericy',
+                    value: 'eric',
                 },
                 {
                     name: 'Abdul',
