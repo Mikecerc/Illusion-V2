@@ -198,15 +198,13 @@ module.exports = {
               )
               .setColor("RED");
 
-            const hasPerms =
+            const canInitPoll =
               interaction.member.roles.cache.some(
-                (r) => r.name === "Moderators"
-              ) ||
-              interaction.member.roles.cache.some(
-                (r) => r.name === "Survey Creator"
-              );
+                (r) => r.id === "692799900009627759"
+              ) || interaction.member.roles.cache.some((r) => r.name === "LED");
 
-            if (!hasPerms) return interaction.followUp({ embeds: [noPerms] });
+            if (!canInitPoll)
+              return interaction.followUp({ embeds: [noPerms] });
 
             jsonReader("./json/polls.json", (err, data0) => {
               if (err) {
@@ -348,15 +346,13 @@ module.exports = {
               )
               .setColor("RED");
 
-            const hasPerms =
+            const canInitPoll =
               interaction.member.roles.cache.some(
-                (r) => r.name === "Moderators"
-              ) ||
-              interaction.member.roles.cache.some(
-                (r) => r.name === "Survey Creator"
-              );
+                (r) => r.id === "692799900009627759"
+              ) || interaction.member.roles.cache.some((r) => r.name === "LED");
 
-            if (!hasPerms) return interaction.followUp({ embeds: [noPerms] });
+            if (!canInitPoll)
+              return interaction.followUp({ embeds: [noPerms] });
 
             let iteration1 = 0;
             let answer = interaction.values[0];
@@ -372,10 +368,11 @@ module.exports = {
             }
 
             const errEmbed = new MessageEmbed()
-              .setColor('RED')
-              .setTitle('Error!')
-              .setDescription('You can no longer request this poll')
-            if (pollPlaceOnAnswerArray == undefined) return interaction.followUp({ embeds: [errEmbed] });
+              .setColor("RED")
+              .setTitle("Error!")
+              .setDescription("You can no longer request this poll");
+            if (pollPlaceOnAnswerArray == undefined)
+              return interaction.followUp({ embeds: [errEmbed] });
 
             let channelId;
             let ephemeral = true;
@@ -385,9 +382,12 @@ module.exports = {
               channelId = data[placeOnArray].displayRequest[1].displayChannelId;
             }
 
-            const channel = interaction.guild.channels.cache.find( (c) => c.id === channelId);
+            const channel = interaction.guild.channels.cache.find(
+              (c) => c.id === channelId
+            );
             if (
-              data[placeOnArray].displayRequest[2].ephemeral == null || data[placeOnArray].displayRequest[2].ephemeral == false
+              data[placeOnArray].displayRequest[2].ephemeral == null ||
+              data[placeOnArray].displayRequest[2].ephemeral == false
             ) {
               ephemeral = false;
             }
@@ -413,35 +413,41 @@ module.exports = {
               pollPlaceOnAnswerArray
             ].poll[4].possibleAnswers) {
               embed.addField(
-                `Option ${iteration2 + 1}: ${data[placeOnArray].displayRequest[3].pollData[pollPlaceOnAnswerArray].poll[4].possibleAnswers[iteration2].answerContent[0].answerText}`,
+                `Option ${iteration2 + 1}: ${
+                  data[placeOnArray].displayRequest[3].pollData[
+                    pollPlaceOnAnswerArray
+                  ].poll[4].possibleAnswers[iteration2].answerContent[0]
+                    .answerText
+                }`,
                 `Votes: ${data[placeOnArray].displayRequest[3].pollData[pollPlaceOnAnswerArray].poll[4].possibleAnswers[iteration2].answerContent[1].votes}`
               );
               iteration2++;
             }
 
-
             const successEmbed = new MessageEmbed()
-              .setColor('RANDOM')
-              .setTitle('Success!')
-              .setDescription(`The results have been posted in <#${channel.id}> `)
+              .setColor("RANDOM")
+              .setTitle("Success!")
+              .setDescription(
+                `The results have been posted in <#${channel.id}> `
+              );
 
-              interaction.followUp({embeds: [successEmbed]});
+            interaction.followUp({ embeds: [successEmbed] });
             if (ephemeral == true) {
               interaction.followUp({ embeds: [embed], ephemeral: true });
             } else {
-              channel.send({ embeds: [embed] })
+              channel.send({ embeds: [embed] });
             }
 
             let newEndRequestArray = data;
-                    newEndRequestArray.splice(placeOnArray, 1);
+            newEndRequestArray.splice(placeOnArray, 1);
 
-                    fs.writeFile(
-                      "./json/displayRequest.json",
-                      JSON.stringify(newEndRequestArray, null, 2),
-                      (err) => {
-                        if (err) console.log(err);
-                      }
-                    );
+            fs.writeFile(
+              "./json/displayRequest.json",
+              JSON.stringify(newEndRequestArray, null, 2),
+              (err) => {
+                if (err) console.log(err);
+              }
+            );
           }
         });
       }
