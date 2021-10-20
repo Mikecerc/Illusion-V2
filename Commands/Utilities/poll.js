@@ -361,6 +361,17 @@ module.exports = {
 
     // for ending poll ( very incomplete )
     if (interaction.options.getSubcommand() === "end") {
+      const noPerms = new MessageEmbed()
+      .setTitle("Error!")
+      .setDescription("Oh no! you dont have permissions to use this command.")
+      .setColor("RED");
+
+    const canInitPoll =
+      interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
+      interaction.member.roles.cache.some((r) => r.name === "LED");
+
+    if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
+
       jsonReader("./json/endPollRequest.json", (err, data) => {
         if (err) {
           console.log(err);
@@ -439,6 +450,17 @@ module.exports = {
       });
     }
     if (interaction.options.getSubcommand() === "displayresults") {
+      const noPerms = new MessageEmbed()
+      .setTitle("Error!")
+      .setDescription("Oh no! you dont have permissions to use this command.")
+      .setColor("RED");
+
+    const canInitPoll =
+      interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
+      interaction.member.roles.cache.some((r) => r.name === "LED");
+
+    if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
+    
       let resultsChannel;
       if (interaction.options.getChannel('resultschannel')) {
         resultsChannel = interaction.options.getChannel('resultschannel').id;
