@@ -3,7 +3,7 @@ module.exports = {
     async execute(interaction, client) {
         if (interaction.isCommand()) {
             // eslint-disable-next-line no-empty-function
-            await interaction.deferReply({ ephemeral: false }).catch(() => {});
+            await interaction.deferReply({ ephemeral: true }).catch(() => {});
 
             const command = client.commands.get(interaction.commandName);
 
