@@ -223,7 +223,7 @@ module.exports = {
 
       const canInitPoll =
         interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
-        interaction.member.roles.cache.some((r) => r.name === "LED");
+        interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
 
       if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
 
@@ -368,7 +368,7 @@ module.exports = {
 
     const canInitPoll =
       interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
-      interaction.member.roles.cache.some((r) => r.name === "LED");
+      interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
 
     if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
 
@@ -457,7 +457,7 @@ module.exports = {
 
     const canInitPoll =
       interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
-      interaction.member.roles.cache.some((r) => r.name === "LED");
+      interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
 
     if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
     
