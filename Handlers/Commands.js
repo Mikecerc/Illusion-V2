@@ -11,7 +11,11 @@ module.exports = (client) => {
             client.commands.set(command.name, command);
             commandsArry.push(command);
             client.on('ready', () => {
-                client.guilds.cache.get(guildId).commands.set(commandsArry);
+                let iteration = 0;
+                for (guilds in guildId) {
+                client.guilds.cache.get(guildId[iteration]).commands.set(commandsArry);
+                iteration++;
+                }
             });
         }
     }
