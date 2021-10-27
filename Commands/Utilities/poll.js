@@ -41,12 +41,6 @@ module.exports = {
           required: true,
         },
         {
-          name: "polllocation",
-          description: "What channel would you like to send the poll in?",
-          type: "CHANNEL",
-          required: false,
-        },
-        {
           name: "answer1",
           description: "answer1",
           type: "STRING",
@@ -104,6 +98,12 @@ module.exports = {
           name: "answer10",
           description: "answer10",
           type: "STRING",
+          required: false,
+        },
+        {
+          name: "polllocation",
+          description: "What channel would you like to send the poll in?",
+          type: "CHANNEL",
           required: false,
         },
         {
@@ -222,7 +222,7 @@ module.exports = {
         .setColor("RED");
 
       const canInitPoll =
-        interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
+        interaction.member.roles.cache.some((r) => r.name === "LED") ||
         interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
 
       if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
@@ -251,8 +251,6 @@ module.exports = {
         answer9,
         answer10,
       ];
-      
-      if (options.length <= 2 ) return interaction.followUp({ embeds: [minans] });
 
       let testOptions = [];
       let iteration00 = 0;
@@ -264,8 +262,9 @@ module.exports = {
         testOptions.push(options[iteration00]);
         iteration00++;
       }
-
       options = testOptions;
+      if (options.length <= 1)
+        return interaction.followUp({ embeds: [minans] });
 
       const embed = new MessageEmbed()
         .setColor("RANDOM")
@@ -298,7 +297,11 @@ module.exports = {
           .addOptions(selectOptions)
       );
 
-      pollChannelSend.send({ embeds: [embed], components: [row] });
+      let message = await pollChannelSend.send({
+        embeds: [embed],
+        components: [row],
+      });
+      let pollMessageId = message.id;
 
       jsonReader("./json/polls.json", (err, data) => {
         if (err) {
@@ -336,7 +339,10 @@ module.exports = {
             { customId: `${customId}` },
             { possibleAnswers: answersArray },
             { restrictedRoles: rolesArray },
-            { respondedUsers: [] }
+            { respondedUsers: [] },
+            { embed: embed },
+            { channelId: pollChannelSend.id },
+            { messageId: pollMessageId }
           );
 
           array.push(newPollObj);
@@ -359,23 +365,26 @@ module.exports = {
       interaction.followUp({ embeds: [confmsg] });
     }
 
-    // for ending poll ( very incomplete )
     if (interaction.options.getSubcommand() === "end") {
-      const noPerms = new MessageEmbed()
-      .setTitle("Error!")
-      .setDescription("Oh no! you dont have permissions to use this command.")
-      .setColor("RED");
-
-    const canInitPoll =
-      interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
-      interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
-
-    if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
-
       jsonReader("./json/endPollRequest.json", (err, data) => {
         if (err) {
           console.log(err);
         } else {
+          const noPerms = new MessageEmbed()
+            .setTitle("Error!")
+            .setDescription(
+              "Oh no! you dont have permissions to use this command."
+            )
+            .setColor("RED");
+
+          const canInitPoll =
+            interaction.member.roles.cache.some((r) => r.name === "LED") ||
+            interaction.member.roles.cache.some(
+              (r) => r.name === "Polls/surveys"
+            );
+
+          if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
+
           let endOptions = [];
           let endCustomId = randomId(15);
           let endRequest = data;
@@ -451,27 +460,26 @@ module.exports = {
     }
     if (interaction.options.getSubcommand() === "displayresults") {
       const noPerms = new MessageEmbed()
-      .setTitle("Error!")
-      .setDescription("Oh no! you dont have permissions to use this command.")
-      .setColor("RED");
+        .setTitle("Error!")
+        .setDescription("Oh no! you dont have permissions to use this command.")
+        .setColor("RED");
 
-    const canInitPoll =
-      interaction.member.roles.cache.some((r) => r.id === "692799900009627759") ||
-      interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
+      const canInitPoll =
+        interaction.member.roles.cache.some((r) => r.name === "LED") ||
+        interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
 
-    if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
-    
+      if (!canInitPoll) return interaction.followUp({ embeds: [noPerms] });
+
       let resultsChannel;
-      if (interaction.options.getChannel('resultschannel')) {
-        resultsChannel = interaction.options.getChannel('resultschannel').id;
+      if (interaction.options.getChannel("resultschannel")) {
+        resultsChannel = interaction.options.getChannel("resultschannel").id;
       } else {
         resultsChannel = null;
       }
 
       let ephemeralresults = false;
-      if (interaction.options.getBoolean('ephemeralresults')) {
-        ephemeralresults =
-          interaction.options.getBoolean('ephemeralresults');
+      if (interaction.options.getBoolean("ephemeralresults")) {
+        ephemeralresults = interaction.options.getBoolean("ephemeralresults");
       }
 
       const resultsEmbed = new MessageEmbed()
@@ -491,13 +499,13 @@ module.exports = {
             for (length > 10; length++; ) {
               newArry.shift();
             }
-          } else if (newArry.length <= 0 ) {
-            const noSavedErr = new MessageEmbed() 
-              .setColor('RED')
-              .setTitle('Error!')
-              .setDescription('There are no ended polls currently saved')
-            
-              return interaction.followUp({ embeds: [noSavedErr] });
+          } else if (newArry.length <= 0) {
+            const noSavedErr = new MessageEmbed()
+              .setColor("RED")
+              .setTitle("Error!")
+              .setDescription("There are no ended polls currently saved");
+
+            return interaction.followUp({ embeds: [noSavedErr] });
           }
 
           let displayOptions = [];
@@ -506,7 +514,7 @@ module.exports = {
             newArry[iteration0].poll[0].pollNumber = randomId(10);
 
             resultsEmbed.addField(
-              `Survey: ${newArry[iteration0].poll[1].title}`,
+              `Poll: ${newArry[iteration0].poll[1].title}`,
               `Question: ${newArry[iteration0].poll[2].question}`
             );
             displayOptions.push({
@@ -529,7 +537,6 @@ module.exports = {
             if (err) {
               console.log(err);
             } else {
-              
               let ephemeral =
                 interaction.options.getBoolean("ephemeralresults");
               let displayArray = data;
@@ -554,9 +561,13 @@ module.exports = {
               );
             }
           });
-          fs.writeFile('./json/endedPoll.json', JSON.stringify(newArry, null, 2), (err) => {
-            if (err) console.log(err);
-          });
+          fs.writeFile(
+            "./json/endedPoll.json",
+            JSON.stringify(newArry, null, 2),
+            (err) => {
+              if (err) console.log(err);
+            }
+          );
           return interaction.followUp({
             embeds: [resultsEmbed],
             components: [resultsRow],

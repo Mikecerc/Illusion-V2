@@ -1,6 +1,5 @@
 const fs = require("fs");
 const { MessageEmbed } = require("discord.js");
-const { channel } = require("diagnostics_channel");
 module.exports = {
   name: "interactionCreate",
   async execute(interaction) {
@@ -116,6 +115,31 @@ module.exports = {
                   .answerContent[1].votes;
               votes++;
 
+              const embed = new MessageEmbed()
+                .setColor(data[placeOnArray].poll[7].embed.color)
+                .setDescription(data[placeOnArray].poll[7].embed.description)
+                .setTitle(data[placeOnArray].poll[7].embed.title)
+                .addFields(data[placeOnArray].poll[7].embed.fields)
+                .setThumbnail(data[placeOnArray].poll[7].embed.thumbnail.url)
+                .setAuthor(
+                  data[placeOnArray].poll[7].embed.author.name,
+                  data[placeOnArray].poll[7].embed.author.icon_url
+                );
+              let totalVotes = 0;
+              let iteration5 = 0;
+              for (answers in data[placeOnArray].poll[4].possibleAnswers) {
+                totalVotes =
+                  totalVotes +
+                  data[placeOnArray].poll[4].possibleAnswers[iteration5]
+                    .answerContent[1].votes;
+                iteration5++;
+              }
+              totalVotes++;
+              embed.setFooter(
+                `please select an option from the dropdown below\ntotal responses: ${totalVotes}`
+              );
+              interaction.message.edit({ embeds: [embed] });
+
               array[placeOnArray].poll[4].possibleAnswers[
                 answerPlaceOnArray
               ].answerContent.splice(1, 1, { votes: votes });
@@ -199,9 +223,10 @@ module.exports = {
               .setColor("RED");
 
             const canInitPoll =
+              interaction.member.roles.cache.some((r) => r.name === "LED") ||
               interaction.member.roles.cache.some(
-                (r) => r.id === "692799900009627759"
-              ) || interaction.member.roles.cache.some((r) => r.name === "LED");
+                (r) => r.name === "Polls/surveys"
+              );
 
             if (!canInitPoll)
               return interaction.followUp({ embeds: [noPerms] });
@@ -240,10 +265,24 @@ module.exports = {
                   iteration1++;
                 }
 
-                const usedErr = new MessageEmbed()
+                const ended = new MessageEmbed()
                   .setColor("RED")
-                  .setTitle("Error!")
-                  .setDescription("This Poll has already ended");
+                  .setTitle("This poll has ended")
+                  .setDescription("use /poll displayresults to show results")
+                  .setThumbnail(
+                    data0[pollPlaceOnArray].poll[7].embed.thumbnail.url
+                  )
+                  .setAuthor(
+                    data0[pollPlaceOnArray].poll[7].embed.author.name,
+                    data0[pollPlaceOnArray].poll[7].embed.author.icon_url
+                  );
+
+                const channelToUpdate = interaction.guild.channels.cache.find(
+                  (c) => c.id === data0[pollPlaceOnArray].poll[8].channelId
+                );
+                const messageToUpdate = channelToUpdate.messages
+                  .fetch(data0[pollPlaceOnArray].poll[9].messageId)
+                  .then((m) => m.edit({ embeds: [ended], components: [] }));
 
                 if (pollToEnd == undefined) {
                   let errAry = data;
@@ -255,7 +294,6 @@ module.exports = {
                       if (err) console.log(err);
                     }
                   );
-                  return interaction.followUp({ embeds: [usedErr] });
                 }
 
                 jsonReader("./json/endedPoll.json", (err, data1) => {
@@ -347,9 +385,10 @@ module.exports = {
               .setColor("RED");
 
             const canInitPoll =
+              interaction.member.roles.cache.some((r) => r.name === "LED") ||
               interaction.member.roles.cache.some(
-                (r) => r.id === "692799900009627759"
-              ) || interaction.member.roles.cache.some((r) => r.name === "Polls/surveys");
+                (r) => r.name === "Polls/surveys"
+              );
 
             if (!canInitPoll)
               return interaction.followUp({ embeds: [noPerms] });
