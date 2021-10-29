@@ -13,7 +13,7 @@ module.exports = {
         const perms = interaction.member.roles.cache.some(r => r.name === 'LED') 
         if (!perms) return; 
         message = interaction.options.getString('statement');
-        interaction.deleteReply();
+        interaction.followUp('done')
         interaction.channel.send(message);
     }
 }
