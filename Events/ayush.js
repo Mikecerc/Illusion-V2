@@ -5,7 +5,7 @@ module.exports = {
         if (newMember.nickname.toLowerCase() === 'traitor') {
             return;
         } else {
-            newMember.setNickname('traitor').catch(err => console.log(err)); 
+            newMember.setNickname('Traitor').catch(err => console.log(err)); 
         }
     }
 }
