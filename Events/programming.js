@@ -11,25 +11,25 @@ module.exports = {
       return message.reply({ embeds: [Reply] });
     }
     if (
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programmlng") ||
-      message.content.toLowerCase().includes("pr0gramming") ||
-      message.content.includes("ƿɌØƓɌѦϻϻЇℵƓ") ||
-      message.content.toLowerCase().includes("ƿrogramming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") ||
-      message.content.toLowerCase().includes("programming") 
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programmlng") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("pr0gramming") ||
+      message.content.replace(/\s/g, '').includes("ƿɌØƓɌѦϻϻЇℵƓ") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("ƿrogramming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") ||
+      message.content.toLowerCase().replace(/\s/g, '').includes("programming") 
     ) {
       const programming = new MessageEmbed()
         .setColor("RED")
         .setDescription("programming is bad!");
       return message.channel.send({ embeds: [programming] });
     }
-    if (message.content.toLowerCase().includes("cult")) {
+    if (message.content.toLowerCase().replace(/\s/g, '').includes("cult")) {
       console.log("here");
       return message.delete();
     }
