@@ -33,13 +33,5 @@ module.exports = {
       console.log("here");
       return message.delete();
     }
-    /**if(message.author.id === '245626574655848449') {
-            const embed = new MessageEmbed()
-                .setTitle('don\'t know how you evade the programming response so I have to do this now:')
-                .setDescription('Programming Is bad!')
-                .setColor('DARK_RED');
-
-            message.channel.send({ embeds: [embed] });
-        } */
   },
 };
