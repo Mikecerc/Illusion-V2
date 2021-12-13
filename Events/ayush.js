@@ -1,10 +1,6 @@
 module.exports = {
   name: "guildMemberUpdate",
   async execute(oldMember, newMember) {
-    console.log(
-      `new member: ${newMember.nickname}`,
-      `old member: ${oldMember.nickname}`
-    );
     if (newMember.user.id == "697198271281758379") {
       if (newMember.nickname == null)
         return newMember
