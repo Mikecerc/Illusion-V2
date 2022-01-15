@@ -3,12 +3,12 @@ const { MessageEmbed } = require("discord.js")
 module.exports = {
     name: 'warnkyle',
     description: 'warn kyle for acting like a freshman',
-    execute (interaction) {
+    async execute (interaction) {
         const embed = new MessageEmbed()
         .setColor('RED')
         .setDescription('Kyle stop acting like a freshman');
 
-        interaction.followUp('yeah....');
-        interaction.channel.send({ embeds: [embed] });
+        await interaction.followUp('yeah....');
+        return await interaction.channel.send({ embeds: [embed] });
     }
 }
