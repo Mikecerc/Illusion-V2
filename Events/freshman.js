@@ -9,7 +9,7 @@ module.exports = {
       if (err) {
         console.log(err);
       } else {
-        if (testWords(JSON.parse(data), content) == true) {
+        if (await testWords(JSON.parse(data), content) == true) {
           const Response = new MessageEmbed()
             .setColor("RED")
             .setDescription(
