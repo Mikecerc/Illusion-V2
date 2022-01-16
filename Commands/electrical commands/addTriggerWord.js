@@ -2,7 +2,7 @@ const fs = require("fs");
 module.exports = {
   name: "addtrigger",
   description:
-    "A command for people with the polls/survey role that allows them to add a trigger to kyle's trigger list",
+    "Add a trigger to kyle's trigger list",
   options: [
     {
       name: "word",
