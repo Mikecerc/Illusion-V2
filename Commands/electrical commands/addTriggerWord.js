@@ -7,8 +7,8 @@ module.exports = {
     {
       name: "word",
       description: "what word do you want to add?",
-      required: true,
       type: "STRING",
+      required: true,
     },
   ],
   async execute(interaction) {
@@ -21,7 +21,7 @@ module.exports = {
     const canInitPoll = interaction.member.roles.cache.some(
       (r) => r.name === "Polls/surveys"
     );
-    if (canInitPoll != true) return;
+    if (canInitPoll != true) return interaction.followUp({ embeds: [noPerms] });
     fs.readFile("../../json/triggerWords.json", "utf-8", (err, data0) => {
       if (err) {
         console.log(err);
@@ -35,6 +35,7 @@ module.exports = {
             if (err) console.log(err);
           }
         );
+        interaction.followUp('done');
       }
     });
   },
