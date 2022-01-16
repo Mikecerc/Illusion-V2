@@ -84,7 +84,7 @@ module.exports = {
                 console.log(`User: ${interaction.user.username} wanted a meme of ${meme}`);
                 return interaction.channel.send('https://media1.tenor.com/images/b19b52b7d46588c3b481215253071316/tenor.gif?itemid=23110790');
             case 'nate': 
-                return interaction.channel.send('https://tenor.com/view/gif-24521507');
+                return interaction.channel.send('https://media1.tenor.com/images/037997d9ca10df5df194ae3546fae537/tenor.gif?itemid=24521521');
         }
     },
 };
