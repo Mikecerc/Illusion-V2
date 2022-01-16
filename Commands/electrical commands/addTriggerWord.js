@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { messageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = {
   name: "addtrigger",
   description:
@@ -23,14 +23,14 @@ module.exports = {
       (r) => r.name === "Polls/surveys"
     );
     if (canInitPoll != true) return interaction.followUp({ embeds: [noPerms] });
-    fs.readFile("../../json/triggerWords.json", "utf-8", (err, data0) => {
+    fs.readFile("./json/triggerWords.json", "utf-8", (err, data0) => {
       if (err) {
         console.log(err);
       } else {
         let data = JSON.parse(data0);
-        data.push(word);
+        data.push(response);
         fs.writeFile(
-          "../../json/triggerWords.json",
+          "./json/triggerWords.json",
           JSON.stringify(data),
           (err) => {
             if (err) console.log(err);
