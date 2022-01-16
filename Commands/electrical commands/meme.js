@@ -38,6 +38,10 @@ module.exports = {
                     name: 'Falcon 500',
                     value: 'falcon500',
                 },
+                {
+                    name: 'nate',
+                    value: 'nate',
+                }
             ],
         },
     ],
@@ -79,6 +83,8 @@ module.exports = {
             case 'falcon500':
                 console.log(`User: ${interaction.user.username} wanted a meme of ${meme}`);
                 return interaction.channel.send('https://media1.tenor.com/images/b19b52b7d46588c3b481215253071316/tenor.gif?itemid=23110790');
+            case 'nate': 
+                return interaction.channel.send('https://tenor.com/view/gif-24521507');
         }
     },
 };
