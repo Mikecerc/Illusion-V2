@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { messageEmbed } = require('discord.js');
 module.exports = {
   name: "addtrigger",
   description:
