@@ -1,5 +1,5 @@
 const fs = require("fs");
-module.export = {
+module.exports = {
   name: "addtrigger",
   description:
     "A command for people with the polls/survey role that allows them to add a trigger to kyle's trigger list",
