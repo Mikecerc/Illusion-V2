@@ -5,11 +5,12 @@ module.exports = {
   execute(message) {
     if (message.author.id != "406629388059410434") return;
     let content = message.content.toLowerCase().replace(/\s/g, "");
-    fs.readFile("../json/triggerwords.json", "utf-8", (err, data) => {
+    fs.readFile("./json/triggerWords.json", "utf-8", (err, data) => {
       if (err) {
         console.log(err);
       } else {
-        if (await testWords(JSON.parse(data), content) == true) {
+        let bool = testWords(JSON.parse(data), content);
+        if (bool == true) {
           const Response = new MessageEmbed()
             .setColor("RED")
             .setDescription(
@@ -19,7 +20,7 @@ module.exports = {
         }
       }
     });
-    async function testWords(data, content) {
+    function testWords(data, content) {
         let iteration = 0;
         for(let words in data) {
             if (content.includes(data[iteration])) {
