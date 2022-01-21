@@ -165,6 +165,8 @@ module.exports = {
   ],
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true }).catch(() => {});
+
     const pollLocation = interaction.options.getChannel("polllocation");
     const pollLocationDefault = interaction.channel;
 

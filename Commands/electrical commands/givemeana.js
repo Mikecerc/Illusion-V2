@@ -7,10 +7,8 @@ module.exports = {
         .setTitle('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
         .setColor('RANDOM');
 
-        interaction.followUp('done!');
-        interaction.channel.send({ embeds: [Response] });
-        interaction.channel.send('https://youtu.be/whhgyzDeCAk');
+        interaction.reply({ embeds: [Response] });
+        interaction.followUp('https://youtu.be/whhgyzDeCAk');
 
     },
-
 };

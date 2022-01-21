@@ -25,7 +25,7 @@ module.exports = {
                 },
                 {
                     name: 'fab',
-                    value: 'design',
+                    value: 'fab',
                 },
                 {
                     name: 'design',
@@ -59,7 +59,6 @@ module.exports = {
 
     execute(interaction) {
         const subgroup = interaction.options.getString('subgroup');
-        interaction.followUp('done!')
         switch (subgroup) {
             case ('electrical'):
                 const ElecResponse = new MessageEmbed()
@@ -67,7 +66,7 @@ module.exports = {
                     .setColor('GREEN')
                     .setDescription(`HELL YEAH! ELECTRICAL SUPREMACY!!! YOU are a SMART Person <@${interaction.user.id}> `)
                     .setFooter(`Good Job ${interaction.user.tag}`);
-                interaction.channel.send({ embeds: [ElecResponse] });
+                interaction.reply({ embeds: [ElecResponse] });
                 return;
             case ('programming'):
                 const ProResponse = new MessageEmbed()
@@ -75,7 +74,7 @@ module.exports = {
                     .setColor('RED')
                     .setDescription(`<@${interaction.user.id}> are you ok??? There will never be such a thing called\n 'Programming Supremacy' SMH.. `)
                     .setFooter(`WTF ${interaction.user.tag}`);
-                interaction.channel.send({ embeds: [ProResponse] });
+                interaction.reply({ embeds: [ProResponse] });
                 return;
             case ('marketing'):
                 const MarResponse = new MessageEmbed()
@@ -83,7 +82,7 @@ module.exports = {
                     .setColor('RED')
                     .setDescription('um... what? ')
                     .setFooter(`Really ${interaction.user.tag}, Marketing?`);
-                interaction.channel.send({ embeds: [MarResponse] });
+                interaction.reply({ embeds: [MarResponse] });
                 return;
             default:
                 const DefResponse = new MessageEmbed()
@@ -91,7 +90,7 @@ module.exports = {
                     .setColor('RED')
                     .setDescription(`yeah... no. ${subgroup} supremacy? Ha! <@${interaction.user.id}> you arent very bright are you?`)
                     .setFooter(`SMH ${interaction.user.tag}`);
-                interaction.channel.send({ embeds: [DefResponse] });
+                interaction.reply({ embeds: [DefResponse] });
                 return;
         }
     },

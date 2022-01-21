@@ -8,7 +8,13 @@ module.exports = {
         .setColor('RED')
         .setDescription('Kyle stop acting like a freshman');
 
-        await interaction.followUp('yeah....');
-        return await interaction.channel.send({ embeds: [embed] });
+        const messages = await interaction.channel.messages.fetch({limit: 100}).then(messages => {
+            const msg = messages.filter(m => m.author.id === '406629388059410434' ).first()
+            interaction.reply({ content:'ok...', ephemeral: true });
+            return msg.reply({ embeds: [embed] });
+        }).catch(err => {
+            console.log(err)
+            return interaction.reply('kyle hasn\'t said anthing in a while');
+        }) 
     }
 }
