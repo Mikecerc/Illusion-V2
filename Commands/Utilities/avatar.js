@@ -11,7 +11,7 @@ module.exports = {
         },
     ],
     execute(interaction) {
-        const target = interaction.options.getUser('target');
+        const target = interaction.options.getMember('target');
 
         const response = new MessageEmbed()
         .setAuthor(`${target.user.username}`, target.user.displayAvatarURL({ dynamic: true }))
