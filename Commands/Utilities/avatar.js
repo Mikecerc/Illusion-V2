@@ -17,7 +17,8 @@ module.exports = {
         .setAuthor(`${target.user.username}`, target.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`${target.user.username}'s avatar`)
         .setImage(target.user.displayAvatarURL({ dynamic: true }))
-        .setFooter(`Requested By ${interaction.user.tag}`);
+        .setFooter(`Requested By ${interaction.user.tag}`)
+        .setColor('RANDOM');
 
         interaction.followUp('done');
         return interaction.channel.send({ embeds: [response] });
