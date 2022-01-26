@@ -20,6 +20,6 @@ module.exports = {
     .setTitle('Uptime:')
     .setDescription(d0 + h0 + m0 + s0);
 
-    interaction.followUp({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
   },
 };
