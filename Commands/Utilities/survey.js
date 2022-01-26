@@ -120,6 +120,7 @@ module.exports = {
 
 
     async execute(interaction, guild) {
+        await interaction.deferReply({ ephemeral: true }).catch(() => {});
         const canInitSrv = interaction.member.roles.cache.some(r => r.name === 'LED');
         if (interaction.options.getSubcommand() === 'create') {
 

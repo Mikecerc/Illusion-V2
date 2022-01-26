@@ -6,7 +6,7 @@ module.exports = {
         const Response = new MessageEmbed()
         .setColor('GREEN')
         .setDescription(`🏓${client.ws.ping}ms`);
-        interaction.followUp({ embeds: [Response] });
+        interaction.reply({ embeds: [Response] });
     },
 
 };

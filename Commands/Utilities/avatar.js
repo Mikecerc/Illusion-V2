@@ -20,7 +20,6 @@ module.exports = {
         .setFooter(`Requested By ${interaction.user.tag}`)
         .setColor('RANDOM');
 
-        interaction.followUp('done');
-        return interaction.channel.send({ embeds: [response] });
+        return interaction.reply({ embeds: [response] });
     }
 }

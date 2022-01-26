@@ -36,7 +36,7 @@ module.exports = {
             if (err) console.log(err);
           }
         );
-        interaction.followUp('done');
+        interaction.reply({content: `done! ${response} has been added to the trigger list`, ephemeral: true });
       }
     });
   },

@@ -12,8 +12,8 @@ module.exports = {
     async execute(interaction) {
         const perms = interaction.member.roles.cache.some(r => r.name === 'LED') || interaction.member.roles.cache.some(r => r.name === 'Leads');
         if (!perms) return; 
+        interaction.reply({ content: 'ok', ephemeral: true})
         message = interaction.options.getString('statement');
-        interaction.followUp('done')
         interaction.channel.send(message);
     }
 }

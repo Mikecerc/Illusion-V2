@@ -6,8 +6,7 @@ module.exports = {
         const Response = new MessageEmbed()
         .setColor('RANDOM')
         .setDescription('<@406629388059410434> is a little bitch');
-        interaction.followUp('done!');
-        interaction.channel.send({ embeds: [Response] });
+        interaction.reply({ embeds: [Response] });
     },
 
 };

@@ -13,9 +13,9 @@ module.exports = {
         },
     ],
 
-    execute(interaction) {
+    async execute(interaction) {
+        await interaction.deferReply({ ephemeral: false }).catch(() => {});
         const Target = interaction.options.getMember('target');
-
         const Response = new MessageEmbed()
         .setAuthor(`${Target.user.username}`, Target.user.displayAvatarURL({ dynamic: true }))
         .setThumbnail(Target.user.displayAvatarURL({ dynamic: true }))

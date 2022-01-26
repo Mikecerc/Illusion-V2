@@ -30,7 +30,6 @@ module.exports = {
       return message.channel.send({ embeds: [programming] });
     }
     if (message.content.toLowerCase().replace(/\s/g, '').includes("cult")) {
-      console.log("here");
       return message.delete();
     }
   },
