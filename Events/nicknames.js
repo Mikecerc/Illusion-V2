@@ -32,8 +32,8 @@ module.exports = {
       return;
     } else {
       newMember.setNickname("Kylie").catch((err) => console.log(err));
-      const guild = client.guilds.cache.get(guildId);
-        const channel = guild.channels.cache.find(
+      const guild = await client.guilds.cache.get(guildId);
+        const channel = await guild.channels.cache.find(
           (c) => c.id === '692794471489732632'
         );
       channel.send('me when kyle thinks he can change his nickname')
