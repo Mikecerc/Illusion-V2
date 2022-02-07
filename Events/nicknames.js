@@ -1,4 +1,5 @@
 const { guildId } = require('../config.json');
+const client = require('../index.js');
 module.exports = {
   name: "guildMemberUpdate",
   async execute(oldMember, newMember) {
