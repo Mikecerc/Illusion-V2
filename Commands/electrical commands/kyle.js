@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 module.exports = {
-    name: 'kyle',
+    name: 'kylie',
     description: 'F U Big Kyle',
     execute(interaction) {
         const Response = new MessageEmbed()

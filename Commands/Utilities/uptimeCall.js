@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 const fs = require("fs");
 module.exports = {
   name: "uptime",
-  description: "Display's the amount of time Illusion has been online",
+  description: "Display's the amount of time Void has been online",
   execute(interaction) {
     let seconds = process.uptime();
     var d = Math.floor(seconds / (3600*24));
