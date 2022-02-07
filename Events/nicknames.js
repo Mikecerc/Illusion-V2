@@ -1,3 +1,4 @@
+const { guildId } = require('../config.json');
 module.exports = {
   name: "guildMemberUpdate",
   async execute(oldMember, newMember) {
@@ -21,7 +22,22 @@ module.exports = {
       } else {
         newMember.setNickname("Disgrace to humanity").catch((err) => console.log(err));
       }
+    } else if (newMember.user.id == "406629388059410434") {
+      if (newMember.nickname == null)
+      return newMember
+        .setNickname("Kylie")
+        .catch((err) => console.log(err));
+    if (newMember.nickname.toLowerCase() === "kylie") {
+      return;
     } else {
+      newMember.setNickname("Kylie").catch((err) => console.log(err));
+      const guild = client.guilds.cache.get(guildId);
+        const channel = guild.channels.cache.find(
+          (c) => c.id === '692794471489732632'
+        );
+      channel.send('me when kyle thinks he can change his nickname')
+    }
+  } else {
         return;
     }
   },
