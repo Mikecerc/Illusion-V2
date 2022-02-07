@@ -32,7 +32,7 @@ module.exports = {
       return;
     } else {
       newMember.setNickname("Kylie").catch((err) => console.log(err));
-      const guild = await client.guilds.cache.get(guildId);
+      const guild = newMember.guild;
         const channel = await guild.channels.cache.find(
           (c) => c.id === '692794471489732632'
         );
