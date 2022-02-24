@@ -6,7 +6,7 @@ module.exports = {
     description: 'retrieves weather data from a weather station near pcep',
 
     async execute(interaction) {
-        const process = spawn('python', ["./commands/weather/parse.py"]);
+        const process = spawn('python', ["./Commands/weather/parse.py"]);
 
         process.stderr.on('data', (data) => {
             console.log(String.fromCharCode.apply(null, data))
