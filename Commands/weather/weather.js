@@ -16,19 +16,17 @@ module.exports = {
             const str = String.fromCharCode.apply(null, data).replace(/\s/g, '');
             console.log(str);
 
-            const values = str.split('/')
+            const values = str.split('\\')
 
             const temp = values[0]
             const realFeel = values[1]
             const windDir = values[2]
             const windSpeed = values[3]
-            const windSpeedGust = values[4]
-            const dewPoint = values[5]
-            const precipitation = values[6]
-            const totalPrecipitation = values[7]
-            const pressure = values[8]
-            const humidity = values[9]
-            const uv = values[10]
+            const dewPoint = values[4]
+            const precipitation = values[5]
+            const totalPrecipitation = values[8]
+            const pressure = values[6]
+            const humidity = values[7]
 
             let color = null
             if (realFeel < 40) {
@@ -45,15 +43,15 @@ module.exports = {
                 .addFields(
                     {
                         name: "Temperature",
-                        value: `Temperature: ${temp}°F\nFeels Like: ${realFeel}F`,
+                        value: `Temperature: ${temp}\nFeels Like: ${realFeel.replace('FeelsLike','')}F`,
                     },
                     {
                         name: "Dew Point",
-                        value: `Dew Point: ${dewPoint}`
+                        value: `Dew Point: ${dewPoint}°F`
                     },
                     {
                         name: "Wind",
-                        value: `Direction: ${windDir}\nWind Speed/Gust: ${windSpeed}/${windSpeedGust}`,
+                        value: `Direction: ${windDir}\nWind Speed/Gust: ${windSpeed}`,
                     },
                     {
                         name: "Pressure",
@@ -67,10 +65,6 @@ module.exports = {
                         name: "Humidity",
                         value: `Humidity: ${humidity} %`,
                     },
-                    {
-                        name: 'UV',
-                        value: `UV: ${uv}`
-                    }
                 );
 
             interaction.reply({ embeds: [embed] });
