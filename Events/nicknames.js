@@ -3,7 +3,7 @@ const client = require('../index.js');
 module.exports = {
   name: "guildMemberUpdate",
   async execute(oldMember, newMember) {
-    if (newMember.user.id == "697198271281758379") {
+    /*if (newMember.user.id == "697198271281758379") {
       if (newMember.nickname == null)
         return newMember
           .setNickname("Traitor")
@@ -13,7 +13,7 @@ module.exports = {
       } else {
         newMember.setNickname("Traitor").catch((err) => console.log(err));
       }
-    } else if (newMember.user.id == "692559110675103784") {
+    } else**/ if (newMember.user.id == "692559110675103784") {
         if (newMember.nickname == null)
         return newMember
           .setNickname("Disgrace to humanity")

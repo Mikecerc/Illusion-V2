@@ -6,17 +6,17 @@ module.exports = {
     description: 'retrieves weather data from a weather station near pcep',
 
     async execute(interaction) {
-        const process = spawn('python', ["./Commands/weather/parse.py"]);
+        const process = spawn('python3', ["./Commands/weather/parse.py"]);
 
         process.stderr.on('data', (data) => {
             console.log(String.fromCharCode.apply(null, data))
         })
 
         process.stdout.on('data', (data) => {
-            const str = String.fromCharCode.apply(null, data).replace(/\s/g, '');
+            const str = String.fromCharCode.apply(null, data).replace(/\s/g, '').replace('b', '').replace("'",'');
             console.log(str);
 
-            const values = str.split('\\')
+            const values = str.split('-')
 
             const temp = values[0]
             const realFeel = values[1]
