@@ -10,5 +10,4 @@ client.setMaxListeners(20);
 require(`./Handlers/${handler}`)(client);
 
 });
-
 client.login(token);
