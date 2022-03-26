@@ -1,5 +1,4 @@
 const { readdirSync } = require('fs');
-const { guildId } = require('../config.json');
 
 module.exports = async (client) => {
     const commandsArry = [];

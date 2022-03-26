@@ -1,7 +1,7 @@
+require('dotenv').config();
 const { Client, Collection } = require('discord.js');
 const client = new Client({ intents: 32767 });
 module.exports = client;
-const { token } = require('./config.json');
 
 client.commands = new Collection();
 client.setMaxListeners(20);
@@ -10,4 +10,4 @@ client.setMaxListeners(20);
 require(`./Handlers/${handler}`)(client);
 
 });
-client.login(token);
+client.login(process.env.token);
