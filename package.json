@@ -11,7 +11,8 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "fs": "^0.0.1-security",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "node-fetch": "^3.2.3"
   },
   "devDependencies": {
     "eslint": "^7.32.0"
