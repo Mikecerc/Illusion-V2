@@ -13,6 +13,7 @@
     "dotenv": "^16.0.0",
     "fs": "^0.0.1-security",
     "moment": "^2.29.1",
+    "mongoose": "^6.2.8",
     "node-fetch": "^3.2.3"
   },
   "devDependencies": {
