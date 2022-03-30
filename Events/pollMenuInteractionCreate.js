@@ -4,7 +4,6 @@ module.exports = {
   name: "interactionCreate",
   async execute(interaction) {
     if (interaction.isSelectMenu()) {
-      await interaction.deferReply({ ephemeral: true }).catch(() => {});
 
       function jsonReader(filePath, cb) {
         fs.readFile(filePath, "utf-8", (err, fileData) => {
@@ -20,7 +19,10 @@ module.exports = {
         });
       }
 
+      if (interaction.customId.includes('-')) return;
+
       if (interaction.customId.length == 25) {
+        await interaction.deferReply({ ephemeral: true }).catch(() => {});
         jsonReader("./json/polls.json", (err, data) => {
           if (err) {
             console.log(err);
@@ -188,6 +190,7 @@ module.exports = {
           }
         });
       } else if (interaction.customId.length == 15) {
+        await interaction.deferReply({ ephemeral: true }).catch(() => {});
         jsonReader("./json/endPollRequest.json", (err, data) => {
           if (err) {
             console.log(err);
@@ -349,6 +352,7 @@ module.exports = {
           }
         });
       } else if (interaction.customId.length === 20) {
+        await interaction.deferReply({ ephemeral: true }).catch(() => {});
         jsonReader("./json/displayRequest.json", (err, data) => {
           if (err) {
             console.log(err);
