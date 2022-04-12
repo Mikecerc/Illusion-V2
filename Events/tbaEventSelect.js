@@ -53,8 +53,7 @@ async function getQuals(interaction, eventId, team) {
     for (match in finalQuals) {
         const time = Number.isInteger(finalQuals[match].actual_time) ? `Actual time: ${new Date(finalQuals[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalQuals[match].predicted_time * 1000)}`
         const alliance = finalQuals[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
-        const redWin = finalQuals[match].alliances.red.score >= finalQuals[match].alliances.blue.score ? (finalQuals[match].alliances.red.score == finalQuals[match].alliances.score ? null : true) : false
-        const win = redWin == true && alliance == 'red' ? 'win' : (redWin == null ? 'tie' : 'loss')
+        const win = finalQuals[match].winning_alliance == alliance ? 'win' : (finalQuals[match].winning_alliance == '' ? 'tie' : 'loss')
         embed.addField(`Qualifying Match #${finalQuals[match].match_number}`, `${time}]\nAlliance: ${alliance}\nWin?: ${win}`)
         options.push(
             {
@@ -133,8 +132,7 @@ async function getPlayoffs(interaction, eventId, team) {
     for (match in finalPlayoffs) {
         const time = Number.isInteger(finalPlayoffs[match].actual_time) ? `Actual time: ${new Date(finalPlayoffs[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalPlayoffs[match].predicted_time * 1000)}`
         const alliance = finalPlayoffs[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
-        const redWin = finalPlayoffs[match].alliances.red.score >= finalPlayoffs[match].alliances.blue.score ? (finalPlayoffs[match].alliances.red.score == finalPlayoffs[match].alliances.score ? null : true) : false
-        const win = redWin == true && alliance == 'red' ? 'win' : (redWin == null ? 'tie' : 'loss')
+        const win = finalPlayoffs[match].winning_alliance == alliance ? 'win' : (finalPlayoffs[match].winning_alliance == '' ? 'tie' : 'loss')
         const matchType = finalPlayoffs[match].comp_level == 'f' ? 'Final' : (finalPlayoffs[match].comp_level == 'sf' ? 'Semi-Final' : 'Quarter-Final')
         embed.addField(`${matchType} Match #${finalPlayoffs[match].match_number}`, `${time}]\nAlliance: ${alliance}\nWin?: ${win}`)
         options.push(
