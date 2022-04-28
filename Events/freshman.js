@@ -14,16 +14,17 @@ module.exports = {
           const row = new MessageActionRow()
           .addComponents(
             new MessageButton()
-              .setCustomId(`kylethinksaboutwhathesays-y-${message.id}`)
+            .setCustomId(`kylethinksaboutwhathesays-y-${message.id}`)
               .setLabel("Yes")
               .setStyle('DANGER'),
             new MessageButton()
-              .setCustomId(`kylethinksaboutwhathesays-n-${message.id}`)
-              .setLabel("No")
-              .setStyle('PRIMARY'),
-          );
-
-          message.reply({ content: "kyle, this is a not okay message are you sure you want to send?", components: [row] })
+            .setCustomId(`kylethinksaboutwhathesays-n-${message.id}`)
+            .setLabel("No")
+            .setStyle('PRIMARY'),
+            );
+          kyleIndexMsg++;
+          const interactionMessage = message.reply({ content: "kyle, this is a not okay message are you sure you want to send?", components: [row] });
+          // startTimeout(message, interactionMessage);
         }
       }
     });
@@ -35,6 +36,13 @@ module.exports = {
             }
             iteration++; 
         }
+    }
+    async function startTimeout(message, interactionMessage) {
+        setTimeout(() => {
+            // find a way to recieve signal from buttonHandler.js to stop timeout
+            message.delete();
+            interactionMessage.delete();
+        }, 10000);
     }
   },
 };

@@ -5,6 +5,7 @@ module.exports = {
         if (interaction.customId.startsWith('kylethinksaboutwhathesays-')) {
             let data = interaction.customId.split('-');
             if (interaction.user.id != '406629388059410434') return interaction.deferUpdate();
+            // find way to send signal to freshman.js to stop timeout
             if (data[1] === 'y') {
                 interaction.message.delete()
                     .catch(console.error);
