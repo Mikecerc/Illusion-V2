@@ -34,7 +34,7 @@ module.exports = {
         const channel = await guild.channels.cache.find(
           (c) => c.id === '692794471489732632'
         );
-      channel.send('me when kyle thinks he can change his nickname')
+      channel.send('stupid kyle thinks he can change his nick hehehehaw')
     }
   } else {
         return;

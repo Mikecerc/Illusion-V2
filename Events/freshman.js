@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const fs = require("fs");
 module.exports = {
   name: "messageCreate",
@@ -11,12 +11,19 @@ module.exports = {
       } else {
         let bool = testWords(JSON.parse(data), content);
         if (bool == true) {
-          const Response = new MessageEmbed()
-            .setColor("RED")
-            .setDescription(
-              "<@406629388059410434> stop acting like a freshman"
-            );
-          message.reply({ embeds: [Response] });
+          const row = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setCustomId(`kylethinksaboutwhathesays-y-${message.id}`)
+              .setLabel("Yes")
+              .setStyle('DANGER'),
+            new MessageButton()
+              .setCustomId(`kylethinksaboutwhathesays-n-${message.id}`)
+              .setLabel("No")
+              .setStyle('PRIMARY'),
+          );
+
+          message.reply({ content: "kyle, this is a not okay message are you sure you want to send?", components: [row] })
         }
       }
     });
