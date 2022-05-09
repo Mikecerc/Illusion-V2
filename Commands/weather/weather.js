@@ -6,6 +6,7 @@ module.exports = {
     description: 'retrieves weather data from a weather station near pcep',
 
     async execute(interaction) {
+        interaction.deferReply();
         const process = spawn('python3', ["./Commands/weather/parse.py"]);
 
         process.stderr.on('data', (data) => {
@@ -67,7 +68,7 @@ module.exports = {
                     },
                 );
 
-            interaction.reply({ embeds: [embed] });
+            interaction.followUp({ embeds: [embed] });
 
         });
 
