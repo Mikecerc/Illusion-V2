@@ -2,8 +2,8 @@ const { Schema, model } = require('mongoose');
 
 pollSchema = new Schema({
     messageId: String, 
-    modalId: String,
     anonymous: Boolean,
+    multipleResponse: Boolean,
     creator: String,
     content: {
         question: String,

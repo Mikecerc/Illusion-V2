@@ -31,6 +31,22 @@ module.exports = {
             required: false,
             type: "BOOLEAN",
         },
+        {
+            name: 'response',
+            description: 'Do you want users to be able to respond to multiple answers',
+            required: false, 
+            type: 'STRING',
+            choices: [
+                {
+                    name: 'single response',
+                    value: 'false',
+                },
+                {
+                     name: 'multiple response',
+                     value: 'true',
+                },
+            ],
+        },
     ],
 
     async execute(interaction) {
@@ -39,7 +55,7 @@ module.exports = {
                 .setCustomId(
                     `10-${interaction.options.getString(
                         "type"
-                    )}-${interaction.options.getBoolean("anonymity")}`
+                    )}-${interaction.options.getBoolean("anonymity")}-${interaction.options.getString('response')}`
                 )
                 .setTitle("Poll Setup");
 
