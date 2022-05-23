@@ -302,13 +302,18 @@ module.exports = {
                     .setCustomId(`15-${data[1]}-${data[2]}`)
                     .setTitle("Survey Response");
 
-                const answer = new TextInputComponent()
+                let answer = new TextInputComponent()
                     .setCustomId("answer")
-                    .setLabel("Response (anonymous)")
                     .setStyle("PARAGRAPH")
                     .setPlaceholder("Please enter a response")
                     .setMaxLength(4000)
                     .setRequired(true);
+                
+                if (data[2]) {
+                    answer.setLabel("Response (anonymous)")
+                } else {
+                    answer.setLabel("Response")
+                }
 
                 const row = new MessageActionRow().addComponents(answer);
                 modal.addComponents(row);
