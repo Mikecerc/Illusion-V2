@@ -1,6 +1,5 @@
 const {
     MessageActionRow,
-    MessageEmbed,
     Modal,
     TextInputComponent,
 } = require("discord.js");
@@ -32,18 +31,19 @@ module.exports = {
             type: "BOOLEAN",
         },
         {
-            name: 'response',
-            description: 'Do you want users to be able to respond to multiple answers',
-            required: false, 
-            type: 'STRING',
+            name: "response",
+            description:
+                "Do you want users to be able to respond to multiple answers (polls only)",
+            required: false,
+            type: "STRING",
             choices: [
                 {
-                    name: 'single response',
-                    value: 'false',
+                    name: "single response",
+                    value: "false",
                 },
                 {
-                     name: 'multiple response',
-                     value: 'true',
+                    name: "multiple response",
+                    value: "true",
                 },
             ],
         },
@@ -55,7 +55,9 @@ module.exports = {
                 .setCustomId(
                     `10-${interaction.options.getString(
                         "type"
-                    )}-${interaction.options.getBoolean("anonymity")}-${interaction.options.getString('response')}`
+                    )}-${interaction.options.getBoolean(
+                        "anonymity"
+                    )}-${interaction.options.getString("response")}`
                 )
                 .setTitle("Poll Setup");
 
@@ -65,7 +67,7 @@ module.exports = {
                 .setStyle("PARAGRAPH")
                 .setPlaceholder("Please enter a question")
                 .setRequired(true)
-                .setMaxLength(4000)
+                .setMaxLength(4000);
 
             const answer1 = new TextInputComponent()
                 .setCustomId("answer1")
@@ -106,6 +108,27 @@ module.exports = {
             const row5 = new MessageActionRow().addComponents(answer4);
 
             modal.addComponents(row1, row2, row3, row4, row5);
+            await interaction.showModal(modal);
+        } else {
+            const modal = new Modal()
+                .setCustomId(
+                    `10-${interaction.options.getString(
+                        "type"
+                    )}-${interaction.options.getBoolean("anonymity")}`
+                )
+                .setTitle("Survey Setup");
+
+            const question = new TextInputComponent()
+                .setCustomId("question")
+                .setLabel("Question:")
+                .setStyle("PARAGRAPH")
+                .setPlaceholder("Please enter a question")
+                .setRequired(true)
+                .setMaxLength(4000);
+
+            const row = new MessageActionRow().addComponents(question);
+
+            modal.addComponents(row);
             await interaction.showModal(modal);
         }
     },

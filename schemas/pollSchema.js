@@ -5,6 +5,7 @@ pollSchema = new Schema({
     anonymous: Boolean,
     multipleResponse: Boolean,
     creator: String,
+    serverId: String,
     content: {
         question: String,
         answers: Array,
@@ -12,7 +13,7 @@ pollSchema = new Schema({
     responses: [
         {
             userId: String,
-            answer: Number,
+            answers: Array,
         },
     ],
 })
