@@ -47,7 +47,7 @@ module.exports = {
                             `${answers[answer]}`
                         );
                         options.push({
-                            label: `Answer ${answer}:`,
+                            label: `Answer ${parseInt(answer) + 1}:`,
                             value: `${answer}`,
                             description: `${answers[answer].slice(0, 100)}`,
                         });
