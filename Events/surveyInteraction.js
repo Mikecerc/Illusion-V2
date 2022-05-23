@@ -174,6 +174,7 @@ module.exports = {
                     serverId: interaction.guild.id,
                 });
                 if (res.responses.length > 0) {
+                    let modified = false;
                     for (response in res.responses) {
                         if (
                             res.responses[response].userId ==
@@ -181,12 +182,14 @@ module.exports = {
                         ) {
                             res.responses[response].answers =
                                 interaction.values;
-                        } else {
-                            res.responses.push({
-                                userId: interaction.user.id,
-                                answers: interaction.values,
-                            });
-                        }
+                            modified = true;
+                        } 
+                    }
+                    if (!modified) {
+                        res.responses.push({
+                            userId: interaction.user.id,
+                            answers: interaction.values,
+                        });
                     }
                 } else {
                     res.responses.push({
