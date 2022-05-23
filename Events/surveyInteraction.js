@@ -274,7 +274,7 @@ module.exports = {
                             );
                             newEmbed.addField(
                                 `Responses: (${votes[answer]}):`,
-                                `Users: ${users[answer].slice(0, 1024)}`
+                                `Users: ${users[answer].slice(0, 1000)}`
                             );
                         }
                     }
