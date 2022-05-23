@@ -263,9 +263,7 @@ module.exports = {
                     for (answer in res.content.answers) {
                         if (res.anonymous == true) {
                             newEmbed.addField(
-                                `Answer #${parseInt(answer) + 1} (Responses: ${
-                                    votes[answer]
-                                }):`,
+                                `Answer #${parseInt(answer) + 1}`,
                                 `${res.content.answers[answer]}`
                             );
                             newEmbed.addField(`Responses:`, `${votes[answer]}`);
