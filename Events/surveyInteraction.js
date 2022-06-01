@@ -309,7 +309,7 @@ module.exports = {
                     .setMaxLength(4000)
                     .setRequired(true);
                 
-                if (data[2]) {
+                if (data[2] == 'true') {
                     answer.setLabel("Response (anonymous)")
                 } else {
                     answer.setLabel("Response")
