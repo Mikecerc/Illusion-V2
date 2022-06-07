@@ -14,6 +14,7 @@ module.exports = async (client) => {
                 for (guild in guilds) {
                     guilds[guild].commands.set(commandsArry);
                 }
+                client.application.commands.set(commandsArry);
             });
         }
     }
