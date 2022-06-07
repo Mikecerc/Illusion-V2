@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const TBA = require('../api/api.js')
+const TBA = require('../../api/api.js')
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {

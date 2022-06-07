@@ -7,7 +7,7 @@ const {
     Modal,
     TextInputComponent,
 } = require("discord.js");
-const pollModel = require("../schemas/pollSchema.js");
+const pollModel = require("../../schemas/pollSchema.js");
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
@@ -309,7 +309,7 @@ module.exports = {
                     .setMaxLength(4000)
                     .setRequired(true);
                 
-                if (data[2] == 'true') {
+                if (data[2]) {
                     answer.setLabel("Response (anonymous)")
                 } else {
                     answer.setLabel("Response")
