@@ -76,11 +76,18 @@ module.exports = {
                             .setStyle("DANGER")
                             .setLabel("End Poll")
                     );
-                    await interaction.reply({
+                    const pollMsg = await interaction.reply({
                         embeds: [embed],
                         components: [row, row1],
                     });
-                    const message = await interaction.fetchReply();
+                    const message = await interaction.fetchReply().catch((e) => {
+                        if (e) {
+                            const err = new MessageEmbed()
+                                .setColor('RED')
+                                .setDescription('There was an error creating this poll. Please try again later.');
+                            return pollMsg.edit({ embeds: [err], components: [] });
+                        }
+                    });
                     doc = new pollModel();
                     doc.messageId = message.id;
                     doc.anonymous = isAnonymous;
@@ -172,6 +179,13 @@ module.exports = {
                 let res = await pollModel.findOne({
                     messageId: interaction.message.id,
                     serverId: interaction.guild.id,
+                }).catch((e) => {
+                    if (e) {
+                        const err = new MessageEmbed()
+                            .setColor('RED')
+                            .setDescription('There was an error responding to this poll. Please try again later.');
+                        return interaction.reply({embeds: [err]});
+                    }
                 });
                 if (res.responses.length > 0) {
                     let modified = false;
@@ -230,6 +244,13 @@ module.exports = {
                 let res = await pollModel.findOne({
                     messageId: interaction.message.id,
                     serverId: interaction.guild.id,
+                }).catch((e) => {
+                    if (e) {
+                        const err = new MessageEmbed()
+                            .setColor('RED')
+                            .setDescription('An error occured when trying to end this poll. Please try again later.');
+                        return interaction.reply({ embeds: [err] });
+                    }
                 });
                 if (
                     interaction.member.permissions.has(
@@ -288,6 +309,13 @@ module.exports = {
                     await pollModel.deleteOne({
                         messageId: interaction.message.id,
                         serverId: interaction.guild.id,
+                    }).catch((e) => {
+                        if (e) {
+                            const err = new MessageEmbed()
+                                .setColor('RED')
+                                .setDescription('An error occured when trying to end this poll. Please try again later.');
+                            return interaction.reply({ embeds: [err] });
+                        }
                     });
                 } else {
                     const embed = new MessageEmbed()
