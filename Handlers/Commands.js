@@ -10,11 +10,18 @@ module.exports = async (client) => {
             client.commands.set(command.name, command);
             commandsArry.push(command);
             client.on('ready', () => {
-                const guilds = client.guilds.cache.map(res => {return res })
-                for (guild in guilds) {
-                    guilds[guild].commands.set(commandsArry);
+                const guilds = client.guilds.cache.map(res => { return res })
+                if (process.env.testMode == true) {
+                    for (guild in guilds) {
+                        guilds[guild].commands.set(commandsArry);
+                    }
+                    client.application.commands.set([])
+                } else {
+                    client.application.commands.set(commandsArry);
+                    for (guild in guilds) {
+                        guilds[guild].commands.set([]);
+                    }
                 }
-                client.application.commands.set(commandsArry);
             });
         }
     }
