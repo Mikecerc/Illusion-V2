@@ -202,21 +202,21 @@ async function getBreakdown(interaction, eventId, team) {
         .addField(`Red Total Score:`, `${finalMatch.alliances.red.score}`, true)
         .addField(`Red Auton Score:`, `${finalMatch.score_breakdown.red.autoPoints}`, true)
         .addField(`Red Teleop Score:`, `${finalMatch.score_breakdown.red.teleopPoints}`, true)
-        .addField(`Blue Total Score:`, `${finalMatch.alliances.blue.score}`, true)
-        .addField(`Blue Auton Score:`, `${finalMatch.score_breakdown.blue.autoPoints}`, true)
-        .addField(`Blue Teleop Score:`, `${finalMatch.score_breakdown.blue.teleopPoints}`, true)
         .addField(`Red Ranking Points:`, `${finalMatch.score_breakdown.red.rp}`, true)
         .addField('Red Endgame Points:', `${finalMatch.score_breakdown.red.endgamePoints}`, true)
         .addField('Red Endgame Levels', `${finalMatch.score_breakdown.red.endgameRobot1}, ${finalMatch.score_breakdown.red.endgameRobot2}, ${finalMatch.score_breakdown.red.endgameRobot3}`, true)
-        .addField(`Blue Ranking Points:`, `${finalMatch.score_breakdown.blue.rp}`, true)
-        .addField('Blue Endgame Points:', `${finalMatch.score_breakdown.blue.endgamePoints}`, true)
-        .addField('Blue Endgame Levels', `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, true)
         .addField('Red fouls', `${finalMatch.score_breakdown.red.foulCount}`, true)
         .addField('Red Technical Fouls', `${finalMatch.score_breakdown.red.techFoulCount}`, true)
         .addField('Red Penalty Points received', `${finalMatch.score_breakdown.red.foulPoints}`, true)
         .addField('Blue fouls', `${finalMatch.score_breakdown.blue.foulCount}`, true)
         .addField('Blue Technical Fouls', `${finalMatch.score_breakdown.blue.techFoulCount}`, true)
-        .addField('Blue Penalty Points received', `${finalMatch.score_breakdown.blue.foulPoints}`, true);
+        .addField('Blue Penalty Points received', `${finalMatch.score_breakdown.blue.foulPoints}`, true)
+        .addField(`Blue Total Score:`, `${finalMatch.alliances.blue.score}`, true)
+        .addField(`Blue Auton Score:`, `${finalMatch.score_breakdown.blue.autoPoints}`, true)
+        .addField(`Blue Teleop Score:`, `${finalMatch.score_breakdown.blue.teleopPoints}`, true)
+        .addField(`Blue Ranking Points:`, `${finalMatch.score_breakdown.blue.rp}`, true)
+        .addField('Blue Endgame Points:', `${finalMatch.score_breakdown.blue.endgamePoints}`, true)
+        .addField('Blue Endgame Levels', `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, true);
 
     let row = new MessageActionRow()
     if (compLevel == 'qm') {
