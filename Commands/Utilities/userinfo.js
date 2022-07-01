@@ -17,14 +17,14 @@ module.exports = {
         await interaction.deferReply({ ephemeral: false }).catch(() => {});
         const Target = interaction.options.getMember('target');
         const Response = new MessageEmbed()
-        .setAuthor(`${Target.user.username}`, Target.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({name: `${Target.user.username}`, iconURL: Target.user.displayAvatarURL({ dynamic: true })})
         .setThumbnail(Target.user.displayAvatarURL({ dynamic: true }))
         .setColor('RANDOM')
         .addField('UserID', `${Target.user.id}`, false)
         .addField('Roles', `${Target.roles.cache.map(r => r).join(' ').replace('@everyone', ' ')}`)
         .addField('Server Member Since', `${moment(Target.joinedAt).format('MMMM Do YYYY, h:mm:ss a')}\n**-** ${moment(Target.joinedAt).startOf('day').fromNow()}`)
         .addField('Discord User Since', `${moment(Target.user.createdAt).format('MMMM Do YYYY, h:mm:ss a')}\n**-** ${moment(Target.user.createdAt).startOf('day').fromNow()}`)
-        .setFooter(`Requested By ${interaction.user.tag}`);
+        .setFooter({text: `Requested By ${interaction.user.tag}`});
         interaction.followUp({ embeds: [Response] });
     },
 };
