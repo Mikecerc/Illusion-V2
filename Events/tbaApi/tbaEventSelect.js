@@ -238,6 +238,4 @@ async function getBreakdown(interaction, eventId, team) {
         )
     }
     interaction.update({ embeds: [embed], components: [row] })
-
-    console.log(finalMatch)
 }
