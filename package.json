@@ -19,6 +19,7 @@
     "moment": "^2.29.1",
     "mongoose": "^6.3.4",
     "node-fetch": "^3.2.3",
+    "yt-search": "^2.10.3",
     "ytdl-core": "^4.11.0"
   },
   "devDependencies": {
