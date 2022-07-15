@@ -13,7 +13,7 @@ module.exports = {
                 const data = JSON.parse(res);
                 const year = interaction.values[0];
                 for (video of data[team][year]) {
-                    interaction.update({embeds: [], components: [], content: video})
+                    interaction.message.edit({embeds: [], components: [], content: video})
                 }
 
             }
