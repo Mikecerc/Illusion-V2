@@ -1,6 +1,5 @@
-const { MessageEmbed } = require("discord.js");
-const fs = require("fs");
-module.exports = {
+import { MessageEmbed } from "discord.js";
+export default {
   name: "uptime",
   description: "Display's the amount of time Void has been online",
   execute(interaction) {

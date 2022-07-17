@@ -1,4 +1,4 @@
-const {
+import {
     MessageEmbed,
     MessageActionRow,
     MessageSelectMenu,
@@ -6,13 +6,13 @@ const {
     Permissions,
     Modal,
     TextInputComponent,
-} = require("discord.js");
-const pollModel = require("../../schemas/pollSchema.js");
-module.exports = {
+} from "discord.js";
+import pollModel from '../../schemas/pollSchema.js'
+export default {
     name: "interactionCreate",
     async execute(interaction) {
         if (interaction.isModalSubmit()) {
-            data = interaction.customId.split("-");
+            const data = interaction.customId.split("-");
             if (data[0] == "10") {
                 const isPoll = data[1];
                 const isAnonymous =
@@ -41,7 +41,7 @@ module.exports = {
                         .setTitle("Multiple Choice Poll")
                         .setDescription(question);
 
-                    for (answer in answers) {
+                    for (const answer in answers) {
                         embed.addField(
                             `Answer #${parseInt(answer) + 1}:`,
                             `${answers[answer]}`
@@ -174,7 +174,7 @@ module.exports = {
                 }
             }
         } else if (interaction.isSelectMenu()) {
-            data = interaction.customId.split("-");
+            const data = interaction.customId.split("-");
             if (data[0] == "11") {
                 let res = await pollModel.findOne({
                     messageId: interaction.message.id,
@@ -189,7 +189,7 @@ module.exports = {
                 });
                 if (res.responses.length > 0) {
                     let modified = false;
-                    for (response in res.responses) {
+                    for (const response in res.responses) {
                         if (
                             res.responses[response].userId ==
                             interaction.user.id
@@ -223,14 +223,14 @@ module.exports = {
                     .setDescription(res.content.question)
                     .setColor("RANDOM");
                 let votes = [0, 0, 0, 0];
-                for (response in res.responses) {
-                    for (vote in res.responses[response].answers) {
+                for (const response in res.responses) {
+                    for (const vote in res.responses[response].answers) {
                         votes[
                             parseInt(res.responses[response].answers[vote])
                         ]++;
                     }
                 }
-                for (answer in res.content.answers) {
+                for (const answer in res.content.answers) {
                     newEmbed.addField(
                         `Answer #${parseInt(answer) + 1} (${votes[answer]}):`,
                         `${res.content.answers[answer]}`
@@ -265,8 +265,8 @@ module.exports = {
 
                     let votes = [0, 0, 0, 0];
                     let users = ["", "", "", ""];
-                    for (response in res.responses) {
-                        for (vote in res.responses[response].answers) {
+                    for (const response in res.responses) {
+                        for (const vote in res.responses[response].answers) {
                             votes[
                                 parseInt(res.responses[response].answers[vote])
                             ]++;
@@ -284,7 +284,7 @@ module.exports = {
                         users == ""
                             ? (users = "no responses")
                             : (users = users);
-                    for (answer in res.content.answers) {
+                    for (const answer in res.content.answers) {
                         if (res.anonymous == true) {
                             newEmbed.addField(
                                 `Answer #${parseInt(answer) + 1}`,

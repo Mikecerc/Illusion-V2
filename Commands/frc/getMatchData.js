@@ -1,11 +1,10 @@
-const {
+import {
     MessageEmbed,
     MessageActionRow,
     MessageSelectMenu,
-} = require("discord.js");
-const TBA = require("../../api/api.js");
-const client = require("../../index.js");
-module.exports = {
+} from "discord.js";
+import TBA from "../../api/api.js";
+export default {
     name: "matches",
     description: "gets matches by team number",
     options: [
@@ -23,8 +22,8 @@ module.exports = {
         },
     ],
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: false }).catch(() => {});
-        res = new TBA(process.env.tbaAuth);
+        await interaction.deferReply({ ephemeral: false }).catch(() => { });
+        const res = new TBA(process.env.tbaAuth);
         const date = interaction.options.getInteger("year")
             ? interaction.options.getInteger("year")
             : new Date().getFullYear();
@@ -43,7 +42,7 @@ module.exports = {
             .setFooter({ text: "Data provided via The Blue Alliance API" });
         let options = [];
         if (events != undefined && events.length > 0) {
-            for (e in events) {
+            for (const e in events) {
                 embed.addField(
                     events[e].name,
                     `Date: ${events[e].start_date} - ${events[e].end_date}`,

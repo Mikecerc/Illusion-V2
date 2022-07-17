@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: "led",
     description: "LIGHT EMITTING DIODE",
     async execute(interaction) {

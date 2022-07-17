@@ -1,9 +1,9 @@
-const {
+import {
     MessageActionRow,
     Modal,
     TextInputComponent,
-} = require("discord.js");
-module.exports = {
+} from 'discord.js';
+export default {
     name: "survey",
     description: "respond to or create a survey here",
     options: [

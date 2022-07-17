@@ -1,7 +1,6 @@
 /* eslint-disable no-case-declarations */
-const { MessageEmbed } = require('discord.js');
-
-module.exports = {
+import { MessageEmbed } from 'discord.js';
+export default {
     name: 'supremacy',
     description: 'Better be Electrical...',
     options: [

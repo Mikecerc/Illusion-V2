@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: "messageCreate",
   async execute(message, client) {
     if (message.content.includes("<@!425403126670032902>")) {

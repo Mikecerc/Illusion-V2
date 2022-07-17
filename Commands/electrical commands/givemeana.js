@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js');
-module.exports = {
+import { MessageEmbed } from 'discord.js' 
+export default {
     name: 'givemeana',
     description: 'AAA',
     execute(interaction) {

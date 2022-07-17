@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'hmm',
     description: 'admin only',
     options: [{
@@ -10,10 +10,10 @@ module.exports = {
 
 ],
     async execute(interaction) {
+        interaction.reply({content: 'ok', ephemeral: true });
         const perms = interaction.member.roles.cache.some(r => r.name === 'LED') || interaction.member.roles.cache.some(r => r.name === 'Leads');
         if (!perms) return; 
-        interaction.reply({ content: 'ok', ephemeral: true})
-        message = interaction.options.getString('statement');
-        interaction.channel.send(message);
+        const message = interaction.options.getString('statement');
+        interaction.channel.send({ content: message });
     }
 }

@@ -1,7 +1,6 @@
-const { MessageEmbed } = require("discord.js");
-const moment = require("moment");
-
-module.exports = {
+import { MessageEmbed } from 'discord.js';
+import moment from 'moment'
+export default {
     name: "dox",
     description: "Gets a users info and avatar",
     options: [

@@ -1,7 +1,6 @@
 'use strict';
-
-const https = require('https');
-class TBA {
+import https from 'https'
+export default class TBA {
 	constructor(auth_key) {
 		this.header = '?X-TBA-Auth-Key=' + auth_key;
 		this.base = 'https://www.thebluealliance.com/api/v3/';
@@ -235,4 +234,3 @@ class TBA {
 		return this.callAPI('district/' + districtShort + '/teams/keys');
 	}
 }
-module.exports = TBA; 	
