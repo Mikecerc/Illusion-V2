@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   name: "guildMemberUpdate",
   async execute(oldMember, newMember) {
     /*if (newMember.user.id == "697198271281758379") {

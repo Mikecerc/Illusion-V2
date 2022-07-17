@@ -1,6 +1,6 @@
-const fs = require("fs");
-const { MessageEmbed } = require('discord.js');
-module.exports = {
+import fs from 'fs';
+import { MessageEmbed } from 'discord.js'
+export default {
   name: "addtrigger",
   description:
     "Add a trigger to kyle's trigger list",

@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js');
-module.exports = {
+import { MessageEmbed } from 'discord.js';
+export default {
     name: 'ping',
     description: 'Round trip travel between Void and the Discord API',
     execute(interaction, client) {

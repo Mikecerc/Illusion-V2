@@ -1,10 +1,10 @@
-const {
+import {
     MessageEmbed,
     MessageActionRow,
     MessageSelectMenu,
-} = require("discord.js");
-const fs = require("fs");
-module.exports = {
+} from 'discord.js';
+import fs from 'fs';
+export default {
     name: "botvideo",
     description: "links an FRC team's robot reveal video of your choosing",
     options: [
@@ -47,7 +47,7 @@ module.exports = {
                         }
                     } else {
                         let options = [];
-                        for (key of Object.keys(teamData)) {
+                        for (const key of Object.keys(teamData)) {
                             options.push({
                                 label: key,
                                 description: key,

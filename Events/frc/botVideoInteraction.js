@@ -1,5 +1,5 @@
-const fs = require('fs');
-module.exports = {
+import fs from 'fs';
+export default {
     name: 'interactionCreate',
     async execute(interaction) {
         if (!interaction.isSelectMenu()) return;
@@ -12,7 +12,7 @@ module.exports = {
             } else { 
                 const data = JSON.parse(res);
                 const year = interaction.values[0];
-                for (video of data[team][year]) {
+                for (const video of data[team][year]) {
                     interaction.message.edit({embeds: [], components: [], content: video})
                 }
 

@@ -2,6 +2,7 @@
   "name": "illusionv2",
   "version": "2.0.0",
   "description": "Discord Bot illusion for 862 electrical (version 2.0.0)",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

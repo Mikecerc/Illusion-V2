@@ -1,8 +1,8 @@
-const { MessageEmbed } = require('discord.js');
-module.exports = {
+import { MessageEmbed } from 'discord.js';
+export default {
     name: 'avatar',
     description: 'gets a users avatar',
-    options:[
+    options: [
         {
             name: 'target',
             description: 'Select a target',
@@ -14,11 +14,11 @@ module.exports = {
         const target = interaction.options.getMember('target');
 
         const response = new MessageEmbed()
-        .setAuthor(`${target.user.username}`, target.user.displayAvatarURL({ dynamic: true }))
-        .setTitle(`${target.user.username}'s avatar`)
-        .setImage(target.user.displayAvatarURL({ dynamic: true }))
-        .setFooter(`Requested By ${interaction.user.tag}`)
-        .setColor('RANDOM');
+            .setAuthor({ name: `${target.user.username}`, iconURL: target.user.displayAvatarURL({ dynamic: true }) })
+            .setTitle(`${target.user.username}'s avatar`)
+            .setImage(target.user.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: `Requested By ${interaction.user.tag}` })
+            .setColor('RANDOM');
 
         return interaction.reply({ embeds: [response] });
     }
