@@ -3,7 +3,7 @@ import fs from 'fs';
 export default {
   name: "messageCreate",
   execute(message) {
-    if (message.author.id != "406629388059410434") return;
+    /**if (message.author.id != "406629388059410434") return;
     let content = message.content.toLowerCase().replace(/\s/g, "");
     fs.readFile("./json/triggerWords.json", "utf-8", (err, data) => {
       if (err) {
@@ -28,6 +28,6 @@ export default {
             }
             iteration++; 
         }
-    }
+    }*/
   },
 };

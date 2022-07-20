@@ -2,7 +2,7 @@ import { MessageEmbed } from 'discord.js';
 export default {
   name: "messageCreate",
   async execute(message) {
-    if (message.content.toLowerCase().includes("i want to join programming")) {
+    /**if (message.content.toLowerCase().includes("i want to join programming")) {
       const Reply = new MessageEmbed()
         .setColor("DARK_RED")
         .setTitle(`you cant say that here :/ `)
@@ -30,6 +30,6 @@ export default {
     }
     if (message.content.toLowerCase().replace(/\s/g, '').includes("cult")) {
       return message.delete();
-    }
+    }*/
   },
 };
