@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'pause',
     description: 'pauses the current track',
     async execute(interaction, client) {

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'resume',
     description: 'resumes the current track',
     async execute(interaction, client) {

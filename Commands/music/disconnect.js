@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'disconnect',
     description: 'disconnects the bot from the voice channel',
     async execute(interaction, client) {

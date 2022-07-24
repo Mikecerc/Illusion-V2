@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'skip',
     description: 'Skips the current track',
     async execute(interaction, client) {

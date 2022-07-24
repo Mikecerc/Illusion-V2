@@ -1,4 +1,4 @@
-const {
+import {
 	AudioPlayer,
 	AudioPlayerStatus,
 	AudioResource,
@@ -8,9 +8,9 @@ const {
 	VoiceConnectionDisconnectReason,
 	VoiceConnectionStatus,
     createAudioResource,
-} = require('@discordjs/voice');
-const{ Track } = require('./track');
-const { promisify }  = require('node:util');
+} from '@discordjs/voice';
+import Track from './track.js';
+import { promisify }  from 'node:util';
 
 const wait = promisify(setTimeout);
 
@@ -18,7 +18,7 @@ const wait = promisify(setTimeout);
  * A MusicSubscription exists for each active VoiceConnection. Each subscription has its own audio player and queue,
  * and it also attaches logic to the audio player and voice connection for error handling and reconnection logic.
  */
-class MusicSubscription {
+export default class MusicSubscription {
 	voiceConnection;
 	audioPlayer;
 	queue;
@@ -153,4 +153,3 @@ class MusicSubscription {
 		}
 	}
 }
-module.exports = MusicSubscription;
