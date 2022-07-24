@@ -1,9 +1,9 @@
-const { MessageEmbed } = require("discord.js");
-const fs = require("fs");
-module.exports = {
+import { MessageEmbed } from "discord.js";
+import fs from 'fs';
+export default {
   name: "messageCreate",
   execute(message) {
-    if (message.author.id != "406629388059410434") return;
+    /**if (message.author.id != "406629388059410434") return;
     let content = message.content.toLowerCase().replace(/\s/g, "");
     fs.readFile("./json/triggerWords.json", "utf-8", (err, data) => {
       if (err) {
@@ -22,12 +22,12 @@ module.exports = {
     });
     function testWords(data, content) {
         let iteration = 0;
-        for(let words in data) {
+        for(const words in data) {
             if (content.includes(data[iteration])) {
                 return true;
             }
             iteration++; 
         }
-    }
+    }*/
   },
 };

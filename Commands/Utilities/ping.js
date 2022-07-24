@@ -1,7 +1,7 @@
-const { MessageEmbed } = require('discord.js');
-module.exports = {
+import { MessageEmbed } from 'discord.js';
+export default {
     name: 'ping',
-    description: 'Sends the ping of the client(illusion)',
+    description: 'Round trip travel between Void and the Discord API',
     execute(interaction, client) {
         const Response = new MessageEmbed()
         .setColor('GREEN')

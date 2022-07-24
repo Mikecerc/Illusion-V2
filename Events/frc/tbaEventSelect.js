@@ -1,6 +1,6 @@
-const { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
-const TBA = require('../../api/api.js')
-module.exports = {
+import { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } from 'discord.js';
+import TBA from '../../api/api.js';
+export default {
     name: 'interactionCreate',
     async execute(interaction) {
         if (interaction.isSelectMenu() || interaction.isButton()) {
@@ -27,7 +27,7 @@ module.exports = {
 }
 
 async function getQuals(interaction, eventId, team) {
-    res = new TBA(process.env.tbaAuth)
+    const res = new TBA(process.env.tbaAuth)
     let matches = await res.getTeamEventMatchList(team, eventId);
     let embed = new MessageEmbed()
         .setTitle('Match Data')
@@ -36,7 +36,7 @@ async function getQuals(interaction, eventId, team) {
         .setFooter({ text: 'Data provided via The Blue Alliance API' })
 
     let finalQuals = [];
-    for (match in matches) {
+    for (const match in matches) {
         if (matches[match].comp_level == 'qm') {
             finalQuals.push(matches[match])
         }
@@ -50,7 +50,7 @@ async function getQuals(interaction, eventId, team) {
         embed.addField('Match Data not available', 'Its possible its just not up yet', false)
     }
     let options = []
-    for (match in finalQuals) {
+    for (const match in finalQuals) {
         const time = Number.isInteger(finalQuals[match].actual_time) ? `Actual time: ${new Date(finalQuals[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalQuals[match].predicted_time * 1000)}`
         const alliance = finalQuals[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
         const win = finalQuals[match].winning_alliance == alliance ? 'win' : (finalQuals[match].winning_alliance == '' ? 'tie' : 'loss')
@@ -92,7 +92,7 @@ async function getQuals(interaction, eventId, team) {
 }
 
 async function getPlayoffs(interaction, eventId, team) {
-    res = new TBA(process.env.tbaAuth)
+    const res = new TBA(process.env.tbaAuth)
     let matches = await res.getTeamEventMatchList(team, eventId);
     let embed = new MessageEmbed()
         .setTitle('Match Data')
@@ -101,7 +101,7 @@ async function getPlayoffs(interaction, eventId, team) {
         .setFooter({ text: 'Data provided via The Blue Alliance API' })
 
     let finalPlayoffs = [];
-    for (match in matches) {
+    for (const match in matches) {
         if (matches[match].comp_level == 'f' || matches[match].comp_level == 'sf' || matches[match].comp_level == 'qf') {
             finalPlayoffs.push(matches[match])
         }
@@ -129,7 +129,7 @@ async function getPlayoffs(interaction, eventId, team) {
         embed.addField('Match Data not available', 'Its possible its just not up yet', false)
     }
     let options = [];
-    for (match in finalPlayoffs) {
+    for (const match in finalPlayoffs) {
         const time = Number.isInteger(finalPlayoffs[match].actual_time) ? `Actual time: ${new Date(finalPlayoffs[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalPlayoffs[match].predicted_time * 1000)}`
         const alliance = finalPlayoffs[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
         const win = finalPlayoffs[match].winning_alliance == alliance ? 'win' : (finalPlayoffs[match].winning_alliance == '' ? 'tie' : 'loss')
@@ -177,12 +177,12 @@ async function getBreakdown(interaction, eventId, team) {
     const matchNumber = data[0];
     const compLevel = data[1];
 
-    res = new TBA(process.env.tbaAuth)
+    const res = new TBA(process.env.tbaAuth)
     let matches = await res.getTeamEventMatchList(team, eventId);
 
     let finalMatch
 
-    for (match in matches) {
+    for (const match in matches) {
         if (matches[match].comp_level == compLevel && matches[match].match_number == matchNumber) {
             finalMatch = matches[match];
         }
@@ -202,18 +202,18 @@ async function getBreakdown(interaction, eventId, team) {
         .addField(`Red Total Score:`, `${finalMatch.alliances.red.score}`, true)
         .addField(`Red Auton Score:`, `${finalMatch.score_breakdown.red.autoPoints}`, true)
         .addField(`Red Teleop Score:`, `${finalMatch.score_breakdown.red.teleopPoints}`, true)
-        .addField(`Blue Total Score:`, `${finalMatch.alliances.blue.score}`, true)
-        .addField(`Blue Auton Score:`, `${finalMatch.score_breakdown.blue.autoPoints}`, true)
-        .addField(`Blue Teleop Score:`, `${finalMatch.score_breakdown.blue.teleopPoints}`, true)
         .addField(`Red Ranking Points:`, `${finalMatch.score_breakdown.red.rp}`, true)
         .addField('Red Endgame Points:', `${finalMatch.score_breakdown.red.endgamePoints}`, true)
         .addField('Red Endgame Levels', `${finalMatch.score_breakdown.red.endgameRobot1}, ${finalMatch.score_breakdown.red.endgameRobot2}, ${finalMatch.score_breakdown.red.endgameRobot3}`, true)
-        .addField(`Blue Ranking Points:`, `${finalMatch.score_breakdown.blue.rp}`, true)
-        .addField('Blue Endgame Points:', `${finalMatch.score_breakdown.blue.endgamePoints}`, true)
-        .addField('Blue Endgame Levels', `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, true)
         .addField('Red fouls', `${finalMatch.score_breakdown.red.foulCount}`, true)
         .addField('Red Technical Fouls', `${finalMatch.score_breakdown.red.techFoulCount}`, true)
         .addField('Red Penalty Points received', `${finalMatch.score_breakdown.red.foulPoints}`, true)
+        .addField(`Blue Total Score:`, `${finalMatch.alliances.blue.score}`, true)
+        .addField(`Blue Auton Score:`, `${finalMatch.score_breakdown.blue.autoPoints}`, true)
+        .addField(`Blue Teleop Score:`, `${finalMatch.score_breakdown.blue.teleopPoints}`, true)
+        .addField(`Blue Ranking Points:`, `${finalMatch.score_breakdown.blue.rp}`, true)
+        .addField('Blue Endgame Points:', `${finalMatch.score_breakdown.blue.endgamePoints}`, true)
+        .addField('Blue Endgame Levels', `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, true)
         .addField('Blue fouls', `${finalMatch.score_breakdown.blue.foulCount}`, true)
         .addField('Blue Technical Fouls', `${finalMatch.score_breakdown.blue.techFoulCount}`, true)
         .addField('Blue Penalty Points received', `${finalMatch.score_breakdown.blue.foulPoints}`, true);
@@ -238,6 +238,4 @@ async function getBreakdown(interaction, eventId, team) {
         )
     }
     interaction.update({ embeds: [embed], components: [row] })
-
-    console.log(finalMatch)
 }

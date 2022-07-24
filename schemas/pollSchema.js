@@ -1,6 +1,7 @@
-const { Schema, model } = require('mongoose');
+import pkg from 'mongoose';
+const { Schema, model } = pkg;
 
-pollSchema = new Schema({
+const pollSchema = new Schema({
     messageId: String, 
     anonymous: Boolean,
     multipleResponse: Boolean,
@@ -20,4 +21,4 @@ pollSchema = new Schema({
 
 const pollModel = model('pollData', pollSchema, 'pollData');
 
-module.exports = pollModel; 
+export default pollModel;

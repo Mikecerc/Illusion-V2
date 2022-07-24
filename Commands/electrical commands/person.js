@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-fallthrough */
-module.exports = {
+export default {
     name: 'person',
     description: 'Get a picture of a person',
     options: [

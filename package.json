@@ -2,6 +2,7 @@
   "name": "illusionv2",
   "version": "2.0.0",
   "description": "Discord Bot illusion for 862 electrical (version 2.0.0)",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +12,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.10.0",
-    "discord.js": "^13.7.0",
+    "discord.js": "^13.8.1",
     "dotenv": "^16.0.0",
     "ffmpeg-static": "^4.4.1",
     "fs": "^0.0.1-security",

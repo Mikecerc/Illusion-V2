@@ -1,13 +1,13 @@
-const spawn = require("child_process").spawn;
-const { MessageEmbed } = require('discord.js');
+import child_process from "child_process";
+import { MessageEmbed } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'weather',
     description: 'retrieves weather data from a weather station near pcep',
 
     async execute(interaction) {
         interaction.deferReply();
-        const process = spawn('python3', ["./Commands/weather/parse.py"]);
+        const process = child_process.spawn('python3', ["./Commands/weather/parse.py"]);
 
         process.stderr.on('data', (data) => {
             console.log(String.fromCharCode.apply(null, data))

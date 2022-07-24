@@ -1,6 +1,6 @@
 /* eslint-disable no-fallthrough */
 /* eslint-disable no-case-declarations */
-module.exports = {
+export default {
     name: 'meme',
     description: 'Get a electrical/robotics meme!',
     options: [

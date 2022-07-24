@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     name: 'ready',
     execute(client) {
         console.log('The client is ready :)');
