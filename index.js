@@ -4,6 +4,7 @@ import { Client, Collection } from 'discord.js';
 env.config()
 mongoose.connect(process.env.db).then(console.log('connected to db')).catch((err) => console.log(err))
 const client = new Client({ intents: 32767 });
+client.subscriptions = new Map();
 client.commands = new Collection();
 client.setMaxListeners(20);
 export default client;

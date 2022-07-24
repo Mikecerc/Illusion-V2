@@ -1,9 +1,11 @@
 import { readdirSync } from 'fs';
 export default async (client) => {
     const commandsArry = [];
-    const commandFolders = readdirSync('./Commands');
+    const commandFolders = readdirSync("./Commands");
     for (const folder of commandFolders) {
-        const commandFiles = readdirSync(`./Commands/${folder}`).filter(files => files.endsWith('.js'));
+        const commandFiles = readdirSync(`./Commands/${folder}`).filter(
+            (files) => files.endsWith('.js')
+        );
         for (const file of commandFiles) {
             const commandFile = await import(`../Commands/${folder}/${file}`);
             const command  = commandFile.default;
