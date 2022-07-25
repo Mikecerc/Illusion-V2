@@ -1,5 +1,5 @@
 export default {
-    name: 'disconnect',
+    name: 'dc',
     description: 'disconnects the bot from the voice channel',
     async execute(interaction, client) {
         await interaction.deferReply();

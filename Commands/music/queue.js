@@ -6,7 +6,7 @@ export default {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);
         if (subscription) {
-            console.log(subscription.audioPlayer);
+            /** 
             const current =
                 subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
                     ? `Nothing is currently playing!`
@@ -18,6 +18,9 @@ export default {
                 .join("\n");
 
             await interaction.followUp(`${current}\n\n${queue}`);
+            */
+           const queue = subscription.queue; 
+
         } else {
             await interaction.followUp("Not playing in this server!");
         }
