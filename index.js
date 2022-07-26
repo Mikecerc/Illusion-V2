@@ -6,7 +6,7 @@ mongoose.connect(process.env.db).then(console.log('connected to db')).catch((err
 const client = new Client({ intents: 32767 });
 client.subscriptions = new Map();
 client.commands = new Collection();
-client.setMaxListeners(20);
+client.setMaxListeners(25);
 export default client;
 ['Events.js', 'Commands.js'].forEach(handler => {
 import(`./Handlers/${handler}`).then(file => file.default(client));

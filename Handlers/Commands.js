@@ -7,7 +7,7 @@ export default async (client) => {
             (files) => files.endsWith('.js')
         );
         for (const file of commandFiles) {
-            const commandFile = await import(`./Commands/${folder}/${file}`);
+            const commandFile = await import(`../Commands/${folder}/${file}`);
             const command  = commandFile.default;
             client.commands.set(command.name, command);
             commandsArry.push(command);

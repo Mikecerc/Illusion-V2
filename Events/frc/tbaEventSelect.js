@@ -5,11 +5,11 @@ export default {
     async execute(interaction) {
         if (interaction.isSelectMenu() || interaction.isButton()) {
             const data = interaction.customId.split('-');
-            if (data[1] == '1') {
+            if (data[1] == '1' && interaction.isButton()) {
                 const eventId = interaction.values[0];
                 getQuals(interaction, eventId, data[0]);
 
-            } else if (data[1] == '2') {
+            } else if (data[1] == '2' && interaction.isButton()) {
                 if (data[2] == '1') {
                     const eventId = data[3];
                     getPlayoffs(interaction, eventId, data[0])
@@ -18,7 +18,7 @@ export default {
                     const eventId = data[3];
                     getQuals(interaction, eventId, data[0]);
                 }
-            } else if (data[1] == '3') {
+            } else if (data[1] == '3' && interaction.isSelectMenu()) {
                 const eventId = data[2];
                 getBreakdown(interaction, eventId, data[0]);
             }

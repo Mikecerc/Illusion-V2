@@ -4,14 +4,14 @@ import {
     VoiceConnectionStatus,
 } from "@discordjs/voice";
 import { GuildMember } from "discord.js";
-import MusicSubscription from "../../classes/audio/subscription.js.js";
+import MusicSubscription from "../../classes/audio/subscription.js";
 import Track from "../../classes/audio/track.js";
 import ytdl from "ytdl-core";
 import yts from "yt-search";
 
 export default {
     name: "play",
-    description: "test",
+    description: "search for a song or play a youtube video/playlist",
     options: [
         {
             name: "search",
@@ -95,6 +95,7 @@ export default {
                     }),
                 },
                 thumbnail: info.thumbnail,
+                duration: info.duration,
             });
             // Enqueue the track and reply a success message to the user
             subscription.enqueue(track);
