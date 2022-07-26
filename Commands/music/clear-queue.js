@@ -1,6 +1,6 @@
 export default {
-    name: 'pause',
-    description: 'pauses the current track',
+    name: 'clear',
+    description: 'clear the queue',
     async execute(interaction, client) {
         await interaction.deferReply();
         if (!interaction.member.voice.channel) {
@@ -8,8 +8,8 @@ export default {
         }
 		let subscription = client.subscriptions.get(interaction.guildId);
         if (subscription) {
-			subscription.audioPlayer.pause();
-			await interaction.followUp({ content: `Paused!`, ephemeral: true });
+			subscription.queue = [];
+			await interaction.followUp({ content: `The queue has been cleared`, ephemeral: true });
 		} else {
 			await interaction.followUp('Not playing in this server!');
 		}

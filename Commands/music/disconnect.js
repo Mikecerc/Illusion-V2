@@ -3,6 +3,9 @@ export default {
     description: 'disconnects the bot from the voice channel',
     async execute(interaction, client) {
         await interaction.deferReply();
+		if (!interaction.member.voice.channel) {
+            return await interaction.followUp({ content: 'You must be in a voice channel to use this command'});
+        }
 		let subscription = client.subscriptions.get(interaction.guildId);
         if (subscription) {
 			subscription.voiceConnection.destroy();

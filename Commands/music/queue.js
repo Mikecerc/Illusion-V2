@@ -51,7 +51,7 @@ export default {
                     .setAuthor({ name: `Queue (${queue.length} tracks)` })
                     .addFields(embedFields)
                     .setFooter({
-                        text: `Page 1/1 - ${time} left - ${subscription.audioPlayer.state.resource.metadata.requestedBy.text}`,
+                        text: `Page 1/1 - ${time} left - Requested by: ${interaction.user.tag}`,
                     });
                 const dropdown = new MessageActionRow().addComponents(
                     new MessageSelectMenu()
@@ -98,10 +98,7 @@ export default {
                     .setFooter({
                         text: `Page 1/${Math.ceil(
                             queue.length / 25
-                        )} - ${time} left - ${
-                            subscription.audioPlayer.state.resource.metadata
-                                .requestedBy.text
-                        }`,
+                        )} - ${time} left - Requested by: ${interaction.user.tag}`,
                     });
                 const buttons = new MessageActionRow().addComponents(
                     new MessageButton()

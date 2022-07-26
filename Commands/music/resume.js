@@ -3,6 +3,9 @@ export default {
     description: 'resumes the current track',
     async execute(interaction, client) {
         await interaction.deferReply();
+        if (!interaction.member.voice.channel) {
+            return await interaction.followUp({ content: 'You must be in a voice channel to use this command'});
+        }
 		let subscription = client.subscriptions.get(interaction.guildId);
         if (subscription) {
 			subscription.audioPlayer.unpause();

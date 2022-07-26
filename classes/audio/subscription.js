@@ -27,6 +27,8 @@ export default class MusicSubscription {
     readyLock = false;
 
     constructor(voiceConnection, interaction) {
+        this.loop = false;
+        this.loopSkipped = false;
         this.voiceConnection = voiceConnection;
         this.audioPlayer = createAudioPlayer({
             maxMissedFrames: 200,
@@ -118,14 +120,26 @@ export default class MusicSubscription {
                 void this.processQueue(interaction);
             } else if (newState.status === AudioPlayerStatus.Playing) {
                 // If the Playing state has been entered, then a new track has started playback.
-                const embed = new MessageEmbed()
-                    .setColor("ORANGE")
-                    .setAuthor({ name: "Now Playing" })
-                    .setTitle(`${newState.resource.metadata.title}`)
-                    .setURL(newState.resource.metadata.url)
-                    .setThumbnail(newState.resource.metadata.thumbnail)
-                    .setFooter(newState.resource.metadata.requestedBy);
-                interaction.channel.send({ embeds: [embed] });
+                if (this.loop && this.loopNpMsg == false) {
+                    const embed = new MessageEmbed()
+                        .setColor("ORANGE")
+                        .setAuthor({ name: "Now Playing 🔁" })
+                        .setTitle(`${newState.resource.metadata.title}`)
+                        .setURL(newState.resource.metadata.url)
+                        .setThumbnail(newState.resource.metadata.thumbnail)
+                        .setFooter(newState.resource.metadata.requestedBy);
+                    interaction.channel.send({ embeds: [embed] });
+                    this.loopNpMsg = true;
+                } else if (!this.loop) {
+                    const embed = new MessageEmbed()
+                        .setColor("ORANGE")
+                        .setAuthor({ name: "Now Playing" })
+                        .setTitle(`${newState.resource.metadata.title}`)
+                        .setURL(newState.resource.metadata.url)
+                        .setThumbnail(newState.resource.metadata.thumbnail)
+                        .setFooter(newState.resource.metadata.requestedBy);
+                    interaction.channel.send({ embeds: [embed] });
+                }
             }
         });
 
@@ -163,16 +177,33 @@ export default class MusicSubscription {
         // If the queue is locked (already being processed), is empty, or the audio player is already playing something, return
         if (
             this.queueLock ||
-            this.audioPlayer.state.status !== AudioPlayerStatus.Idle ||
-            this.queue.length === 0
+            this.audioPlayer.state.status !== AudioPlayerStatus.Idle
         ) {
             return;
         }
+        if (
+            (this.queue.length === 0 && !this.loop) ||
+            (this.queue.length === 0 && this.loopSkipped == true)
+        )
+            return;
         // Lock the queue to guarantee safe access
         this.queueLock = true;
 
         // Take the first item from the queue. This is guaranteed to exist due to the non-empty check above.
-        const nextTrack = this.queue.shift();
+        let nextTrack;
+        // console.log(this.loop, this.loopSkipped, this.lastResource);
+        if (this.loop && this.loopSkipped == false && this.lastResource) {
+            nextTrack = this.lastResource;
+            if (this.loopNpMsg == false) {
+               this.queue.shift();
+            }
+        } else {
+            if (this.queue.length === 0) return; // just to be sure :)
+            this.loopSkipped = false;
+            this.loopNpMsg = false;
+            nextTrack = this.queue.shift();
+        }
+        //const nextTrack = this.queue.shift();
         try {
             // Attempt to convert the Track into an AudioResource (i.e. start streaming the video)
             //const resource = createAudioResource(nextTrack.url, { metadata: nextTrack })
@@ -180,14 +211,19 @@ export default class MusicSubscription {
                 filter: "audioonly",
                 quality: "highestaudio",
                 dlChunkSize: 0,
-				highWaterMark: 1<<25,
+                highWaterMark: 1 << 25,
             });
             const resource = createAudioResource(stream, {
                 metadata: nextTrack,
             });
+            this.lastResource = nextTrack;
             this.audioPlayer.play(resource);
             this.queueLock = false;
         } catch (error) {
+            if (this.loop) {
+                this.loopSkipped = true;
+                this.loopNpMsg = false;
+            }
             // If an error occurred, try the next item of the queue instead
             console.warn(error);
             interaction.channel.send("There was an error");

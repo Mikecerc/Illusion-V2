@@ -8,12 +8,12 @@ export default {
                 let subscription = await client.subscriptions.get(
                     interaction.guildId
                 );
-                response(interaction, Number.parseInt(data[2]) + 1, Number.parseInt(data[2]), subscription);
+                response(interaction, Number.parseInt(data[2]) - 1, subscription);
             } else if (data[0] == "41") {
                 let subscription = await client.subscriptions.get(
                     interaction.guildId
                 );
-                response(interaction, Number.parseInt(data[2]) - 1, Number.parseInt(data[2]), subscription);
+                response(interaction, Number.parseInt(data[2]) + 1, subscription);
             }
         } else if (interaction.isSelectMenu()) {
             const data = interaction.customId.split("-");
@@ -26,7 +26,7 @@ export default {
                 subscription.queue.splice(subscription.queue.indexOf(track), 1); 
             }
             updateQueue(interaction, subscription, Number.parseInt(data[2]));
-            interaction.followUp(`${interaction.values.length} track(s) deleted`)
+            //interaction.reply(`${interaction.values.length} track(s) deleted`)
         }
     },
 };
@@ -57,7 +57,7 @@ async function updateQueue(interaction, subscription, currentPageIndex) {
             .setAuthor({ name: `Queue (${queue.length} tracks)` })
             .addFields(embedFields)
             .setFooter({
-                text: `Page 1/1 - ${time} left - ${subscription.audioPlayer.state.resource.metadata.requestedBy.text}`,
+                text: `Page 1/1 - ${time} left - Requested by: ${interaction.user.tag}`,
             });
         const dropdown = new MessageActionRow().addComponents(
             new MessageSelectMenu()
@@ -76,7 +76,7 @@ async function updateQueue(interaction, subscription, currentPageIndex) {
             await interaction.update({ embeds: [embed] });
         }
     } else {
-        response(interaction, currentPageIndex, currentPageIndex, subscription);
+        response(interaction, currentPageIndex, subscription);
     }
 }
 
@@ -92,17 +92,18 @@ function hms(num) {
     return hours+':'+minutes+':'+seconds;
 }
 
-async function response(interaction, newIndex, currentIndex, subscription) {
+async function response(interaction, newIndex, subscription) {
     const queue = subscription.queue;
     let embedFields = [];
         let options = [];
         let timeRemSec = 0;
-        const begin = (currentIndex * 25) - 25;
-        const end = (currentIndex * 25) - 1;
+        const begin = (newIndex * 25) - 25;
+        const end = (newIndex * 25) - 1;
+        console.log(begin, end)
         const slicedQueue = queue.slice(begin, end)
         for (const song in slicedQueue) {
             embedFields.push({
-                name: `${Number.parseInt(song) + 1 + (currentIndex * 25)}.`,
+                name: `${Number.parseInt(song) + 1 + (newIndex * 25) - 25}.`,
                 value: `[${slicedQueue[song].title}](${slicedQueue[song].url}) [${slicedQueue[song].duration.timestamp}]`,
             });
             options.push({
@@ -123,13 +124,12 @@ async function response(interaction, newIndex, currentIndex, subscription) {
             .setAuthor({ name: `Queue (${queue.length} tracks)` })
             .addFields(embedFields)
             .setFooter({
-                text: `Page 1/${Math.ceil(
+                text: `${newIndex}/${Math.ceil(
                     queue.length / 25
-                )} - ${time} left - ${
-                    subscription.audioPlayer.state.resource.metadata
-                        .requestedBy.text
-                }`,
+                )} - ${time} left - Requested by: ${interaction.user.tag}`,
             });
+            console.log(newIndex)
+            console.log(Math.ceil(queue.length / 24))
         const buttonDisabled = newIndex == 1 ? true : false; 
         const buttonDisabled0 = newIndex >= Math.ceil(queue.length / 24) ? true : false;
         const buttons = new MessageActionRow().addComponents(
