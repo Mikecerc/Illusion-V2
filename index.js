@@ -5,6 +5,7 @@ env.config()
 mongoose.connect(process.env.db).then(console.log('connected to db')).catch((err) => console.log(err))
 const client = new Client({ intents: 32767 });
 client.commands = new Collection();
+client.reactionRoles = {};
 client.setMaxListeners(20);
 export default client;
 ['Events.js', 'Commands.js'].forEach(handler => {

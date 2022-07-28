@@ -80,6 +80,13 @@ export default {
                     doc.multiRole = false;
                     doc.save();
                     msg.react(emojiName);
+                    if (!Object.keys(client.reactionRoles).includes(interaction.guild.id)) client.reactionRoles[interaction.guild.id] = {};
+                    if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id)) client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId])) client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!client.reactionRoles[interaction.guild.id][channel.id].includes(msg.id)) {
+                        client.reactionRoles[interaction.guild.id][channel.id].push(msg.id);
+                    }
+
                     return interaction.update({
                         embeds: [success],
                         components: [],
@@ -108,7 +115,7 @@ export default {
                         .setStyle("SUCCESS"),
                     new MessageButton()
                         .setCustomId(
-                            `33${messageId}-${channelId}-${role.id}-${emojiName}`
+                            `33-${messageId}-${channelId}-${role.id}-${emojiName}`
                         )
                         .setLabel("No")
                         .setStyle("DANGER")
@@ -146,6 +153,8 @@ export default {
                 });
                 if (data[0] == "33") {
                     res.multiRole = true;
+                } else {
+                    res.multiRole = false;
                 }
                 await res.save();
             } catch (e) {
@@ -182,6 +191,12 @@ export default {
                     channelId
                 );
                 const msg = await channel.messages.fetch(messageId);
+                    if (!Object.keys(client.reactionRoles).includes(interaction.guild.id)) client.reactionRoles[interaction.guild.id] = {};
+                    if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id)) client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId])) client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!client.reactionRoles[interaction.guild.id][channel.id].includes(msg.id)) {
+                        client.reactionRoles[interaction.guild.id][channel.id].push(msg.id);
+                    }
                 msg.react(emojiName);
                 return interaction.update({
                     embeds: [success],
