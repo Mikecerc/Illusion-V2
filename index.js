@@ -9,6 +9,7 @@ mongoose.connect(process.env.db).then(console.log('connected to db')).catch((err
 const client = new Client({ intents: 32767 });
 client.subscriptions = new Map();
 client.commands = new Collection();
+client.reactionRoles = {};
 client.setMaxListeners(30);
 export default client;
 //run each handler file
