@@ -19,16 +19,16 @@ const wait = promisify(setTimeout);
  * and it also attaches logic to the audio player and voice connection for error handling and reconnection logic.
  */
 export default class MusicSubscription {
-    voiceConnection;
-    audioPlayer;
+    voiceConnection: VoiceConnection;
+    audioPlayer: AudioPlayer;
     queue: any[];
     queueLock = false;
     readyLock = false;
-    loop;
-    loopSkipped;
+    loop: boolean;
+    loopSkipped: boolean;
     loopNpMsg = false;
     lastResource: any;
-    interaction;
+    interaction: { channel: { send: (arg0: any) => void; }};
 
     constructor(voiceConnection: VoiceConnection, interaction: { channel: { send: (arg0: any) => void; }; }) {
         this.loop = false;
