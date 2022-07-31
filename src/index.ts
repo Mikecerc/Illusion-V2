@@ -6,6 +6,7 @@ env.config()
 //connect to mongoose db
 try {
 mongoose.connect(process.env.db as string);
+console.log('connected to db')
 } catch (err) { console.error('error connecting to mongoDb', err)}
 //initiate discordjs client
 const client: any = new Client({ intents: 32767 });
