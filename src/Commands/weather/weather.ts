@@ -15,8 +15,6 @@ export default {
 
         process.stdout.on('data', (data) => {
             const str = String.fromCharCode.apply(null, data).replace(/\s/g, '').replace('b', '').replace("'",'');
-            console.log(str);
-
             const values = str.split('-')
 
             const temp = values[0]
@@ -70,10 +68,6 @@ export default {
 
             interaction.followUp({ embeds: [embed] });
 
-        });
-
-        process.on('close', (code) => {
-            console.log(`child process exited with code ${code}`);
         });
     }
 }
