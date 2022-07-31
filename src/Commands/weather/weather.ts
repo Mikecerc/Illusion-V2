@@ -7,7 +7,7 @@ export default {
 
     async execute(interaction: any) {
         interaction.deferReply();
-        const process = child_process.spawn('python3', ["./Commands/weather/parse.py"]);
+        const process = child_process.spawn('python3', ["./src/Commands/weather/parse.py"]);
 
         process.stderr.on('data', (data) => {
             console.log(String.fromCharCode.apply(null, data))
