@@ -68,7 +68,7 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
                 .setPlaceholder("Delete a song")
         );
         if (options.length > 0) {
-            await interaction.followUp({
+            await interaction.update({
                 embeds: [embed],
                 components: [dropdown],
             });
