@@ -11,7 +11,8 @@ import {
 } from "@discordjs/voice";
 import { promisify } from "node:util";
 import ytdl from "ytdl-core";
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
+import Track from "./track";
 const wait = promisify(setTimeout);
 
 /**
@@ -21,13 +22,13 @@ const wait = promisify(setTimeout);
 export default class MusicSubscription {
     voiceConnection: VoiceConnection;
     audioPlayer: AudioPlayer;
-    queue: any[];
+    queue: Track[];
     queueLock = false;
     readyLock = false;
     loop: boolean;
     loopSkipped: boolean;
     loopNpMsg = false;
-    lastResource: any;
+    lastResource: Track;
     interaction: { channel: { send: (arg0: any) => void; }};
 
     constructor(voiceConnection: VoiceConnection, interaction: { channel: { send: (arg0: any) => void; }; }) {
@@ -124,8 +125,8 @@ export default class MusicSubscription {
             } else if (newState.status === AudioPlayerStatus.Playing) {
                 // If the Playing state has been entered, then a new track has started playback.
                 if (this.loop && this.loopNpMsg == false) {
-                    const embed = new MessageEmbed()
-                        .setColor("ORANGE")
+                    const embed = new EmbedBuilder()
+                        .setColor("Orange")
                         .setAuthor({ name: "Now Playing 🔁" })
                         .setTitle(`${newState.resource.metadata.title}`)
                         .setURL(newState.resource.metadata.url)
@@ -134,8 +135,8 @@ export default class MusicSubscription {
                     interaction.channel.send({ embeds: [embed] });
                     this.loopNpMsg = true;
                 } else if (!this.loop) {
-                    const embed = new MessageEmbed()
-                        .setColor("ORANGE")
+                    const embed = new EmbedBuilder()
+                        .setColor("Orange")
                         .setAuthor({ name: "Now Playing" })
                         .setTitle(`${newState.resource.metadata.title}`)
                         .setURL(newState.resource.metadata.url)

@@ -1,5 +1,5 @@
-import { MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu } from 'discord.js';
-import TBA from '../../api/api.js';
+import { EmbedBuilder, SelectMenuBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import TBA from '../../classes/tba/api.js';
 export default {
     name: 'interactionCreate',
     async execute(interaction: any) {
@@ -29,16 +29,16 @@ export default {
 async function getQuals(interaction: any, eventId: string, team: number) {
     const res = new TBA(process.env.tbaAuth)
     let matches: any = await res.getTeamEventMatchList(team, eventId);
-    let embed = new MessageEmbed()
+    let embed = new EmbedBuilder()
         .setTitle('Match Data')
         .setDescription(`Match data for team ${team} at ${eventId}`)
-        .setColor('RANDOM')
-        .setFooter({ text: 'Data provided via The Blue Alliance API' })
+        .setColor('Orange')
+        .setFooter({ text: 'Data provided via The Blue Alliance API' });
 
     let finalQuals = [];
     for (const match in matches) {
         if (matches[match].comp_level == 'qm') {
-            finalQuals.push(matches[match])
+            finalQuals.push(matches[match]);
         }
     }
     finalQuals.sort(function (a, b) {
@@ -47,14 +47,14 @@ async function getQuals(interaction: any, eventId: string, team: number) {
         return aNum - bNum;
     });
     if (finalQuals.length == 0) {
-        embed.addField('Match Data not available', 'Its possible its just not up yet', false)
+        embed.addFields({ name: 'Match Data not available', value: 'Its possible its just not up yet', inline: false });
     }
-    let options = []
+    let options = [];
     for (const match in finalQuals) {
-        const time = Number.isInteger(finalQuals[match].actual_time) ? `Actual time: ${new Date(finalQuals[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalQuals[match].predicted_time * 1000)}`
-        const alliance = finalQuals[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
-        const win = finalQuals[match].winning_alliance == alliance ? 'win' : (finalQuals[match].winning_alliance == '' ? 'tie' : 'loss')
-        embed.addField(`Qualifying Match #${finalQuals[match].match_number}`, `${time}]\nAlliance: ${alliance}\nWin?: ${win}`)
+        const time = Number.isInteger(finalQuals[match].actual_time) ? `Actual time: ${new Date(finalQuals[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalQuals[match].predicted_time * 1000)}`;
+        const alliance = finalQuals[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue';
+        const win = finalQuals[match].winning_alliance == alliance ? 'win' : (finalQuals[match].winning_alliance == '' ? 'tie' : 'loss');
+        embed.addFields({ name: `Qualifying Match #${finalQuals[match].match_number}`, value: `${time}]\nAlliance: ${alliance}\nWin?: ${win}` });
         options.push(
             {
                 label: `Qualifying Match #${finalQuals[match].match_number}`,
@@ -64,23 +64,23 @@ async function getQuals(interaction: any, eventId: string, team: number) {
         )
     }
 
-    let row = new MessageActionRow()
+    let row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-2-${eventId}`)
                 .setLabel(`Qualifiers`)
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(true),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-1-${eventId}`)
                 .setLabel('Playoffs')
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(false),
         );
     if (finalQuals.length > 0) {
-        const row0 = new MessageActionRow()
+        const row0 = new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId(`${team}-3-${eventId}`)
                     .setPlaceholder(`View more data`)
                     .addOptions(options),
@@ -94,10 +94,10 @@ async function getQuals(interaction: any, eventId: string, team: number) {
 async function getPlayoffs(interaction, eventId, team) {
     const res = new TBA(process.env.tbaAuth)
     let matches: any = await res.getTeamEventMatchList(team, eventId);
-    let embed = new MessageEmbed()
+    let embed = new EmbedBuilder()
         .setTitle('Match Data')
         .setDescription(`Match data for team ${team} at ${eventId}`)
-        .setColor('RANDOM')
+        .setColor('Orange')
         .setFooter({ text: 'Data provided via The Blue Alliance API' })
 
     let finalPlayoffs = [];
@@ -126,15 +126,15 @@ async function getPlayoffs(interaction, eventId, team) {
         }
     });
     if (finalPlayoffs.length == 0) {
-        embed.addField('Match Data not available', 'Its possible its just not up yet', false)
+        embed.addFields({ name: 'Match Data not available', value: 'Its possible its just not up yet', inline: false });
     }
     let options = [];
     for (const match in finalPlayoffs) {
-        const time = Number.isInteger(finalPlayoffs[match].actual_time) ? `Actual time: ${new Date(finalPlayoffs[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalPlayoffs[match].predicted_time * 1000)}`
-        const alliance = finalPlayoffs[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue'
-        const win = finalPlayoffs[match].winning_alliance == alliance ? 'win' : (finalPlayoffs[match].winning_alliance == '' ? 'tie' : 'loss')
-        const matchType = finalPlayoffs[match].comp_level == 'f' ? 'Final' : (finalPlayoffs[match].comp_level == 'sf' ? 'Semi-Final' : 'Quarter-Final')
-        embed.addField(`${matchType} Match #${finalPlayoffs[match].match_number}`, `${time}]\nAlliance: ${alliance}\nWin?: ${win}`)
+        const time = Number.isInteger(finalPlayoffs[match].actual_time) ? `Actual time: ${new Date(finalPlayoffs[match].actual_time * 1000)}` : ` Predicted time: ${new Date(finalPlayoffs[match].predicted_time * 1000)}`;
+        const alliance = finalPlayoffs[match].alliances.red.team_keys.includes(`frc${team}`) ? 'red' : 'blue';
+        const win = finalPlayoffs[match].winning_alliance == alliance ? 'win' : (finalPlayoffs[match].winning_alliance == '' ? 'tie' : 'loss');
+        const matchType = finalPlayoffs[match].comp_level == 'f' ? 'Final' : (finalPlayoffs[match].comp_level == 'sf' ? 'Semi-Final' : 'Quarter-Final');
+        embed.addFields({ name: `${matchType} Match #${finalPlayoffs[match].match_number}`, value: `${time}]\nAlliance: ${alliance}\nWin?: ${win}` });
         options.push(
             {
                 label: `${matchType} Match #${finalPlayoffs[match].match_number}`,
@@ -144,24 +144,24 @@ async function getPlayoffs(interaction, eventId, team) {
         )
     }
 
-    let row = new MessageActionRow()
+    let row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-2-${eventId}`)
                 .setLabel(`Qualifiers`)
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(false),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-1-${eventId}`)
                 .setLabel('Playoffs')
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(true),
 
         );
     if (finalPlayoffs.length > 0) {
-        const row0 = new MessageActionRow()
+        const row0 = new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId(`${team}-3-${eventId}`)
                     .setPlaceholder(`View more data`)
                     .addOptions(options),
@@ -190,49 +190,49 @@ async function getBreakdown(interaction, eventId, team) {
     const level = compLevel == 'f' ? 'Final' : (compLevel == 'sf' ? 'Semi-Final' : (compLevel == 'qf' ? 'Quarter-Final' : 'Qualifying'))
     const time = Number.isInteger(finalMatch.actual_time) ? ` Actual: ${new Date(finalMatch.actual_time * 1000)}` : `Predicted: ${new Date(finalMatch.predicted_time * 1000)}`
     const winner = finalMatch.alliances.red.score >= finalMatch.alliances.blue.score ? (finalMatch.alliances.red.score == finalMatch.alliances.blue.score ? 'Tie' : 'Red') : 'Blue'
-    const color = winner == 'Red' ? 'RED' : (winner == 'Tie' ? 'GREEN' : 'BLUE')
-    const embed = new MessageEmbed()
+    const color = winner == 'Red' ? 'Red' : (winner == 'Tie' ? 'Green' : 'Blue')
+    const embed = new EmbedBuilder()
         .setTitle('Match Breakdown')
         .setDescription(`Match Breakdown for ${level} Match #${matchNumber}`)
         .setColor(color)
-        .addField(`Time of match:`, time, false)
-        .addField(`Red Alliance:`, `${finalMatch.alliances.red.team_keys}`, true)
-        .addField(`Blue Alliance:`, `${finalMatch.alliances.blue.team_keys}`, true)
-        .addField(`Winning Alliance:`, winner, false)
-        .addField(`Red Total Score:`, `${finalMatch.alliances.red.score}`, true)
-        .addField(`Red Auton Score:`, `${finalMatch.score_breakdown.red.autoPoints}`, true)
-        .addField(`Red Teleop Score:`, `${finalMatch.score_breakdown.red.teleopPoints}`, true)
-        .addField(`Red Ranking Points:`, `${finalMatch.score_breakdown.red.rp}`, true)
-        .addField('Red Endgame Points:', `${finalMatch.score_breakdown.red.endgamePoints}`, true)
-        .addField('Red Endgame Levels', `${finalMatch.score_breakdown.red.endgameRobot1}, ${finalMatch.score_breakdown.red.endgameRobot2}, ${finalMatch.score_breakdown.red.endgameRobot3}`, true)
-        .addField('Red fouls', `${finalMatch.score_breakdown.red.foulCount}`, true)
-        .addField('Red Technical Fouls', `${finalMatch.score_breakdown.red.techFoulCount}`, true)
-        .addField('Red Penalty Points received', `${finalMatch.score_breakdown.red.foulPoints}`, true)
-        .addField(`Blue Total Score:`, `${finalMatch.alliances.blue.score}`, true)
-        .addField(`Blue Auton Score:`, `${finalMatch.score_breakdown.blue.autoPoints}`, true)
-        .addField(`Blue Teleop Score:`, `${finalMatch.score_breakdown.blue.teleopPoints}`, true)
-        .addField(`Blue Ranking Points:`, `${finalMatch.score_breakdown.blue.rp}`, true)
-        .addField('Blue Endgame Points:', `${finalMatch.score_breakdown.blue.endgamePoints}`, true)
-        .addField('Blue Endgame Levels', `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, true)
-        .addField('Blue fouls', `${finalMatch.score_breakdown.blue.foulCount}`, true)
-        .addField('Blue Technical Fouls', `${finalMatch.score_breakdown.blue.techFoulCount}`, true)
-        .addField('Blue Penalty Points received', `${finalMatch.score_breakdown.blue.foulPoints}`, true);
+        .addFields({ name: `Time of match:`, value: time, inline: false })
+        .addFields({ name: `Red Alliance:`, value: `${finalMatch.alliances.red.team_keys}`, inline: true })
+        .addFields({ name: `Blue Alliance:`, value: `${finalMatch.alliances.blue.team_keys}`, inline: true })
+        .addFields({ name: `Winning Alliance:`, value: winner, inline: false })
+        .addFields({ name: `Red Total Score:`, value: `${finalMatch.alliances.red.score}`, inline: true })
+        .addFields({ name: `Red Auton Score:`, value: `${finalMatch.score_breakdown.red.autoPoints}`, inline: true })
+        .addFields({ name: `Red Teleop Score:`, value: `${finalMatch.score_breakdown.red.teleopPoints}`, inline: true })
+        .addFields({ name: `Red Ranking Points:`, value: `${finalMatch.score_breakdown.red.rp}`, inline: true })
+        .addFields({ name: 'Red Endgame Points:', value: `${finalMatch.score_breakdown.red.endgamePoints}`, inline: true })
+        .addFields({ name: 'Red Endgame Levels', value: `${finalMatch.score_breakdown.red.endgameRobot1}, ${finalMatch.score_breakdown.red.endgameRobot2}, ${finalMatch.score_breakdown.red.endgameRobot3}`, inline: true })
+        .addFields({ name: 'Red fouls', value: `${finalMatch.score_breakdown.red.foulCount}`, inline: true })
+        .addFields({ name: 'Red Technical Fouls', value: `${finalMatch.score_breakdown.red.techFoulCount}`, inline: true })
+        .addFields({ name: 'Red Penalty Points received', value: `${finalMatch.score_breakdown.red.foulPoints}`, inline: true })
+        .addFields({ name: `Blue Total Score:`, value: `${finalMatch.alliances.blue.score}`, inline: true })
+        .addFields({ name: `Blue Auton Score:`, value: `${finalMatch.score_breakdown.blue.autoPoints}`, inline: true })
+        .addFields({ name: `Blue Teleop Score:`, value: `${finalMatch.score_breakdown.blue.teleopPoints}`, inline: true })
+        .addFields({ name: `Blue Ranking Points:`, value: `${finalMatch.score_breakdown.blue.rp}`, inline: true })
+        .addFields({ name: 'Blue Endgame Points:', value: `${finalMatch.score_breakdown.blue.endgamePoints}`, inline: true })
+        .addFields({ name: 'Blue Endgame Levels', value: `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`, inline: true })
+        .addFields({ name: 'Blue fouls', value: `${finalMatch.score_breakdown.blue.foulCount}`, inline: true })
+        .addFields({ name: 'Blue Technical Fouls', value: `${finalMatch.score_breakdown.blue.techFoulCount}`, inline: true })
+        .addFields({ name: 'Blue Penalty Points received', value: `${finalMatch.score_breakdown.blue.foulPoints}`, inline: true });
 
-    let row = new MessageActionRow()
+    let row = new ActionRowBuilder()
     if (compLevel == 'qm') {
         row.addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-2-${eventId}`)
                 .setLabel(`Back to Qualifiers`)
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(false),
         );
     } else {
         row.addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`${team}-2-1-${eventId}`)
                 .setLabel('Back to Playoffs')
-                .setStyle('PRIMARY')
+                .setStyle(ButtonStyle.Primary)
                 .setDisabled(false),
 
         )

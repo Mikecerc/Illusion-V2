@@ -1,6 +1,10 @@
+import { SlashCommandBuilder } from "discord.js";
+
 export default {
-    name: 'pause',
-    description: 'pauses the current track',
+    data: new SlashCommandBuilder()
+        .setName("pause")
+        .setDescription("pauses the current track")
+        .setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         if (!interaction.member.voice.channel) {

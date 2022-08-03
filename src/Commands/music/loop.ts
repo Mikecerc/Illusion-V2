@@ -1,6 +1,10 @@
+import { SlashCommandBuilder } from "discord.js";
+
 export default {
-    name: 'loop',
-    description: 'enables / disables the looping of a song', 
+    data: new SlashCommandBuilder()
+        .setName("loop")
+        .setDescription("toggles loop mode")
+        .setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         if (!interaction.member.voice.channel) {

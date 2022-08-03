@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageEmbed, MessageButton, MessageSelectMenu } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, ButtonStyle } from "discord.js";
 export default {
     name: "interactionCreate",
     async execute(interaction: any, client: { subscriptions: { get: (arg0: any) => any; }; }) {
@@ -52,15 +52,15 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
         let date = new Date(0);
         date.setSeconds(timeRemSec);
         const time = date.toISOString().slice(11, 19);
-        let embed = new MessageEmbed()
-            .setColor("ORANGE")
+        let embed = new EmbedBuilder()
+            .setColor("Orange")
             .setAuthor({ name: `Queue (${queue.length} tracks)` })
             .addFields(embedFields)
             .setFooter({
                 text: `Page 1/1 - ${time} left - Requested by: ${interaction.user.tag}`,
             });
-        const dropdown = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const dropdown = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId("42-10-1")
                 .setMinValues(1)
                 .setMaxValues(options.length)
@@ -73,7 +73,7 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
                 components: [dropdown],
             });
         } else {
-            await interaction.update({ embeds: [embed] });
+            await interaction.update({ embeds: [embed], components: [] });
         }
     } else {
         response(interaction, currentPageIndex, subscription);
@@ -119,8 +119,8 @@ async function response(interaction, newIndex, subscription) {
         //date.setSeconds(timeRemSec);
         //const time = date.toISOString().slice(11, 19);
         const time = hms(timeRemSec.toString());
-        let embed = new MessageEmbed()
-            .setColor("ORANGE")
+        let embed = new EmbedBuilder()
+            .setColor("Orange")
             .setAuthor({ name: `Queue (${queue.length} tracks)` })
             .addFields(embedFields)
             .setFooter({
@@ -132,20 +132,20 @@ async function response(interaction, newIndex, subscription) {
             console.log(Math.ceil(queue.length / 24))
         const buttonDisabled = newIndex == 1 ? true : false; 
         const buttonDisabled0 = newIndex >= Math.ceil(queue.length / 24) ? true : false;
-        const buttons = new MessageActionRow().addComponents(
-            new MessageButton()
+        const buttons = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId(`40-10-${newIndex}`)
-                .setStyle("SECONDARY")
+                .setStyle(ButtonStyle.Secondary)
                 .setEmoji("◀️")
                 .setDisabled(buttonDisabled),
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId(`41-10-${newIndex}`)
-                .setStyle("SECONDARY")
+                .setStyle(ButtonStyle.Secondary)
                 .setEmoji("▶️")
                 .setDisabled(buttonDisabled0),
         );
-        const dropdown = new MessageActionRow().addComponents(
-            new MessageSelectMenu()
+        const dropdown = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
                 .setCustomId(`42-10-${newIndex}`)
                 .setMinValues(1)
                 .setMaxValues(options.length)

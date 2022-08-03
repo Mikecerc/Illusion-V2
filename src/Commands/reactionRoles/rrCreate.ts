@@ -1,52 +1,32 @@
 import {
-    Message,
-    MessageActionRow,
-    MessageButton,
-    MessageEmbed,
-    Permissions,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ChannelType,
+    EmbedBuilder,
+    PermissionFlagsBits,
+    SlashCommandBuilder,
 } from "discord.js";
 export default {
-    name: "reactionrole",
-    description: "create a reaction role",
-    options: [
-        {
-            name: "messageid",
-            description:
-                "message id of the message you want to add reactions to",
-            required: true,
-            type: "STRING",
-        },
-        {
-            name: "role",
-            description: "The role you would like to be assinged",
-            required: true,
-            type: "ROLE",
-        },
-    ],
+    data: new SlashCommandBuilder()
+        .setName("rr")
+        .setDescription("create a reaction role")
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild & PermissionFlagsBits.ManageRoles)
+        .addStringOption(o => o.setName("messageid").setDescription("message id of the message you want to add reactions to").setRequired(true))
+        .addRoleOption(o => o.setName("role").setDescription("The role you would like to be assinged").setRequired(true)),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
-        if (
-            !interaction.member.permissions.has(
-                Permissions.FLAGS.MANAGE_GUILD
-            )
-        ) {
-            return interaction.update({
-                content: "You cannot use this command! You are missing the permission MANAGE_GUILD",
-                embeds: [],
-                components: [],
-                ephemeral: true,
-            });
-        }
         const messageId = interaction.options.getString("messageid");
         const role = interaction.options.getRole("role");
         const bot = await interaction.guild.members.fetch(client.user.id);
 
-        if (!bot.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+        if (!bot.permissions.has(PermissionFlagsBits.ManageRoles)) {
             return interaction.followUp({
                 content: "bot missing permission MANAGE_ROLES",
             });
         }
-        if (!bot.permissions.has(Permissions.FLAGS.ADD_REACTIONS)) {
+        if (!bot.permissions.has(PermissionFlagsBits.AddReactions)) {
             return interaction.followUp({
                 content: "bot missing permission ADD_REACTIONS",
             });
@@ -63,7 +43,7 @@ export default {
         let channelId: number;
         for (const id of channels) {
             const channel = await interaction.guild.channels.fetch(id);
-            if (channel.type != "GUILD_TEXT") continue;
+            if (channel.type != ChannelType.GuildText) continue;
             try {
                 const msg = await channel.messages.fetch(messageId);
                 if (msg) {
@@ -79,8 +59,8 @@ export default {
             });
         }
 
-        const reactionCollectMsg = new MessageEmbed()
-            .setColor("RANDOM")
+        const reactionCollectMsg = new EmbedBuilder()
+            .setColor("Orange")
             .setDescription(
                 "Please react to this embed within the next 60 seconds with the emoji you would like to use for this reaction role."
             );
@@ -107,9 +87,9 @@ export default {
                     ephemeral: true,
                 });
             });
-        const conformationButton = new MessageEmbed()
+        const conformationButton = new EmbedBuilder()
             .setTitle("Review Info:")
-            .setColor("RANDOM")
+            .setColor("Orange")
             .addFields(
                 {
                     name: "Message ID:",
@@ -128,19 +108,19 @@ export default {
                 text: "click accept to accept and cancel to cancel.",
             });
 
-        const button = new MessageActionRow().addComponents(
-            new MessageButton()
+        const button = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
                 .setCustomId(
                     `30-${messageId}-${channelId}-${role.id}-${emoji.identifier}`
                 )
                 .setLabel("Accept")
-                .setStyle("SUCCESS"),
-            new MessageButton()
+                .setStyle(ButtonStyle.Success),
+            new ButtonBuilder()
                 .setCustomId(
                     `31-${messageId}-${channelId}-${role.id}-${emoji.identifier}`
                 )
                 .setLabel("Cancel")
-                .setStyle("DANGER")
+                .setStyle(ButtonStyle.Danger)
         );
         await collectMsg.edit({
             embeds: [conformationButton],

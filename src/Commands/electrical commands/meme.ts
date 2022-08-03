@@ -1,51 +1,48 @@
-/* eslint-disable no-fallthrough */
-/* eslint-disable no-case-declarations */
+import { SlashCommandBuilder } from "discord.js";
 export default {
-    name: "meme",
-    description: "Get a electrical/robotics meme!",
-    options: [
-        {
-            name: "meme",
-            description: "Which meme do you want?",
-            type: "STRING",
-            required: true,
-            choices: [
-                {
-                    name: "Balloon",
-                    value: "balloon",
-                },
-                {
-                    name: "Heygirl",
-                    value: "heygirl",
-                },
-                {
-                    name: "Sidthesnek",
-                    value: "sidthesnek",
-                },
-                {
-                    name: "Armsdeal",
-                    value: "armsdeal",
-                },
-                {
-                    name: "Painting",
-                    value: "painting",
-                },
-                {
-                    name: "Mr. O meme",
-                    value: "mromeme",
-                },
-                {
-                    name: "Falcon 500",
-                    value: "falcon500",
-                },
-                {
-                    name: "nate",
-                    value: "nate",
-                },
-            ],
-        },
-    ],
-
+    data: new SlashCommandBuilder()
+        .setName("meme")
+        .setDescription("Get a electrical/robotics meme!")
+        .addStringOption((o) =>
+            o
+                .setName("meme")
+                .setDescription("which meme do you want?")
+                .setRequired(true)
+                .setChoices(
+                    {
+                        name: "Balloon",
+                        value: "balloon",
+                    },
+                    {
+                        name: "Heygirl",
+                        value: "heygirl",
+                    },
+                    {
+                        name: "Sidthesnek",
+                        value: "sidthesnek",
+                    },
+                    {
+                        name: "Armsdeal",
+                        value: "armsdeal",
+                    },
+                    {
+                        name: "Painting",
+                        value: "painting",
+                    },
+                    {
+                        name: "Mr. O meme",
+                        value: "mromeme",
+                    },
+                    {
+                        name: "Falcon 500",
+                        value: "falcon500",
+                    },
+                    {
+                        name: "nate",
+                        value: "nate",
+                    }
+                )
+        ),
     execute(interaction: any) {
         const meme = interaction.options.getString("meme");
         switch (meme) {

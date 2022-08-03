@@ -1,6 +1,10 @@
+import { SlashCommandBuilder } from "discord.js";
+
 export default {
-    name: 'resume',
-    description: 'resumes the current track',
+    data: new SlashCommandBuilder()
+        .setName("resume")
+        .setDescription("resumes the current track")
+        .setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         if (!interaction.member.voice.channel) {

@@ -3,24 +3,18 @@ import {
     entersState,
     VoiceConnectionStatus,
 } from "@discordjs/voice";
-import { GuildMember } from "discord.js";
+import { GuildMember, SlashCommandBuilder } from "discord.js";
 import MusicSubscription from "../../classes/audio/subscription.js";
 import Track from "../../classes/audio/track.js";
 import ytdl from "ytdl-core";
 import yts from "yt-search";
 
 export default {
-    name: "play",
-    description: "search for a song or play a youtube video/playlist",
-    options: [
-        {
-            name: "search",
-            description: "a youtube link or search term",
-            type: "STRING",
-            required: true,
-        },
-    ],
-
+    data: new SlashCommandBuilder()
+        .setName("play")
+        .setDescription("search for a song or play a youtube video/playlist")
+        .setDMPermission(false)
+        .addStringOption(o => o.setName("search").setDescription("A youtube link or search term").setRequired(true)),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);

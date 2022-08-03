@@ -50,8 +50,8 @@ export default async (client: any) => {
         for (const file of commandFiles) {
             const commandFile = await import(`../Commands/${folder}/${file}`);
             const command = commandFile.default;
-            await client.commands.set(command.name, command);
-            commandsArry.push(command);
+            await client.commands.set(command.data.name, command);
+            commandsArry.push(command.data.toJSON());
         }
     }
     client.on("ready", async () => {

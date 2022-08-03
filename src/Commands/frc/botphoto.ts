@@ -1,22 +1,18 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import fetch from "node-fetch";
 export default {
-    name: "botphoto",
-    description: "Get a photo of a bot from a particular year",
-    options: [
-        {
-            name: "team",
-            description: "team number",
-            type: "NUMBER",
-            required: true,
-        },
-        {
-            name: "year",
-            description: "optionally enter a year",
-            type: "NUMBER",
-            required: false,
-        },
-    ],
+    data: new SlashCommandBuilder()
+        .setName("botphoto")
+        .setDescription("Get a photo of a bot from a particular year")
+        .addNumberOption((o) =>
+            o.setName("team").setDescription("team number").setRequired(true)
+        )
+        .addNumberOption((o) =>
+            o
+                .setName("year")
+                .setDescription("optionally enter a year")
+                .setRequired(false)
+        ),
     async execute(interaction: any) {
         await interaction.deferReply();
         const team = interaction.options.getNumber("team").toString();
@@ -32,8 +28,8 @@ export default {
             const url = `https://github.com/Team973/RobotPhotos973/raw/master/${year}/${teamNumber}.jpg`;
             const doesExist = await checkStatus(url);
             if (doesExist) {
-                const response = new MessageEmbed()
-                    .setColor("RANDOM")
+                const response = new EmbedBuilder()
+                    .setColor("Orange")
                     .setDescription(
                         `Team ${teamNumber}'s robot for the year ${year}`
                     )
@@ -46,8 +42,8 @@ export default {
                 const url0 = `https://github.com/Team973/RobotPhotos973/raw/master/${year}/${teamNumber}.JPG`;
                 const doesExist0 = await checkStatus(url0);
                 if (doesExist0) {
-                    const response = new MessageEmbed()
-                        .setColor("RANDOM")
+                    const response = new EmbedBuilder()
+                        .setColor("Orange")
                         .setDescription(
                             `Team ${teamNumber}'s robot for the year ${year}`
                         )
@@ -57,8 +53,8 @@ export default {
                         });
                     interaction.followUp({ embeds: [response] });
                 } else {
-                    const response = new MessageEmbed()
-                        .setColor("RED")
+                    const response = new EmbedBuilder()
+                        .setColor("Orange")
                         .setDescription(
                             `There is no bot photo for the team ${teamNumber} in the year ${year}`
                         );
@@ -87,8 +83,8 @@ export default {
             }
             if (latestYear) {
                 const url = `https://github.com/Team973/RobotPhotos973/raw/master/${latestYear}/${teamNumber}.${fileExt}`;
-                const response = new MessageEmbed()
-                    .setColor("RANDOM")
+                const response = new EmbedBuilder()
+                    .setColor("Orange")
                     .setDescription(
                         `Team ${teamNumber}'s robot for the year ${latestYear}`
                     )
@@ -98,8 +94,8 @@ export default {
                     });
                 interaction.followUp({ embeds: [response] });
             } else {
-                const response = new MessageEmbed()
-                    .setColor("RED")
+                const response = new EmbedBuilder()
+                    .setColor("Orange")
                     .setDescription(
                         `There is no bot photo for the team ${teamNumber}`
                     );
