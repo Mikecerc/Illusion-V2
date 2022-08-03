@@ -1,10 +1,11 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
-    name: "warnkylie",
-    description: "warn kyle for acting like a freshman",
+    data: new SlashCommandBuilder()
+        .setName("warnkylie")
+        .setDescription("warn kyle for acting like a freshman"),
     async execute(interaction: any) {
-        const embed = new MessageEmbed()
-            .setColor("RED")
+        const embed = new EmbedBuilder()
+            .setColor("Orange")
             .setDescription(
                 "<@406629388059410434> stop acting like a freshman"
             );

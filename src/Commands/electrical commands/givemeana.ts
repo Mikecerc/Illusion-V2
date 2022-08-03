@@ -1,14 +1,14 @@
-import { MessageEmbed } from 'discord.js' 
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
-    name: 'givemeana',
-    description: 'AAA',
+    data: new SlashCommandBuilder()
+        .setName("give-me-an-a")
+        .setDescription("AAA"),
     async execute(interaction: any) {
-        const Response = new MessageEmbed()
-        .setTitle('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-        .setColor('RANDOM');
+        const Response = new EmbedBuilder()
+            .setTitle("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            .setColor("Orange");
 
         await interaction.reply({ embeds: [Response] });
-        interaction.followUp('https://youtu.be/whhgyzDeCAk');
-
+        interaction.followUp("https://youtu.be/whhgyzDeCAk");
     },
 };

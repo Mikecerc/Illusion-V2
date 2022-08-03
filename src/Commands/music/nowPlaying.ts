@@ -1,13 +1,15 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
-    name: "np",
-    description: "lists the current song",
+    data: new SlashCommandBuilder()
+        .setName("np")
+        .setDescription("Lists info on the song currently playing")
+        .setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);
         if (subscription) {
-            let embed = new MessageEmbed().setColor("ORANGE");
+            let embed = new EmbedBuilder().setColor("Orange");
             if (
                 subscription.audioPlayer.state.status === AudioPlayerStatus.Idle
             ) {

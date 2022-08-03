@@ -1,14 +1,18 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import {
     Message,
-    MessageActionRow,
-    MessageButton,
-    MessageEmbed,
-    MessageSelectMenu,
+    ActionRowBuilder,
+    ButtonBuilder,
+    EmbedBuilder,
+    SelectMenuBuilder,
+    SlashCommandBuilder,
+    ButtonStyle,
 } from "discord.js";
 export default {
-    name: "queue",
-    description: "lists the current queue",
+    data: new SlashCommandBuilder()
+        .setName("queue")
+        .setDescription("lists the current queue")
+        .setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);
@@ -46,15 +50,15 @@ export default {
                 let date = new Date(0);
                 date.setSeconds(timeRemSec);
                 const time = date.toISOString().slice(11, 19);
-                let embed = new MessageEmbed()
-                    .setColor("ORANGE")
+                let embed = new EmbedBuilder()
+                    .setColor("Orange")
                     .setAuthor({ name: `Queue (${queue.length} tracks)` })
                     .addFields(embedFields)
                     .setFooter({
                         text: `Page 1/1 - ${time} left - Requested by: ${interaction.user.tag}`,
                     });
-                const dropdown = new MessageActionRow().addComponents(
-                    new MessageSelectMenu()
+                const dropdown = new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
                         .setCustomId("42-10-1")
                         .setMinValues(1)
                         .setMaxValues(options.length)
@@ -91,8 +95,8 @@ export default {
                 //date.setSeconds(timeRemSec);
                 //const time = date.toISOString().slice(11, 19);
                 const time = hms(timeRemSec.toString());
-                let embed = new MessageEmbed()
-                    .setColor("ORANGE")
+                let embed = new EmbedBuilder()
+                    .setColor("Orange")
                     .setAuthor({ name: `Queue (${queue.length} tracks)` })
                     .addFields(embedFields)
                     .setFooter({
@@ -100,20 +104,20 @@ export default {
                             queue.length / 25
                         )} - ${time} left - Requested by: ${interaction.user.tag}`,
                     });
-                const buttons = new MessageActionRow().addComponents(
-                    new MessageButton()
+                const buttons = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
                         .setCustomId(`40-10-1`)
-                        .setStyle("SECONDARY")
+                        .setStyle(ButtonStyle.Secondary)
                         .setEmoji("◀️")
                         .setDisabled(true),
-                    new MessageButton()
+                    new ButtonBuilder()
                         .setCustomId("41-10-1")
-                        .setStyle("SECONDARY")
+                        .setStyle(ButtonStyle.Secondary)
                         .setEmoji("▶️")
                         .setDisabled(false)
                 );
-                const dropdown = new MessageActionRow().addComponents(
-                    new MessageSelectMenu()
+                const dropdown = new ActionRowBuilder().addComponents(
+                    new SelectMenuBuilder()
                         .setCustomId("42-10-1")
                         .setMinValues(1)
                         .setMaxValues(options.length)

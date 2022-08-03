@@ -1,6 +1,10 @@
+import { SlashCommandBuilder } from "discord.js";
+
 export default {
-    name: 'skip',
-    description: 'Skips the current track',
+	data: new SlashCommandBuilder()
+		.setName("skip")
+		.setDescription("skips the current track")
+		.setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
 		if (!interaction.member.voice.channel) {

@@ -1,67 +1,64 @@
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-fallthrough */
+import { SlashCommandBuilder } from "discord.js";
 export default {
-    name: "person",
-    description: "Get a picture of a person",
-    options: [
-        {
-            name: "person",
-            description: "Which person do you want a picture of",
-            type: "STRING",
-            required: true,
-            choices: [
-                {
-                    name: "Ayush",
-                    value: "ayush",
-                },
-                {
-                    name: "Sashvat",
-                    value: "sashvat",
-                },
-                {
-                    name: "Quincy",
-                    value: "quincy",
-                },
-                {
-                    name: "Robert",
-                    value: "robert",
-                },
-                {
-                    name: "David",
-                    value: "david",
-                },
-                {
-                    name: "Eric",
-                    value: "eric",
-                },
-                {
-                    name: "Abdul",
-                    value: "abdul",
-                },
-                {
-                    name: "Nate",
-                    value: "nate",
-                },
-                {
-                    name: "Riley",
-                    value: "riley",
-                },
-                {
-                    name: "Mr. O Photo",
-                    value: "mrophoto",
-                },
-                {
-                    name: "Sid",
-                    value: "sid",
-                },
-                {
-                    name: "Jerry",
-                    value: "jerry",
-                },
-            ],
-        },
-    ],
-
+    data: new SlashCommandBuilder()
+        .setName("person")
+        .setDescription("Get a picture of a person")
+        .addStringOption((o) =>
+            o
+                .setName("person")
+                .setDescription("Which person do you want a picture of")
+                .setRequired(true)
+                .addChoices(
+                    {
+                        name: "Ayush",
+                        value: "ayush",
+                    },
+                    {
+                        name: "Sashvat",
+                        value: "sashvat",
+                    },
+                    {
+                        name: "Quincy",
+                        value: "quincy",
+                    },
+                    {
+                        name: "Robert",
+                        value: "robert",
+                    },
+                    {
+                        name: "David",
+                        value: "david",
+                    },
+                    {
+                        name: "Eric",
+                        value: "eric",
+                    },
+                    {
+                        name: "Abdul",
+                        value: "abdul",
+                    },
+                    {
+                        name: "Nate",
+                        value: "nate",
+                    },
+                    {
+                        name: "Riley",
+                        value: "riley",
+                    },
+                    {
+                        name: "Mr. O Photo",
+                        value: "mrophoto",
+                    },
+                    {
+                        name: "Sid",
+                        value: "sid",
+                    },
+                    {
+                        name: "Jerry",
+                        value: "jerry",
+                    }
+                )
+        ),
     execute(interaction: any) {
         const person = interaction.options.getString("person");
         switch (person) {

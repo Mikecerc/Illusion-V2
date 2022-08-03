@@ -65,11 +65,17 @@ export default {
                     const role = await guild.roles.fetch(rr.reactionRole.role);
                     const member = await guild.members.fetch(user.id);
                     member.roles.add(role);
-                    const userReactions = reaction.message.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
-                    for (const r of userReactions.values()) {
-                       if (r == reaction) continue;
-                       r.users.remove(user.id); 
-                    }
+                    reaction.message.reactions.cache.map(r => r).forEach(async e => await e.users.fetch(user.id))
+                    const userReactions =
+                        reaction.message.reactions.cache.filter(
+                            //(r) => r.users.cache.has(user.id)
+                            r => r.users.fetch(user.id)
+                        );
+                    userReactions.forEach(r => {
+                        if (r != reaction) {
+                            r.users.remove(user.id)
+                        }
+                    });
                 } catch (e) {
                     console.log(e);
                 }

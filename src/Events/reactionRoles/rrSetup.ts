@@ -1,9 +1,10 @@
 import rrModel from "../../schemas/reactionRoleSchema.js";
 import {
-    MessageEmbed,
-    MessageActionRow,
-    MessageButton,
-    Permissions,
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    PermissionFlagsBits,
+    ButtonStyle,
 } from "discord.js";
 export default {
     name: "interactionCreate",
@@ -19,7 +20,7 @@ export default {
         if (data[0] == "31") {
             if (
                 !interaction.member.permissions.has(
-                    Permissions.FLAGS.MANAGE_GUILD
+                    PermissionFlagsBits.ManageGuild
                 )
             ) {
                 return interaction.update({
@@ -36,15 +37,15 @@ export default {
                 ephemeral: true,
             });
         }
-        const success = new MessageEmbed()
-            .setColor("GREEN")
+        const success = new EmbedBuilder()
+            .setColor("Orange")
             .setDescription(
                 "The reaction role has been saved. To delete the reaction role, remove the message of the reaction role or remove the bots reaction to it."
             );
         if (data[0] == "30") {
             if (
                 !interaction.member.permissions.has(
-                    Permissions.FLAGS.MANAGE_GUILD
+                    PermissionFlagsBits.ManageGuild
                 )
             ) {
                 return interaction.update({
@@ -100,25 +101,25 @@ export default {
                     });
                 }
             } else {
-                const multiEmbed = new MessageEmbed()
-                    .setColor("RANDOM")
+                const multiEmbed = new EmbedBuilder()
+                    .setColor("Orange")
                     .setDescription(
                         "It seems there are other reaction roles on this message. Would you like the bot to only allow users to pick one or do you want the bot to allow users to react multiple times"
                     )
-                    .setFooter({ text: "Please select yes or no" });
-                const buttons = new MessageActionRow().addComponents(
-                    new MessageButton()
+                    .setFooter({ text: "Please select 'allow multiple' or 'Only one'" });
+                const buttons = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
                         .setCustomId(
                             `32-${messageId}-${channelId}-${role.id}-${emojiName}`
                         )
-                        .setLabel("Yes")
-                        .setStyle("SUCCESS"),
-                    new MessageButton()
+                        .setLabel("Allow Multiple")
+                        .setStyle(ButtonStyle.Success),
+                    new ButtonBuilder()
                         .setCustomId(
                             `33-${messageId}-${channelId}-${role.id}-${emojiName}`
                         )
-                        .setLabel("No")
-                        .setStyle("DANGER")
+                        .setLabel("Only One")
+                        .setStyle(ButtonStyle.Danger)
                 );
                 try {
                     return await interaction.update({
@@ -167,13 +168,13 @@ export default {
             }
             const bot = await interaction.guild.members.fetch(client.user.id);
 
-            if (!bot.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {
+            if (!bot.permissions.has(PermissionFlagsBits.ManageRoles)) {
                 return interaction.update({
                     content: "bot missing permission MANAGE_ROLES",
                     ephemeral: true,
                 });
             }
-            if (!bot.permissions.has(Permissions.FLAGS.ADD_REACTIONS)) {
+            if (!bot.permissions.has(PermissionFlagsBits.AddReactions)) {
                 return interaction.update({
                     content: "bot missing permission ADD_REACTIONS",
                     ephemeral: true,

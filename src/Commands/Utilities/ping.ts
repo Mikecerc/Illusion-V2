@@ -1,12 +1,12 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
-    name: 'ping',
-    description: 'Round trip travel between Void and the Discord API',
+    data: new SlashCommandBuilder()
+        .setName("ping")
+        .setDescription("Round trip travel between Void and the Discord API"),
     execute(interaction: any, client: any) {
-        const Response = new MessageEmbed()
-        .setColor('GREEN')
-        .setDescription(`🏓${client.ws.ping}ms`);
+        const Response = new EmbedBuilder()
+            .setColor("Orange")
+            .setDescription(`🏓${client.ws.ping}ms`);
         interaction.reply({ embeds: [Response] });
     },
-
 };
