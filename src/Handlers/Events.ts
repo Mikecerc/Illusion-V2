@@ -11,10 +11,15 @@ export default async (client: any) => {
             const event = eventFile.default;
             //determines the collector type for each event and creates an event collector. Upon the event, the execute() object in the event files will be run. 
             if (event.once) {
-                client.once(event.name, (...args: any) => event.execute(...args, client));
-            }
-            else {
-                client.on(event.name, (...args: any) => event.execute(...args, client));
+                client.once(event.name, (...args: any) => { 
+                    try{ 
+                        event.execute(...args, client);
+                    } catch(error) { console.error(error) }});
+            } else {
+                client.on(event.name, (...args: any) => {
+                    try {
+                        event.execute(...args, client);
+                    } catch(error) { console.error(error)}});
             }
         }
     }
