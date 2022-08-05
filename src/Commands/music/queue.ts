@@ -65,13 +65,19 @@ export default {
                         .setOptions(options)
                         .setPlaceholder("Delete a song")
                 );
+                const refresh = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
+                        .setCustomId(`43-10-1`)
+                        .setStyle(ButtonStyle.Primary)
+                        .setLabel('Refresh'),
+                );
                 if (options.length > 0) {
                     await interaction.followUp({
                         embeds: [embed],
-                        components: [dropdown],
+                        components: [dropdown, refresh],
                     });
                 } else {
-                    await interaction.followUp({ embeds: [embed] });
+                    await interaction.followUp({ embeds: [embed], components: [refresh] });
                 }
             } else {
                 let embedFields = [];
@@ -114,7 +120,11 @@ export default {
                         .setCustomId("41-10-1")
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji("▶️")
-                        .setDisabled(false)
+                        .setDisabled(false),
+                    new ButtonBuilder()
+                        .setCustomId(`43-10-1`)
+                        .setStyle(ButtonStyle.Primary)
+                        .setLabel('Refresh'),
                 );
                 const dropdown = new ActionRowBuilder().addComponents(
                     new SelectMenuBuilder()

@@ -3,11 +3,13 @@ import {
     entersState,
     VoiceConnectionStatus,
 } from "@discordjs/voice";
-import { GuildMember, SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, GuildMember, SlashCommandBuilder } from "discord.js";
 import MusicSubscription from "../../classes/audio/subscription.js";
 import Track from "../../classes/audio/track.js";
 import ytdl from "ytdl-core";
 import yts from "yt-search";
+import SpotifyWebApi from "spotify-web-api-node";
+import * as spotifyUri from "spotify-uri";
 
 export default {
     data: new SlashCommandBuilder()
@@ -138,6 +140,54 @@ export default {
                 await interaction.followUp(
                     `Enqueued Playlist:**${res.title}** (${res.videos.length} songs)`
                 );
+            } else if (search.startsWith('https://open.spotify.com/playlist/')) {
+                const spotify = new SpotifyWebApi({
+                    clientId: process.env.spotifyClientId, 
+                    clientSecret: process.env.spotifyClientSecret,
+                });
+                await getToken(spotify);
+                const parsed: any = spotifyUri.parse(search);
+                const playlist = await spotify.getPlaylist(parsed.id);
+                let totalSongs = playlist.body.tracks.total;
+                totalSongs -= 1;
+                let tracks = [];
+                for (let offset = 0; offset < totalSongs;) {
+                    const trackRes = await spotify.getPlaylistTracks(parsed.id, {
+                        offset: offset,
+                        fields: 'items',
+                    });
+                    for (const track of trackRes.body.items.map(t => t.track)) {
+                        tracks.push(track);
+                    }
+                    if ((totalSongs - offset) > 100 ) {
+                        offset += 100;
+                    } else {
+                        offset += (totalSongs - offset);
+                    }
+                }
+                await interaction.followUp({
+                    embeds: [new EmbedBuilder().setDescription( `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists.`).setColor('Orange')]
+                });
+                for (const track of tracks) {
+                    const res = await yts(`${track.name} ${track.artists[0].name}`)
+                    const info = res.videos[0]
+                    const trackToEnqueue = new Track({
+                        url: info.url,
+                        //title: info.videoDetails.title,
+                        title: info.title,
+                        requestedBy: {
+                            text: `Requested by: ${interaction.user.tag}`,
+                            iconURL: interaction.user.displayAvatarURL({
+                                dynamic: true,
+                            }),
+                        },
+                        thumbnail: info.thumbnail,
+                        duration: info.duration,
+                    });
+                    // Enqueue the track and reply a success message to the user
+                    subscription.enqueue(trackToEnqueue);
+                    
+                }
             } else {
                 const res = await yts(search);
                 //const audioUrl = ytdl.filterFormats(info.formats, "audioonly");
@@ -163,7 +213,7 @@ export default {
         } catch (error) {
             console.log(error);
             await interaction.followUp(
-                "Failed to play track, please try again later!"
+                "Failed to play track(s), please try again later!"
             );
         }
     },
@@ -185,4 +235,8 @@ function hms(num: string) {
         seconds = "0" + seconds;
     }
     return hours + ":" + minutes + ":" + seconds;
+}
+
+async function getToken(api) {
+    await api.clientCredentialsGrant().then(data => api.setAccessToken(data.body['access_token']));
 }

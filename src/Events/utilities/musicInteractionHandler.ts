@@ -14,6 +14,11 @@ export default {
                     interaction.guildId
                 );
                 response(interaction, Number.parseInt(data[2]) + 1, subscription);
+            } else if (data[0] == '43') {
+                let subscription = await client.subscriptions.get(
+                    interaction.guildId
+                );
+                updateQueue(interaction, subscription, Number.parseInt(data[2]))
             }
         } else if (interaction.isSelectMenu()) {
             const data = interaction.customId.split("-");
@@ -67,13 +72,19 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
                 .setOptions(options)
                 .setPlaceholder("Delete a song")
         );
+        const refresh = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+                .setCustomId(`43-10-${currentPageIndex}`)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel('Refresh'),
+        );
         if (options.length > 0) {
             await interaction.update({
                 embeds: [embed],
-                components: [dropdown],
+                components: [dropdown, refresh],
             });
         } else {
-            await interaction.update({ embeds: [embed], components: [] });
+            await interaction.update({ embeds: [embed], components: [refresh] });
         }
     } else {
         response(interaction, currentPageIndex, subscription);
@@ -99,7 +110,6 @@ async function response(interaction, newIndex, subscription) {
         let timeRemSec = 0;
         const begin = (newIndex * 25) - 25;
         const end = (newIndex * 25) - 1;
-        console.log(begin, end)
         const slicedQueue = queue.slice(begin, end)
         for (const song in slicedQueue) {
             embedFields.push({
@@ -128,8 +138,6 @@ async function response(interaction, newIndex, subscription) {
                     queue.length / 25
                 )} - ${time} left - Requested by: ${interaction.user.tag}`,
             });
-            console.log(newIndex)
-            console.log(Math.ceil(queue.length / 24))
         const buttonDisabled = newIndex == 1 ? true : false; 
         const buttonDisabled0 = newIndex >= Math.ceil(queue.length / 24) ? true : false;
         const buttons = new ActionRowBuilder().addComponents(
@@ -143,6 +151,10 @@ async function response(interaction, newIndex, subscription) {
                 .setStyle(ButtonStyle.Secondary)
                 .setEmoji("▶️")
                 .setDisabled(buttonDisabled0),
+            new ButtonBuilder()
+                .setCustomId(`43-10-${newIndex}`)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel('Refresh'),
         );
         const dropdown = new ActionRowBuilder().addComponents(
             new SelectMenuBuilder()
