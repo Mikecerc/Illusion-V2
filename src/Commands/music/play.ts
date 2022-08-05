@@ -14,7 +14,7 @@ import * as spotifyUri from "spotify-uri";
 export default {
     data: new SlashCommandBuilder()
         .setName("play")
-        .setDescription("search for a song or play a youtube video/playlist")
+        .setDescription("search for a song or play a youtube video/playlist or spotify playlist (experimental)")
         .setDMPermission(false)
         .addStringOption(o => o.setName("search").setDescription("A youtube link or search term").setRequired(true)),
     async execute(interaction: any, client: any) {
@@ -166,7 +166,7 @@ export default {
                     }
                 }
                 await interaction.followUp({
-                    embeds: [new EmbedBuilder().setDescription( `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists.`).setColor('Orange')]
+                    embeds: [new EmbedBuilder().setDescription( `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists. Also note this process is experimental; some songs may queue incorrectly.`).setColor('Orange')]
                 });
                 for (const track of tracks) {
                     const res = await yts(`${track.name} ${track.artists[0].name}`)
