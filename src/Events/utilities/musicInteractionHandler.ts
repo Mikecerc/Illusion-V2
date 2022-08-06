@@ -6,15 +6,19 @@ export default {
             const data = interaction.customId.split("-");
             if (data[0] == "40") {
                 let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
                 response(interaction, Number.parseInt(data[2]) - 1, subscription);
             } else if (data[0] == "41") {
                 let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
                 response(interaction, Number.parseInt(data[2]) + 1, subscription);
             } else if (data[0] == "43") {
                 let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
                 updateQueue(interaction, subscription, Number.parseInt(data[2]));
             } else if (data[0] == "44") {
                 let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
                 subscription.queue = shuffle(subscription.queue);
                 updateQueue(interaction, subscription, Number.parseInt(data[2]));
             }
@@ -22,6 +26,7 @@ export default {
             const data = interaction.customId.split("-");
             if (data[0] != "42") return;
             let subscription = await client.subscriptions.get(interaction.guildId);
+            if (!subscription) return noSub(interaction);
             for (const videoId of interaction.values) {
                 const track = await subscription.queue.find((t) => t.id == videoId);
                 subscription.queue.splice(subscription.queue.indexOf(track), 1);
@@ -183,4 +188,9 @@ function shuffle(arr: any[]) {
         }
     }
     return result;
+}
+
+async function noSub(interaction) {
+    const noSubEmbed = new EmbedBuilder().setColor('Orange').setDescription("The bot is not playing in this server.");
+    interaction.update({ embeds: [noSubEmbed], components: [] });
 }
