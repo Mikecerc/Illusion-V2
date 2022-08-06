@@ -4,12 +4,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName("userinfo")
         .setDescription("Retrieves a users info and avatar")
-        .addUserOption((o) =>
-            o
-                .setName("target")
-                .setDescription("Select a target")
-                .setRequired(true)
-        ),
+        .addUserOption((o) => o.setName("target").setDescription("Select a target").setRequired(true)),
     async execute(interaction: any) {
         await interaction.deferReply({ ephemeral: false }).catch(() => {});
         const Target = interaction.options.getMember("target");
@@ -48,15 +43,13 @@ export default {
         Response.addFields(
             {
                 name: "Server Member Since",
-                value: `${moment(Target.joinedAt).format(
-                    "MMMM Do YYYY, h:mm:ss a"
-                )}\n**-** ${moment(Target.joinedAt).startOf("day").fromNow()}`,
+                value: `${moment(Target.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}\n**-** ${moment(Target.joinedAt)
+                    .startOf("day")
+                    .fromNow()}`,
             },
             {
                 name: "Discord User Since",
-                value: `${moment(Target.user.createdAt).format(
-                    "MMMM Do YYYY, h:mm:ss a"
-                )}\n**-** ${moment(Target.user.createdAt)
+                value: `${moment(Target.user.createdAt).format("MMMM Do YYYY, h:mm:ss a")}\n**-** ${moment(Target.user.createdAt)
                     .startOf("day")
                     .fromNow()}`,
             }

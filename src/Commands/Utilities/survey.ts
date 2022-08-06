@@ -12,35 +12,27 @@ export default {
         .setDescription("create a survey here")
         .setDMPermission(false)
         .addStringOption((o) =>
-            o
-                .setName("type")
-                .setDescription("Multiple choice poll or Free-Response Survey")
-                .setRequired(true)
-                .setChoices(
-                    {
-                        name: "Poll",
-                        value: "true",
-                    },
-                    {
-                        name: "Survey",
-                        value: "false",
-                    }
-                )
+            o.setName("type").setDescription("Multiple choice poll or Free-Response Survey").setRequired(true).setChoices(
+                {
+                    name: "Poll",
+                    value: "true",
+                },
+                {
+                    name: "Survey",
+                    value: "false",
+                }
+            )
         )
         .addBooleanOption((o) =>
             o
                 .setName("anonymity")
-                .setDescription(
-                    "Do you want the results of this poll or survey to be shared anonymously?"
-                )
+                .setDescription("Do you want the results of this poll or survey to be shared anonymously?")
                 .setRequired(false)
         )
         .addStringOption((o) =>
             o
                 .setName("response")
-                .setDescription(
-                    "Do you want users to be able to respond to multiple answers (polls only)"
-                )
+                .setDescription("Do you want users to be able to respond to multiple answers (polls only)")
                 .setRequired(false)
                 .setChoices(
                     {
@@ -57,9 +49,7 @@ export default {
         if (interaction.options.getString("type") == "true") {
             const modal = new ModalBuilder()
                 .setCustomId(
-                    `10-${interaction.options.getString(
-                        "type"
-                    )}-${interaction.options.getBoolean(
+                    `10-${interaction.options.getString("type")}-${interaction.options.getBoolean(
                         "anonymity"
                     )}-${interaction.options.getString("response")}`
                 )
@@ -105,36 +95,17 @@ export default {
                 .setMaxLength(1024)
                 .setRequired(false);
 
-            const row1 =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    question
-                );
-            const row2 =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    answer1
-                );
-            const row3 =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    answer2
-                );
-            const row4 =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    answer3
-                );
-            const row5 =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    answer4
-                );
+            const row1 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(question);
+            const row2 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(answer1);
+            const row3 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(answer2);
+            const row4 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(answer3);
+            const row5 = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(answer4);
 
             modal.addComponents(row1, row2, row3, row4, row5);
             await interaction.showModal(modal);
         } else {
             const modal = new ModalBuilder()
-                .setCustomId(
-                    `10-${interaction.options.getString(
-                        "type"
-                    )}-${interaction.options.getBoolean("anonymity")}`
-                )
+                .setCustomId(`10-${interaction.options.getString("type")}-${interaction.options.getBoolean("anonymity")}`)
                 .setTitle("Survey Setup");
 
             const question = new TextInputBuilder()
@@ -145,10 +116,7 @@ export default {
                 .setRequired(true)
                 .setMaxLength(4000);
 
-            const row =
-                new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-                    question
-                );
+            const row = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(question);
 
             modal.addComponents(row);
             await interaction.showModal(modal);

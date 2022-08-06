@@ -1,9 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 export default {
-    data: new SlashCommandBuilder()
-        .setName("clear")
-        .setDescription("clear the queue")
-        .setDMPermission(false),
+    data: new SlashCommandBuilder().setName("clear").setDescription("clear the queue").setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         if (!interaction.member.voice.channel) {

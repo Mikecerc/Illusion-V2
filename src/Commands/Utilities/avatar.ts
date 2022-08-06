@@ -1,11 +1,11 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName("avatar")
         .setDescription("Retrieves a user's avatar")
-        .addUserOption(o => o.setName("target").setDescription("Select a target user").setRequired(true)),
+        .addUserOption((o) => o.setName("target").setDescription("Select a target user").setRequired(true)),
     execute(interaction: any) {
-        const target = interaction.options.getMember('target');
+        const target = interaction.options.getMember("target");
 
         const response = new EmbedBuilder()
             .setAuthor({ name: `${target.user.username}`, iconURL: target.user.displayAvatarURL({ dynamic: true }) })
@@ -15,5 +15,5 @@ export default {
             .setColor("Orange");
 
         return interaction.reply({ embeds: [response] });
-    }
-}
+    },
+};

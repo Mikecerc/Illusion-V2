@@ -9,7 +9,9 @@ export default {
 
 async function syncDb(client: any) {
     const res = await rrModel.find();
-    let guild: { channels: { fetch: (arg0: any) => any; }; id: string; }, channel: { messages: { fetch: (arg0: any) => any; }; id: string; }, msg: { reactions: { cache: any[]; }; id: any; };
+    let guild: { channels: { fetch: (arg0: any) => any }; id: string },
+        channel: { messages: { fetch: (arg0: any) => any }; id: string },
+        msg: { reactions: { cache: any[] }; id: any };
     for (const rr of res) {
         try {
             guild = await client.guilds.fetch(rr.guildId);
@@ -39,11 +41,7 @@ async function syncDb(client: any) {
         for (const reaction in rr.reactions) {
             let exists: boolean;
             for (const msgReaction of msgReactions) {
-                if (
-                    msgReaction.emoji.identifier ==
-                        rr.reactions[reaction].reactionRole.emoji &&
-                    msgReaction.me == true
-                ) {
+                if (msgReaction.emoji.identifier == rr.reactions[reaction].reactionRole.emoji && msgReaction.me == true) {
                     exists = true;
                 }
             }
@@ -63,18 +61,10 @@ async function syncDb(client: any) {
                 messageId: rr.messageId,
             });
         } else {
-            if (!Object.keys(client.reactionRoles).includes(guild.id))
-                client.reactionRoles[guild.id] = {};
-            if (
-                !Object.keys(client.reactionRoles[guild.id]).includes(
-                    channel.id
-                )
-            )
-                client.reactionRoles[guild.id][channel.id] = [];
-            if (!Array.isArray(client.reactionRoles[guild.id][channel.id]))
-                client.reactionRoles[guild.id][channel.id] = [];
-            if (client.reactionRoles[guild.id][channel.id].includes(msg.id))
-                return;
+            if (!Object.keys(client.reactionRoles).includes(guild.id)) client.reactionRoles[guild.id] = {};
+            if (!Object.keys(client.reactionRoles[guild.id]).includes(channel.id)) client.reactionRoles[guild.id][channel.id] = [];
+            if (!Array.isArray(client.reactionRoles[guild.id][channel.id])) client.reactionRoles[guild.id][channel.id] = [];
+            if (client.reactionRoles[guild.id][channel.id].includes(msg.id)) return;
             client.reactionRoles[guild.id][channel.id].push(msg.id);
         }
     }

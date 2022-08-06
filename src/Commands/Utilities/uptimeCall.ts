@@ -1,8 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 export default {
-    data: new SlashCommandBuilder()
-        .setName("uptime")
-        .setDescription("Display's the amount of time Void has been online"),
+    data: new SlashCommandBuilder().setName("uptime").setDescription("Display's the amount of time Void has been online"),
     execute(interaction: any) {
         let seconds = process.uptime();
         var d = Math.floor(seconds / (3600 * 24));

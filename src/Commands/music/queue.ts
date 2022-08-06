@@ -1,18 +1,6 @@
-import { AudioPlayerStatus } from "@discordjs/voice";
-import {
-    Message,
-    ActionRowBuilder,
-    ButtonBuilder,
-    EmbedBuilder,
-    SelectMenuBuilder,
-    SlashCommandBuilder,
-    ButtonStyle,
-} from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, SelectMenuBuilder, SlashCommandBuilder, ButtonStyle } from "discord.js";
 export default {
-    data: new SlashCommandBuilder()
-        .setName("queue")
-        .setDescription("lists the current queue")
-        .setDMPermission(false),
+    data: new SlashCommandBuilder().setName("queue").setDescription("lists the current queue").setDMPermission(false),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);
@@ -66,10 +54,7 @@ export default {
                         .setPlaceholder("Delete a song")
                 );
                 const refresh = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`43-10-1`)
-                        .setStyle(ButtonStyle.Primary)
-                        .setLabel('Refresh'),
+                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
                 );
                 if (options.length > 0) {
                     await interaction.followUp({
@@ -106,25 +91,12 @@ export default {
                     .setAuthor({ name: `Queue (${queue.length} tracks)` })
                     .addFields(embedFields)
                     .setFooter({
-                        text: `Page 1/${Math.ceil(
-                            queue.length / 25
-                        )} - ${time} left - Requested by: ${interaction.user.tag}`,
+                        text: `Page 1/${Math.ceil(queue.length / 25)} - ${time} left - Requested by: ${interaction.user.tag}`,
                     });
                 const buttons = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder()
-                        .setCustomId(`40-10-1`)
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji("◀️")
-                        .setDisabled(true),
-                    new ButtonBuilder()
-                        .setCustomId("41-10-1")
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji("▶️")
-                        .setDisabled(false),
-                    new ButtonBuilder()
-                        .setCustomId(`43-10-1`)
-                        .setStyle(ButtonStyle.Primary)
-                        .setLabel('Refresh'),
+                    new ButtonBuilder().setCustomId(`40-10-1`).setStyle(ButtonStyle.Secondary).setEmoji("◀️").setDisabled(true),
+                    new ButtonBuilder().setCustomId("41-10-1").setStyle(ButtonStyle.Secondary).setEmoji("▶️").setDisabled(false),
+                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
                 );
                 const dropdown = new ActionRowBuilder().addComponents(
                     new SelectMenuBuilder()

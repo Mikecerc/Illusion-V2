@@ -1,12 +1,12 @@
-import pkg from 'mongoose';
+import pkg from "mongoose";
 const { Schema, model } = pkg;
 
-const rrSchema =  new Schema({
-    guildId: String, 
+const rrSchema = new Schema({
+    guildId: String,
     messageId: String,
     channelId: String,
-    reactions: Array, 
+    reactions: Array,
     multiRole: Boolean,
 });
-const rrModel = model('rrData', rrSchema, 'rrData');
-export default rrModel; 
+const rrModel = model("rrData", rrSchema, "rrData");
+export default rrModel;

@@ -3,33 +3,23 @@ import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import os from "node:os";
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("weather")
-        .setDescription(
-            "retrieves weather data from a weather station near P-CEP"
-        ),
+    data: new SlashCommandBuilder().setName("weather").setDescription("retrieves weather data from a weather station near P-CEP"),
     async execute(interaction: any) {
         interaction.deferReply();
         const opSys = os.platform();
         let pyString: string;
         if (opSys.toString() == "win32") {
-            pyString = 'py'
+            pyString = "py";
         } else {
-            pyString = 'python3'
+            pyString = "python3";
         }
-        const process = child_process.spawn(pyString, [
-            "./src/Commands/weather/parse.py",
-        ]);
+        const process = child_process.spawn(pyString, ["./src/Commands/weather/parse.py"]);
         process.stderr.on("data", (data) => {
             console.log(String.fromCharCode.apply(null, data));
         });
 
         process.stdout.on("data", (data) => {
-            const str = String.fromCharCode
-                .apply(null, data)
-                .replace(/\s/g, "")
-                .replace("b", "")
-                .replace("'", "");
+            const str = String.fromCharCode.apply(null, data).replace(/\s/g, "").replace("b", "").replace("'", "");
             const values = str.split("-");
 
             const temp = values[0];
@@ -53,16 +43,11 @@ export default {
             const embed = new EmbedBuilder()
                 .setColor(color)
                 .setTitle("Current Weather Data")
-                .setDescription(
-                    "This weather Data was retrieved just now from a weather station right next to P-CEP"
-                )
+                .setDescription("This weather Data was retrieved just now from a weather station right next to P-CEP")
                 .addFields(
                     {
                         name: "Temperature",
-                        value: `Temperature: ${temp}\nFeels Like: ${realFeel.replace(
-                            "FeelsLike",
-                            ""
-                        )}F`,
+                        value: `Temperature: ${temp}\nFeels Like: ${realFeel.replace("FeelsLike", "")}F`,
                     },
                     {
                         name: "Dew Point",

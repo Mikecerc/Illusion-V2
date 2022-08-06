@@ -1,11 +1,5 @@
 import rrModel from "../../schemas/reactionRoleSchema.js";
-import {
-    EmbedBuilder,
-    ActionRowBuilder,
-    ButtonBuilder,
-    PermissionFlagsBits,
-    ButtonStyle,
-} from "discord.js";
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, PermissionFlagsBits, ButtonStyle } from "discord.js";
 export default {
     name: "interactionCreate",
     async execute(interaction: any, client: any) {
@@ -13,16 +7,10 @@ export default {
         const data = interaction.customId.split("-");
         const messageId = data[1];
         const channelId = data[2];
-        const role = await interaction.guild.roles.cache.find(
-            (r: { id: number; }) => r.id === data[3]
-        );
+        const role = await interaction.guild.roles.cache.find((r: { id: number }) => r.id === data[3]);
         const emojiName = data[4];
         if (data[0] == "31") {
-            if (
-                !interaction.member.permissions.has(
-                    PermissionFlagsBits.ManageGuild
-                )
-            ) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 return interaction.update({
                     content: "You cannot respond to this!",
                     embeds: [],
@@ -43,11 +31,7 @@ export default {
                 "The reaction role has been saved. To delete the reaction role, remove the message of the reaction role or remove the bots reaction to it."
             );
         if (data[0] == "30") {
-            if (
-                !interaction.member.permissions.has(
-                    PermissionFlagsBits.ManageGuild
-                )
-            ) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.ManageGuild)) {
                 return interaction.update({
                     content: "You cannot respond to this!",
                     embeds: [],
@@ -62,9 +46,7 @@ export default {
             });
             if (!res) {
                 try {
-                    const channel = await interaction.guild.channels.fetch(
-                        channelId
-                    );
+                    const channel = await interaction.guild.channels.fetch(channelId);
                     const msg = await channel.messages.fetch(messageId);
                     const doc = new rrModel();
                     doc.guildId = interaction.guild.id;
@@ -82,8 +64,10 @@ export default {
                     doc.save();
                     msg.react(emojiName);
                     if (!Object.keys(client.reactionRoles).includes(interaction.guild.id)) client.reactionRoles[interaction.guild.id] = {};
-                    if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id)) client.reactionRoles[interaction.guild.id][channel.id] = [];
-                    if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId])) client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id))
+                        client.reactionRoles[interaction.guild.id][channel.id] = [];
+                    if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId]))
+                        client.reactionRoles[interaction.guild.id][channel.id] = [];
                     if (!client.reactionRoles[interaction.guild.id][channel.id].includes(msg.id)) {
                         client.reactionRoles[interaction.guild.id][channel.id].push(msg.id);
                     }
@@ -109,15 +93,11 @@ export default {
                     .setFooter({ text: "Please select 'allow multiple' or 'Only one'" });
                 const buttons = new ActionRowBuilder().addComponents(
                     new ButtonBuilder()
-                        .setCustomId(
-                            `32-${messageId}-${channelId}-${role.id}-${emojiName}`
-                        )
+                        .setCustomId(`32-${messageId}-${channelId}-${role.id}-${emojiName}`)
                         .setLabel("Allow Multiple")
                         .setStyle(ButtonStyle.Success),
                     new ButtonBuilder()
-                        .setCustomId(
-                            `33-${messageId}-${channelId}-${role.id}-${emojiName}`
-                        )
+                        .setCustomId(`33-${messageId}-${channelId}-${role.id}-${emojiName}`)
                         .setLabel("Only One")
                         .setStyle(ButtonStyle.Danger)
                 );
@@ -138,8 +118,7 @@ export default {
             for (const rr of res.reactions) {
                 if (rr.reactionRole.emoji != emojiName) continue;
                 return interaction.update({
-                    content:
-                        "There was an error! The emoji you want to use is already assigned to a reaction role on this message",
+                    content: "There was an error! The emoji you want to use is already assigned to a reaction role on this message",
                     embeds: [],
                     components: [],
                     ephemeral: true,
@@ -182,22 +161,21 @@ export default {
             }
             if (!role.editable) {
                 return interaction.update({
-                    content:
-                        "Bot cannot edit role. Try placing the bot higher than the role you want to give in the role hierarchy list",
+                    content: "Bot cannot edit role. Try placing the bot higher than the role you want to give in the role hierarchy list",
                     ephemeral: true,
                 });
             }
             try {
-                const channel = await interaction.guild.channels.fetch(
-                    channelId
-                );
+                const channel = await interaction.guild.channels.fetch(channelId);
                 const msg = await channel.messages.fetch(messageId);
-                    if (!Object.keys(client.reactionRoles).includes(interaction.guild.id)) client.reactionRoles[interaction.guild.id] = {};
-                    if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id)) client.reactionRoles[interaction.guild.id][channel.id] = [];
-                    if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId])) client.reactionRoles[interaction.guild.id][channel.id] = [];
-                    if (!client.reactionRoles[interaction.guild.id][channel.id].includes(msg.id)) {
-                        client.reactionRoles[interaction.guild.id][channel.id].push(msg.id);
-                    }
+                if (!Object.keys(client.reactionRoles).includes(interaction.guild.id)) client.reactionRoles[interaction.guild.id] = {};
+                if (!Object.keys(client.reactionRoles[interaction.guild.id]).includes(channel.id))
+                    client.reactionRoles[interaction.guild.id][channel.id] = [];
+                if (!Array.isArray(client.reactionRoles[interaction.guild.id][channelId]))
+                    client.reactionRoles[interaction.guild.id][channel.id] = [];
+                if (!client.reactionRoles[interaction.guild.id][channel.id].includes(msg.id)) {
+                    client.reactionRoles[interaction.guild.id][channel.id].push(msg.id);
+                }
                 msg.react(emojiName);
                 return interaction.update({
                     embeds: [success],
@@ -206,8 +184,7 @@ export default {
                 });
             } catch (e) {
                 return interaction.update({
-                    content:
-                        "There was an error! Please make sure the bot has all necessary permissions!",
+                    content: "There was an error! Please make sure the bot has all necessary permissions!",
                     embeds: [],
                     components: [],
                     ephemeral: true,

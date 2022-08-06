@@ -1,8 +1,4 @@
-import {
-    joinVoiceChannel,
-    entersState,
-    VoiceConnectionStatus,
-} from "@discordjs/voice";
+import { joinVoiceChannel, entersState, VoiceConnectionStatus } from "@discordjs/voice";
 import { EmbedBuilder, GuildMember, SlashCommandBuilder } from "discord.js";
 import MusicSubscription from "../../classes/audio/subscription.js";
 import Track from "../../classes/audio/track.js";
@@ -16,7 +12,7 @@ export default {
         .setName("play")
         .setDescription("search for a song or play a youtube video/playlist or spotify playlist (experimental)")
         .setDMPermission(false)
-        .addStringOption(o => o.setName("search").setDescription("A youtube link or search term").setRequired(true)),
+        .addStringOption((o) => o.setName("search").setDescription("A youtube link or search term").setRequired(true)),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         let subscription = client.subscriptions.get(interaction.guildId);
@@ -24,10 +20,7 @@ export default {
         // If a connection to the guild doesn't already exist and the user is in a voice channel, join that channel
         // and create a subscription.
         if (!subscription) {
-            if (
-                interaction.member instanceof GuildMember &&
-                interaction.member.voice.channel
-            ) {
+            if (interaction.member instanceof GuildMember && interaction.member.voice.channel) {
                 const channel = interaction.member.voice.channel;
                 subscription = new MusicSubscription(
                     joinVoiceChannel({
@@ -44,24 +37,16 @@ export default {
 
         // If there is no subscription, tell the user they need to join a channel.
         if (!subscription) {
-            await interaction.followUp(
-                "Join a voice channel and then try that again!"
-            );
+            await interaction.followUp("Join a voice channel and then try that again!");
             return;
         }
 
         // Make sure the connection is ready before processing the user's request
         try {
-            await entersState(
-                subscription.voiceConnection,
-                VoiceConnectionStatus.Ready,
-                20e3
-            );
+            await entersState(subscription.voiceConnection, VoiceConnectionStatus.Ready, 20e3);
         } catch (error) {
             console.warn(error);
-            await interaction.followUp(
-                "Failed to join voice channel within 20 seconds, please try again later!"
-            );
+            await interaction.followUp("Failed to join voice channel within 20 seconds, please try again later!");
             return;
         }
 
@@ -92,9 +77,7 @@ export default {
                 });
                 subscription.enqueue(track);
                 await interaction.followUp(`Enqueued **${track.title}**`);
-            } else if (
-                search.startsWith("https://www.youtube.com/playlist?list=")
-            ) {
+            } else if (search.startsWith("https://www.youtube.com/playlist?list=")) {
                 const playListId = search.substring(38);
                 const res = await yts({ listId: playListId });
                 for (const video of res.videos) {
@@ -113,12 +96,8 @@ export default {
                     });
                     subscription.enqueue(track);
                 }
-                await interaction.followUp(
-                    `Enqueued Playlist:**${res.title}** (${res.videos.length} songs)`
-                );
-            } else if (
-                search.startsWith("http://www.youtube.com/playlist?list=")
-            ) {
+                await interaction.followUp(`Enqueued Playlist:**${res.title}** (${res.videos.length} songs)`);
+            } else if (search.startsWith("http://www.youtube.com/playlist?list=")) {
                 const playListId = search.substring(37);
                 const res = await yts({ listId: playListId });
                 for (const video of res.videos) {
@@ -137,12 +116,10 @@ export default {
                     });
                     subscription.enqueue(track);
                 }
-                await interaction.followUp(
-                    `Enqueued Playlist:**${res.title}** (${res.videos.length} songs)`
-                );
-            } else if (search.startsWith('https://open.spotify.com/playlist/')) {
+                await interaction.followUp(`Enqueued Playlist:**${res.title}** (${res.videos.length} songs)`);
+            } else if (search.startsWith("https://open.spotify.com/playlist/")) {
                 const spotify = new SpotifyWebApi({
-                    clientId: process.env.spotifyClientId, 
+                    clientId: process.env.spotifyClientId,
                     clientSecret: process.env.spotifyClientSecret,
                 });
                 await getToken(spotify);
@@ -151,26 +128,32 @@ export default {
                 let totalSongs = playlist.body.tracks.total;
                 totalSongs -= 1;
                 let tracks = [];
-                for (let offset = 0; offset < totalSongs;) {
+                for (let offset = 0; offset < totalSongs; ) {
                     const trackRes = await spotify.getPlaylistTracks(parsed.id, {
                         offset: offset,
-                        fields: 'items',
+                        fields: "items",
                     });
-                    for (const track of trackRes.body.items.map(t => t.track)) {
+                    for (const track of trackRes.body.items.map((t) => t.track)) {
                         tracks.push(track);
                     }
-                    if ((totalSongs - offset) > 100 ) {
+                    if (totalSongs - offset > 100) {
                         offset += 100;
                     } else {
-                        offset += (totalSongs - offset);
+                        offset += totalSongs - offset;
                     }
                 }
                 await interaction.followUp({
-                    embeds: [new EmbedBuilder().setDescription( `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists. Also note this process is experimental; some songs may queue incorrectly.`).setColor('Orange')]
+                    embeds: [
+                        new EmbedBuilder()
+                            .setDescription(
+                                `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists. Also note this process is experimental; some songs may queue incorrectly.`
+                            )
+                            .setColor("Orange"),
+                    ],
                 });
                 for (const track of tracks) {
-                    const res = await yts(`${track.name} ${track.artists[0].name}`)
-                    const info = res.videos[0]
+                    const res = await yts(`${track.name} ${track.artists[0].name}`);
+                    const info = res.videos[0];
                     const trackToEnqueue = new Track({
                         url: info.url,
                         //title: info.videoDetails.title,
@@ -186,7 +169,6 @@ export default {
                     });
                     // Enqueue the track and reply a success message to the user
                     subscription.enqueue(trackToEnqueue);
-                    
                 }
             } else {
                 const res = await yts(search);
@@ -212,9 +194,7 @@ export default {
             }
         } catch (error) {
             console.log(error);
-            await interaction.followUp(
-                "Failed to play track(s), please try again later!"
-            );
+            await interaction.followUp("Failed to play track(s), please try again later!");
         }
     },
 };
@@ -238,5 +218,5 @@ function hms(num: string) {
 }
 
 async function getToken(api) {
-    await api.clientCredentialsGrant().then(data => api.setAccessToken(data.body['access_token']));
+    await api.clientCredentialsGrant().then((data) => api.setAccessToken(data.body["access_token"]));
 }

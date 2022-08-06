@@ -1,7 +1,6 @@
 import {
     AudioPlayer,
     AudioPlayerStatus,
-    AudioResource,
     createAudioPlayer,
     entersState,
     VoiceConnection,
@@ -29,9 +28,9 @@ export default class MusicSubscription {
     loopSkipped: boolean;
     loopNpMsg = false;
     lastResource: Track;
-    interaction: { channel: { send: (arg0: any) => void; }};
+    interaction: { channel: { send: (arg0: any) => void } };
 
-    constructor(voiceConnection: VoiceConnection, interaction: { channel: { send: (arg0: any) => void; }; }) {
+    constructor(voiceConnection: VoiceConnection, interaction: { channel: { send: (arg0: any) => void } }) {
         this.loop = false;
         this.loopSkipped = false;
         this.voiceConnection = voiceConnection;
@@ -41,11 +40,7 @@ export default class MusicSubscription {
 
         this.voiceConnection.on("stateChange", async (newState: any) => {
             if (newState.status === VoiceConnectionStatus.Disconnected) {
-                if (
-                    newState.reason ===
-                        VoiceConnectionDisconnectReason.WebSocketClose &&
-                    newState.closeCode === 4014
-                ) {
+                if (newState.reason === VoiceConnectionDisconnectReason.WebSocketClose && newState.closeCode === 4014) {
                     /**
                      * If the WebSocket closed with a 4014 code, this means that we should not manually attempt to reconnect,
                      * but there is a chance the connection will recover itself if the reason of the disconnect was due to
@@ -54,11 +49,7 @@ export default class MusicSubscription {
                      * the voice connection.
                      */
                     try {
-                        await entersState(
-                            this.voiceConnection,
-                            VoiceConnectionStatus.Connecting,
-                            5_000
-                        );
+                        await entersState(this.voiceConnection, VoiceConnectionStatus.Connecting, 5_000);
                         // Probably moved voice channel
                     } catch {
                         this.voiceConnection.destroy();
@@ -68,9 +59,7 @@ export default class MusicSubscription {
                     /**
                      * The disconnect in this case is recoverable, and we also have <5 repeated attempts so we will reconnect.
                      */
-                    await wait(
-                        (this.voiceConnection.rejoinAttempts + 1) * 5_000
-                    );
+                    await wait((this.voiceConnection.rejoinAttempts + 1) * 5_000);
                     this.voiceConnection.rejoin();
                 } else {
                     /**
@@ -85,8 +74,7 @@ export default class MusicSubscription {
                 this.stop();
             } else if (
                 !this.readyLock &&
-                (newState.status === VoiceConnectionStatus.Connecting ||
-                    newState.status === VoiceConnectionStatus.Signalling)
+                (newState.status === VoiceConnectionStatus.Connecting || newState.status === VoiceConnectionStatus.Signalling)
             ) {
                 /**
                  * In the Signalling or Connecting states, we set a 20 second time limit for the connection to become ready
@@ -95,17 +83,9 @@ export default class MusicSubscription {
                  */
                 this.readyLock = true;
                 try {
-                    await entersState(
-                        this.voiceConnection,
-                        VoiceConnectionStatus.Ready,
-                        20_000
-                    );
+                    await entersState(this.voiceConnection, VoiceConnectionStatus.Ready, 20_000);
                 } catch {
-                    if (
-                        this.voiceConnection.state.status !==
-                        VoiceConnectionStatus.Destroyed
-                    )
-                        this.voiceConnection.destroy();
+                    if (this.voiceConnection.state.status !== VoiceConnectionStatus.Destroyed) this.voiceConnection.destroy();
                 } finally {
                     this.readyLock = false;
                 }
@@ -114,10 +94,7 @@ export default class MusicSubscription {
 
         // Configure audio player
         this.audioPlayer.on("stateChange", (oldState: any, newState: any) => {
-            if (
-                newState.status === AudioPlayerStatus.Idle &&
-                oldState.status !== AudioPlayerStatus.Idle
-            ) {
+            if (newState.status === AudioPlayerStatus.Idle && oldState.status !== AudioPlayerStatus.Idle) {
                 // If the Idle state is entered from a non-Idle state, it means that an audio resource has finished playing.
                 // The queue is then processed to start playing the next track, if one is available.
                 //interaction.followUp('The song has finished')
@@ -125,6 +102,7 @@ export default class MusicSubscription {
             } else if (newState.status === AudioPlayerStatus.Playing) {
                 // If the Playing state has been entered, then a new track has started playback.
                 if (this.loop && this.loopNpMsg == false) {
+                    //if loop is enabled and there hasn't been a np message yet
                     const embed = new EmbedBuilder()
                         .setColor("Orange")
                         .setAuthor({ name: "Now Playing 🔁" })
@@ -135,6 +113,7 @@ export default class MusicSubscription {
                     interaction.channel.send({ embeds: [embed] });
                     this.loopNpMsg = true;
                 } else if (!this.loop) {
+                    // if loop is disabled
                     const embed = new EmbedBuilder()
                         .setColor("Orange")
                         .setAuthor({ name: "Now Playing" })
@@ -147,11 +126,12 @@ export default class MusicSubscription {
             }
         });
 
+        //log audio player errors
         this.audioPlayer.on("error", (error) => {
             interaction.channel.send("An error has occured");
             console.warn(error);
         });
-
+        //attach audio player to voice connection
         voiceConnection.subscribe(this.audioPlayer);
     }
 
@@ -177,29 +157,22 @@ export default class MusicSubscription {
     /**
      * Attempts to play a Track from the queue.
      */
-    async processQueue(interaction: { channel: { send: (arg0: string) => void; }; }) {
+    async processQueue(interaction: { channel: { send: (arg0: string) => void } }) {
         // If the queue is locked (already being processed), is empty, or the audio player is already playing something, return
-        if (
-            this.queueLock ||
-            this.audioPlayer.state.status !== AudioPlayerStatus.Idle
-        ) {
+        if (this.queueLock || this.audioPlayer.state.status !== AudioPlayerStatus.Idle) {
             return;
         }
-        if (
-            (this.queue.length === 0 && !this.loop) ||
-            (this.queue.length === 0 && this.loopSkipped == true)
-        )
-            return;
+        if ((this.queue.length === 0 && !this.loop) || (this.queue.length === 0 && this.loopSkipped == true)) return;
         // Lock the queue to guarantee safe access
         this.queueLock = true;
 
         // Take the first item from the queue. This is guaranteed to exist due to the non-empty check above.
         let nextTrack;
-        // console.log(this.loop, this.loopSkipped, this.lastResource);
+        // if loop is enabled, use the last resource instead of shifing a new one from the queue.
         if (this.loop && this.loopSkipped == false && this.lastResource) {
             nextTrack = this.lastResource;
             if (this.loopNpMsg == false) {
-               this.queue.shift();
+                this.queue.shift();
             }
         } else {
             if (this.queue.length === 0) return; // just to be sure :)
@@ -210,16 +183,17 @@ export default class MusicSubscription {
         //const nextTrack = this.queue.shift();
         try {
             // Attempt to convert the Track into an AudioResource (i.e. start streaming the video)
-            //const resource = createAudioResource(nextTrack.url, { metadata: nextTrack })
             const stream = ytdl(nextTrack.url, {
                 filter: "audioonly",
                 quality: "highestaudio",
                 dlChunkSize: 0,
                 highWaterMark: 1 << 25,
             });
+            // create resource from ytdl steam and inject metadata (track object)
             const resource = createAudioResource(stream, {
                 metadata: nextTrack,
             });
+            //sets 'lastResource var, plays the resource and unlocks the queue. 
             this.lastResource = nextTrack;
             this.audioPlayer.play(resource);
             this.queueLock = false;

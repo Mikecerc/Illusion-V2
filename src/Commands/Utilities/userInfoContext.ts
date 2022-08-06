@@ -1,10 +1,7 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, EmbedBuilder } from "discord.js";
-import moment from 'moment'
+import moment from "moment";
 export default {
-    data: new ContextMenuCommandBuilder()
-        .setName("Get Info")
-        .setDMPermission(false)
-        .setType(ApplicationCommandType.User),
+    data: new ContextMenuCommandBuilder().setName("Get Info").setDMPermission(false).setType(ApplicationCommandType.User),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: false }).catch(() => {});
         const Target = interaction.targetMember;
@@ -43,19 +40,17 @@ export default {
         Response.addFields(
             {
                 name: "Server Member Since",
-                value: `${moment(Target.joinedAt).format(
-                    "MMMM Do YYYY, h:mm:ss a"
-                )}\n**-** ${moment(Target.joinedAt).startOf("day").fromNow()}`,
+                value: `${moment(Target.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}\n**-** ${moment(Target.joinedAt)
+                    .startOf("day")
+                    .fromNow()}`,
             },
             {
                 name: "Discord User Since",
-                value: `${moment(Target.user.createdAt).format(
-                    "MMMM Do YYYY, h:mm:ss a"
-                )}\n**-** ${moment(Target.user.createdAt)
+                value: `${moment(Target.user.createdAt).format("MMMM Do YYYY, h:mm:ss a")}\n**-** ${moment(Target.user.createdAt)
                     .startOf("day")
                     .fromNow()}`,
             }
         ).setFooter({ text: `Requested By ${interaction.user.tag}` });
         interaction.followUp({ embeds: [Response] });
-    }
-}
+    },
+};

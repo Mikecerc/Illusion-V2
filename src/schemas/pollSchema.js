@@ -1,8 +1,8 @@
-import pkg from 'mongoose';
+import pkg from "mongoose";
 const { Schema, model } = pkg;
 //create mongoose schema (class)
 const pollSchema = new Schema({
-    messageId: String, 
+    messageId: String,
     anonymous: Boolean,
     multipleResponse: Boolean,
     creator: String,
@@ -17,8 +17,8 @@ const pollSchema = new Schema({
             answers: Array,
         },
     ],
-})
+});
 //export schema as a mongoose model
-const pollModel = model('pollData', pollSchema, 'pollData');
+const pollModel = model("pollData", pollSchema, "pollData");
 
 export default pollModel;

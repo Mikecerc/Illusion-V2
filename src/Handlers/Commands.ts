@@ -44,9 +44,7 @@ export default async (client: any) => {
     const commandFolders = readdirSync("./build/Commands");
 
     for (const folder of commandFolders) {
-        const commandFiles = readdirSync(`./build/Commands/${folder}`).filter(
-            (files) => files.endsWith(".js")
-        );
+        const commandFiles = readdirSync(`./build/Commands/${folder}`).filter((files) => files.endsWith(".js"));
         for (const file of commandFiles) {
             const commandFile = await import(`../Commands/${folder}/${file}`);
             const command = commandFile.default;
@@ -73,5 +71,5 @@ export default async (client: any) => {
             }
         }
     });
-    console.log(`${commandsArry.length} command(s) registered`)
+    console.log(`${commandsArry.length} command(s) registered`);
 };

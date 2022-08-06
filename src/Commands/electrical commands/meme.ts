@@ -4,60 +4,52 @@ export default {
         .setName("meme")
         .setDescription("Get a electrical/robotics meme!")
         .addStringOption((o) =>
-            o
-                .setName("meme")
-                .setDescription("which meme do you want?")
-                .setRequired(true)
-                .setChoices(
-                    {
-                        name: "Balloon",
-                        value: "balloon",
-                    },
-                    {
-                        name: "Heygirl",
-                        value: "heygirl",
-                    },
-                    {
-                        name: "Sidthesnek",
-                        value: "sidthesnek",
-                    },
-                    {
-                        name: "Armsdeal",
-                        value: "armsdeal",
-                    },
-                    {
-                        name: "Painting",
-                        value: "painting",
-                    },
-                    {
-                        name: "Mr. O meme",
-                        value: "mromeme",
-                    },
-                    {
-                        name: "Falcon 500",
-                        value: "falcon500",
-                    },
-                    {
-                        name: "nate",
-                        value: "nate",
-                    }
-                )
+            o.setName("meme").setDescription("which meme do you want?").setRequired(true).setChoices(
+                {
+                    name: "Balloon",
+                    value: "balloon",
+                },
+                {
+                    name: "Heygirl",
+                    value: "heygirl",
+                },
+                {
+                    name: "Sidthesnek",
+                    value: "sidthesnek",
+                },
+                {
+                    name: "Armsdeal",
+                    value: "armsdeal",
+                },
+                {
+                    name: "Painting",
+                    value: "painting",
+                },
+                {
+                    name: "Mr. O meme",
+                    value: "mromeme",
+                },
+                {
+                    name: "Falcon 500",
+                    value: "falcon500",
+                },
+                {
+                    name: "nate",
+                    value: "nate",
+                }
+            )
         ),
     execute(interaction: any) {
         const meme = interaction.options.getString("meme");
         switch (meme) {
             case "balloon":
-                return interaction.reply(
-                    "https://c.tenor.com/VwbfGQlOUqUAAAAC/balloon.gif"
-                );
+                return interaction.reply("https://c.tenor.com/VwbfGQlOUqUAAAAC/balloon.gif");
             case "heygirl":
                 return interaction.reply(
                     "https://media1.tenor.com/images/0d7ca06c51ce96e11f2de2b50c1dfa7c/tenor.gif?itemid=23104409://c.tenor.com/VwbfGQlOUqUAAAAC/balloon.gif"
                 );
             case "sidthesnek":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/e85b36a911a3f9132991aa7f99e6e0ad/tenor.gif?itemid=23136057"
-                );
+                return interaction.reply("https://media1.tenor.com/images/e85b36a911a3f9132991aa7f99e6e0ad/tenor.gif?itemid=23136057");
             case "armsdeal":
                 const photoNum = Math.floor(Math.random() * 2);
                 switch (photoNum) {
@@ -71,9 +63,7 @@ export default {
                         );
                 }
             case "painting":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/243a3ae8d1acde66ecc187f47a7ce882/tenor.gif?itemid=23136199"
-                );
+                return interaction.reply("https://media1.tenor.com/images/243a3ae8d1acde66ecc187f47a7ce882/tenor.gif?itemid=23136199");
             case "mromeme":
                 const mrophotoNum = Math.floor(Math.random() * 3);
                 switch (mrophotoNum) {
@@ -91,13 +81,9 @@ export default {
                         );
                 }
             case "falcon500":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/b19b52b7d46588c3b481215253071316/tenor.gif?itemid=23110790"
-                );
+                return interaction.reply("https://media1.tenor.com/images/b19b52b7d46588c3b481215253071316/tenor.gif?itemid=23110790");
             case "nate":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/037997d9ca10df5df194ae3546fae537/tenor.gif?itemid=24521521"
-                );
+                return interaction.reply("https://media1.tenor.com/images/037997d9ca10df5df194ae3546fae537/tenor.gif?itemid=24521521");
         }
     },
 };

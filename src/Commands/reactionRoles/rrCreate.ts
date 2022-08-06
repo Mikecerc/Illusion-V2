@@ -13,8 +13,10 @@ export default {
         .setDescription("create a reaction role")
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild & PermissionFlagsBits.ManageRoles)
-        .addStringOption(o => o.setName("messageid").setDescription("message id of the message you want to add reactions to").setRequired(true))
-        .addRoleOption(o => o.setName("role").setDescription("The role you would like to be assinged").setRequired(true)),
+        .addStringOption((o) =>
+            o.setName("messageid").setDescription("message id of the message you want to add reactions to").setRequired(true)
+        )
+        .addRoleOption((o) => o.setName("role").setDescription("The role you would like to be assinged").setRequired(true)),
     async execute(interaction: any, client: any) {
         await interaction.deferReply();
         const messageId = interaction.options.getString("messageid");
@@ -33,13 +35,10 @@ export default {
         }
         if (!role.editable) {
             return interaction.followUp({
-                content:
-                    "Bot cannot edit role. Try placing the bot higher than the role you want to give in the role hierarchy list",
+                content: "Bot cannot edit role. Try placing the bot higher than the role you want to give in the role hierarchy list",
             });
         }
-        const channels = interaction.guild.channels.cache.map(
-            (channel: { id: number; }) => channel.id
-        );
+        const channels = interaction.guild.channels.cache.map((channel: { id: number }) => channel.id);
         let channelId: number;
         for (const id of channels) {
             const channel = await interaction.guild.channels.fetch(id);
@@ -70,14 +69,14 @@ export default {
             ephemeral: true,
         });
 
-        let emoji: { identifier: string; };
+        let emoji: { identifier: string };
 
-        const filter = (_reaction: any, user: { id: number; }) => {
+        const filter = (_reaction: any, user: { id: number }) => {
             return (user.id = interaction.user.id);
         };
         await collectMsg
             .awaitReactions({ filter, max: 1, time: 60000, error: ["time"] })
-            .then((collected: { first: () => { (): any; new(): any; emoji: { identifier: string; }; }; }) => {
+            .then((collected: { first: () => { (): any; new (): any; emoji: { identifier: string } } }) => {
                 emoji = collected.first().emoji;
             })
 
@@ -110,15 +109,11 @@ export default {
 
         const button = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
-                .setCustomId(
-                    `30-${messageId}-${channelId}-${role.id}-${emoji.identifier}`
-                )
+                .setCustomId(`30-${messageId}-${channelId}-${role.id}-${emoji.identifier}`)
                 .setLabel("Accept")
                 .setStyle(ButtonStyle.Success),
             new ButtonBuilder()
-                .setCustomId(
-                    `31-${messageId}-${channelId}-${role.id}-${emoji.identifier}`
-                )
+                .setCustomId(`31-${messageId}-${channelId}-${role.id}-${emoji.identifier}`)
                 .setLabel("Cancel")
                 .setStyle(ButtonStyle.Danger)
         );

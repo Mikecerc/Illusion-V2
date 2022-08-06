@@ -4,80 +4,68 @@ export default {
         .setName("person")
         .setDescription("Get a picture of a person")
         .addStringOption((o) =>
-            o
-                .setName("person")
-                .setDescription("Which person do you want a picture of")
-                .setRequired(true)
-                .addChoices(
-                    {
-                        name: "Ayush",
-                        value: "ayush",
-                    },
-                    {
-                        name: "Sashvat",
-                        value: "sashvat",
-                    },
-                    {
-                        name: "Quincy",
-                        value: "quincy",
-                    },
-                    {
-                        name: "Robert",
-                        value: "robert",
-                    },
-                    {
-                        name: "David",
-                        value: "david",
-                    },
-                    {
-                        name: "Eric",
-                        value: "eric",
-                    },
-                    {
-                        name: "Abdul",
-                        value: "abdul",
-                    },
-                    {
-                        name: "Nate",
-                        value: "nate",
-                    },
-                    {
-                        name: "Riley",
-                        value: "riley",
-                    },
-                    {
-                        name: "Mr. O Photo",
-                        value: "mrophoto",
-                    },
-                    {
-                        name: "Sid",
-                        value: "sid",
-                    },
-                    {
-                        name: "Jerry",
-                        value: "jerry",
-                    }
-                )
+            o.setName("person").setDescription("Which person do you want a picture of").setRequired(true).addChoices(
+                {
+                    name: "Ayush",
+                    value: "ayush",
+                },
+                {
+                    name: "Sashvat",
+                    value: "sashvat",
+                },
+                {
+                    name: "Quincy",
+                    value: "quincy",
+                },
+                {
+                    name: "Robert",
+                    value: "robert",
+                },
+                {
+                    name: "David",
+                    value: "david",
+                },
+                {
+                    name: "Eric",
+                    value: "eric",
+                },
+                {
+                    name: "Abdul",
+                    value: "abdul",
+                },
+                {
+                    name: "Nate",
+                    value: "nate",
+                },
+                {
+                    name: "Riley",
+                    value: "riley",
+                },
+                {
+                    name: "Mr. O Photo",
+                    value: "mrophoto",
+                },
+                {
+                    name: "Sid",
+                    value: "sid",
+                },
+                {
+                    name: "Jerry",
+                    value: "jerry",
+                }
+            )
         ),
     execute(interaction: any) {
         const person = interaction.options.getString("person");
         switch (person) {
             case "ayush":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/b797ad7ca88bcaaf36a91f23a57d244a/tenor.gif?itemid=23136058"
-                );
+                return interaction.reply("https://media1.tenor.com/images/b797ad7ca88bcaaf36a91f23a57d244a/tenor.gif?itemid=23136058");
             case "sashvat":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/4109215d90dd64ed6c012b1a4de9cd06/tenor.gif?itemid=23136112"
-                );
+                return interaction.reply("https://media1.tenor.com/images/4109215d90dd64ed6c012b1a4de9cd06/tenor.gif?itemid=23136112");
             case "quincy":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/d53c199634f6a756a079149053946163/tenor.gif?itemid=23136127"
-                );
+                return interaction.reply("https://media1.tenor.com/images/d53c199634f6a756a079149053946163/tenor.gif?itemid=23136127");
             case "robert":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/75ba376abf8890dc2b73a1af238dda2e/tenor.gif?itemid=23136141"
-                );
+                return interaction.reply("https://media1.tenor.com/images/75ba376abf8890dc2b73a1af238dda2e/tenor.gif?itemid=23136141");
             case "david":
                 const davidPhotoNum = Math.floor(Math.random() * 2);
                 switch (davidPhotoNum) {
@@ -91,13 +79,9 @@ export default {
                         );
                 }
             case "eric":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/160e84e1e0487c2de206012b49d20123/tenor.gif?itemid=23136165"
-                );
+                return interaction.reply("https://media1.tenor.com/images/160e84e1e0487c2de206012b49d20123/tenor.gif?itemid=23136165");
             case "abdul":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/0294712a2e59f00b45d7c9326443a8af/tenor.gif?itemid=23136267"
-                );
+                return interaction.reply("https://media1.tenor.com/images/0294712a2e59f00b45d7c9326443a8af/tenor.gif?itemid=23136267");
             case "nate":
                 const natePhotoNum = Math.floor(Math.random() * 11);
                 switch (natePhotoNum) {
@@ -147,9 +131,7 @@ export default {
                         );
                 }
             case "riley":
-                return interaction.reply(
-                    "https://media1.tenor.com/images/1b00d4480b666784108ad81dbe99c0f6/tenor.gif?itemid=23136375"
-                );
+                return interaction.reply("https://media1.tenor.com/images/1b00d4480b666784108ad81dbe99c0f6/tenor.gif?itemid=23136375");
             case "mrophoto":
                 const mroPhotoNum = Math.floor(Math.random() * 3);
                 switch (mroPhotoNum) {
