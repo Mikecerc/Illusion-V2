@@ -54,7 +54,8 @@ export default {
                         .setPlaceholder("Delete a song")
                 );
                 const refresh = new ActionRowBuilder().addComponents(
-                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
+                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh"),
+                    new ButtonBuilder().setCustomId(`44-10-2`).setStyle(ButtonStyle.Danger).setLabel("Scramble")
                 );
                 if (options.length > 0) {
                     await interaction.followUp({
@@ -96,7 +97,8 @@ export default {
                 const buttons = new ActionRowBuilder().addComponents(
                     new ButtonBuilder().setCustomId(`40-10-1`).setStyle(ButtonStyle.Secondary).setEmoji("◀️").setDisabled(true),
                     new ButtonBuilder().setCustomId("41-10-1").setStyle(ButtonStyle.Secondary).setEmoji("▶️").setDisabled(false),
-                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
+                    new ButtonBuilder().setCustomId(`43-10-1`).setStyle(ButtonStyle.Primary).setLabel("Refresh"),
+                    new ButtonBuilder().setCustomId(`44-10-2`).setStyle(ButtonStyle.Danger).setLabel("Scramble")
                 );
                 const dropdown = new ActionRowBuilder().addComponents(
                     new SelectMenuBuilder()

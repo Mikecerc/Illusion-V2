@@ -13,6 +13,10 @@ export default {
             } else if (data[0] == "43") {
                 let subscription = await client.subscriptions.get(interaction.guildId);
                 updateQueue(interaction, subscription, Number.parseInt(data[2]));
+            } else if (data[0] == "44") {
+                let subscription = await client.subscriptions.get(interaction.guildId);
+                subscription.queue = shuffle(subscription.queue);
+                updateQueue(interaction, subscription, Number.parseInt(data[2]));
             }
         } else if (interaction.isSelectMenu()) {
             const data = interaction.customId.split("-");
@@ -65,7 +69,8 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
                 .setPlaceholder("Delete a song")
         );
         const refresh = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId(`43-10-${currentPageIndex}`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
+            new ButtonBuilder().setCustomId(`43-10-${currentPageIndex}`).setStyle(ButtonStyle.Primary).setLabel("Refresh"),
+            new ButtonBuilder().setCustomId(`44-10-${currentPageIndex}`).setStyle(ButtonStyle.Danger).setLabel("Scramble")
         );
         if (options.length > 0) {
             await interaction.update({
@@ -136,7 +141,8 @@ async function response(interaction, newIndex, subscription) {
     const buttons = new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId(`40-10-${newIndex}`).setStyle(ButtonStyle.Secondary).setEmoji("◀️").setDisabled(buttonDisabled),
         new ButtonBuilder().setCustomId(`41-10-${newIndex}`).setStyle(ButtonStyle.Secondary).setEmoji("▶️").setDisabled(buttonDisabled0),
-        new ButtonBuilder().setCustomId(`43-10-${newIndex}`).setStyle(ButtonStyle.Primary).setLabel("Refresh")
+        new ButtonBuilder().setCustomId(`43-10-${newIndex}`).setStyle(ButtonStyle.Primary).setLabel("Refresh"),
+        new ButtonBuilder().setCustomId(`44-10-${newIndex}`).setStyle(ButtonStyle.Danger).setLabel("Scramble")
     );
     const dropdown = new ActionRowBuilder().addComponents(
         new SelectMenuBuilder()
@@ -157,4 +163,24 @@ async function response(interaction, newIndex, subscription) {
             components: [buttons],
         });
     }
+}
+
+function shuffle(arr: any[]) {
+    // randomly rearanges the items in an array
+    const result = [];
+    for (let i = arr.length - 1; i >= 0; i--) {
+        // picks an integer between 0 and i:
+        const r = Math.floor(Math.random() * (i + 1)); // NOTE: use a better RNG if cryptographic security is needed
+        // inserts the arr[i] element in the r-th free space in the shuffled array:
+        for (let j = 0, k = 0; j <= arr.length - 1; j++) {
+            if (result[j] === undefined) {
+                if (k === r) {
+                    result[j] = arr[i]; // NOTE: if array contains objects, this doesn't clone them! Use a better clone function instead, if that is needed.
+                    break;
+                }
+                k++;
+            }
+        }
+    }
+    return result;
 }
