@@ -152,7 +152,7 @@ export default {
                     embeds: [
                         new EmbedBuilder()
                             .setDescription(
-                                `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)\n note: The process of enqueuing a spotify playlist is long. It make take a while for all of the songs to be added to the queue in larger playlists. Also note this process is experimental; some songs may queue incorrectly.`
+                                `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)`
                             )
                             .setColor("Orange"),
                     ],
