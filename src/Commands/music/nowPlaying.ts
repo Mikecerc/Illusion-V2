@@ -25,7 +25,7 @@ export default {
                 //date.setSeconds(subscription.audioPlayer.state.resource.playbackDuration / 1000)
                 //const currentPlayback = date.toISOString().slice(11, 19);
                 const currentPlayback = hms((subscription.audioPlayer.state.resource.playbackDuration / 1000).toString());
-                const durationString = `${currentPlayback} / ${subscription.audioPlayer.state.resource.metadata.duration.timestamp}`;
+                const durationString = `${currentPlayback} / ${subscription.audioPlayer.state.resource.metadata.duration.timestamp ? subscription.audioPlayer.state.resource.metadata.duration.timestamp : subscription.audioPlayer.state.resource.metadata.duration }`;
                 embed
                     .setAuthor({ name: "Now Playing" })
                     .setTitle(`${subscription.audioPlayer.state.resource.metadata.title}`)

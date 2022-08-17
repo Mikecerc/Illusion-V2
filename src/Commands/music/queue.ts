@@ -26,11 +26,11 @@ export default {
                 for (const song in queue) {
                     embedFields.push({
                         name: `${Number.parseInt(song) + 1}.`,
-                        value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp}]`,
+                        value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
                     });
                     options.push({
                         label: `${queue[song].title}`,
-                        description: `[${queue[song].duration.timestamp}]`,
+                        description: `[${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
                         value: queue[song].id,
                     });
                     timeRemSec += queue[song].duration.seconds;
@@ -72,11 +72,11 @@ export default {
                 for (const song in queue.slice(0, 24)) {
                     embedFields.push({
                         name: `${Number.parseInt(song) + 1}.`,
-                        value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp}]`,
+                        value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
                     });
                     options.push({
                         label: `${queue[song].title}`,
-                        description: `[${queue[song].duration.timestamp}]`,
+                        description: `[${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
                         value: queue[song].id,
                     });
                 }

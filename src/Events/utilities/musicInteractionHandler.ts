@@ -46,11 +46,12 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
         for (const song in queue) {
             embedFields.push({
                 name: `${Number.parseInt(song) + 1}.`,
-                value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp}]`,
+                value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
+                
             });
             options.push({
                 label: `${queue[song].title}`,
-                description: `[${queue[song].duration.timestamp}]`,
+                description: `[${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
                 value: queue[song].id,
             });
             timeRemSec += queue[song].duration.seconds;
@@ -119,11 +120,11 @@ async function response(interaction, newIndex, subscription) {
     for (const song in slicedQueue) {
         embedFields.push({
             name: `${Number.parseInt(song) + 1 + newIndex * 25 - 25}.`,
-            value: `[${slicedQueue[song].title}](${slicedQueue[song].url}) [${slicedQueue[song].duration.timestamp}]`,
+            value: `[${slicedQueue[song].title}](${slicedQueue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
         });
         options.push({
             label: `${slicedQueue[song].title}`,
-            description: `[${slicedQueue[song].duration.timestamp}]`,
+            description: `[${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
             value: slicedQueue[song].id,
         });
     }

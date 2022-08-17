@@ -73,7 +73,11 @@ export default {
                         }),
                     },
                     thumbnail: res.videoDetails.thumbnails[0].url,
-                    duration: hms(res.videoDetails.lengthSeconds),
+                    duration: {
+                        timestamp: hms(res.videoDetails.lengthSeconds),
+                        seconds: res.videoDetails.lengthSeconds,
+                    },
+                    spotify: false,
                 });
                 subscription.enqueue(track);
                 await interaction.followUp(`Enqueued **${track.title}**`);
@@ -92,7 +96,8 @@ export default {
                             }),
                         },
                         thumbnail: video.thumbnail,
-                        duration: video.duration,
+                        duration: video.duration ? video.duration : { timestamp: video.duration, seconds: HmsToSeconds(video.duration) },
+                        spotify: false,
                     });
                     subscription.enqueue(track);
                 }
@@ -112,7 +117,8 @@ export default {
                             }),
                         },
                         thumbnail: video.thumbnail,
-                        duration: video.duration,
+                        duration: video.duration ? video.duration : { timestamp: video.duration, seconds: HmsToSeconds(video.duration) },
+                        spotify: false,
                     });
                     subscription.enqueue(track);
                 }
@@ -152,6 +158,25 @@ export default {
                     ],
                 });
                 for (const track of tracks) {
+                    const trackToEnqueue = new Track({
+                        title: track.name,
+                        duration: {
+                            timestamp: hms((parseInt(track.duration_ms) / 1000).toString()).toString(),
+                            seconds: parseInt(track.duration_ms) / 1000,
+                        },
+                        spotify: true,
+                        artist: track.artists[0].name,
+                        requestedBy: {
+                            text: `Requested by: ${interaction.user.tag}`,
+                            iconURL: interaction.user.displayAvatarURL({
+                                dynamic: true,
+                            }),
+                        },
+                    })
+                    subscription.enqueue(trackToEnqueue);
+                }
+                /** 
+                for (const track of tracks) {
                     const res = await yts(`${track.name} ${track.artists[0].name}`);
                     const info = res.videos[0];
                     const trackToEnqueue = new Track({
@@ -169,7 +194,8 @@ export default {
                     });
                     // Enqueue the track and reply a success message to the user
                     subscription.enqueue(trackToEnqueue);
-                }
+                } */
+                
             } else {
                 const res = await yts(search);
                 //const audioUrl = ytdl.filterFormats(info.formats, "audioonly");
@@ -186,7 +212,8 @@ export default {
                         }),
                     },
                     thumbnail: info.thumbnail,
-                    duration: info.duration,
+                    duration: info.duration ? info.duration : { timestamp: info.duration, seconds: HmsToSeconds(info.duration) },
+                    spotify: false,
                 });
                 // Enqueue the track and reply a success message to the user
                 subscription.enqueue(track);
@@ -219,4 +246,13 @@ function hms(num: string) {
 
 async function getToken(api) {
     await api.clientCredentialsGrant().then((data) => api.setAccessToken(data.body["access_token"]));
+}
+function HmsToSeconds(num: string) {
+    const ary = num.split(':');
+    if (ary.length = 2) {
+        return ((parseInt(ary[0]) * 60) + parseInt(ary[1]))
+    }
+    if (ary.length = 3) {
+        return ((parseInt(ary[0]) * 3600) + (parseInt(ary[1]) * 60) + parseInt(ary[2]))
+    }
 }

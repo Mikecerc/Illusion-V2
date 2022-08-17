@@ -12,6 +12,7 @@ import { promisify } from "node:util";
 import ytdl from "ytdl-core";
 import { EmbedBuilder } from "discord.js";
 import Track from "./track";
+import yts from "yt-search";
 const wait = promisify(setTimeout);
 
 /**
@@ -157,7 +158,7 @@ export default class MusicSubscription {
     /**
      * Attempts to play a Track from the queue.
      */
-    async processQueue(interaction: { channel: { send: (arg0: string) => void } }) {
+    async processQueue(interaction: { channel: any; user?: any }) {
         // If the queue is locked (already being processed), is empty, or the audio player is already playing something, return
         if (this.queueLock || this.audioPlayer.state.status !== AudioPlayerStatus.Idle) {
             return;
@@ -182,6 +183,20 @@ export default class MusicSubscription {
         }
         //const nextTrack = this.queue.shift();
         try {
+            if (nextTrack.spotify) {
+                const res = await yts(`${nextTrack.title} ${nextTrack.artist}`);
+                const info = res.videos[0];
+                nextTrack.url = info.url;
+                nextTrack.title = info.title;
+                nextTrack.requestedBy = {
+                    text: `Requested by: ${interaction.user.tag}`,
+                    iconURL: interaction.user.displayAvatarURL({
+                        dynamic: true,
+                    }),
+                };
+                nextTrack.thumbnail = info.thumbnail;
+                nextTrack.duration = info.duration;
+            }
             // Attempt to convert the Track into an AudioResource (i.e. start streaming the video)
             const stream = ytdl(nextTrack.url, {
                 filter: "audioonly",
@@ -193,7 +208,7 @@ export default class MusicSubscription {
             const resource = createAudioResource(stream, {
                 metadata: nextTrack,
             });
-            //sets 'lastResource var, plays the resource and unlocks the queue. 
+            //sets 'lastResource var, plays the resource and unlocks the queue.
             this.lastResource = nextTrack;
             this.audioPlayer.play(resource);
             this.queueLock = false;
