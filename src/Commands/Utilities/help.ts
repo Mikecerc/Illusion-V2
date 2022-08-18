@@ -26,7 +26,7 @@ export default {
             }
             interaction.followUp({ embeds: [embed] });
         } else {
-            const slicedList = commands.slice(0, 24);
+            const slicedList = commands.slice(0, 25);
             const embed = new EmbedBuilder()
                 .setColor("Orange")
                 .setTitle("Help")
