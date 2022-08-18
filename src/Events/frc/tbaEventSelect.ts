@@ -190,6 +190,7 @@ async function getBreakdown(interaction, eventId, team) {
         .addFields({ name: `Red Teleop Score:`, value: `${finalMatch.score_breakdown.red.teleopPoints}`, inline: true })
         .addFields({ name: `Red Ranking Points:`, value: `${finalMatch.score_breakdown.red.rp}`, inline: true })
         .addFields({ name: "Red Endgame Points:", value: `${finalMatch.score_breakdown.red.endgamePoints}`, inline: true })
+        .addFields({ name: "Red Penalty Points received", value: `${finalMatch.score_breakdown.red.foulPoints}`, inline: true })
         .addFields({
             name: "Red Endgame Levels",
             value: `${finalMatch.score_breakdown.red.endgameRobot1}, ${finalMatch.score_breakdown.red.endgameRobot2}, ${finalMatch.score_breakdown.red.endgameRobot3}`,
@@ -197,20 +198,20 @@ async function getBreakdown(interaction, eventId, team) {
         })
         .addFields({ name: "Red fouls", value: `${finalMatch.score_breakdown.red.foulCount}`, inline: true })
         .addFields({ name: "Red Technical Fouls", value: `${finalMatch.score_breakdown.red.techFoulCount}`, inline: true })
-        .addFields({ name: "Red Penalty Points received", value: `${finalMatch.score_breakdown.red.foulPoints}`, inline: true })
         .addFields({ name: `Blue Total Score:`, value: `${finalMatch.alliances.blue.score}`, inline: true })
         .addFields({ name: `Blue Auton Score:`, value: `${finalMatch.score_breakdown.blue.autoPoints}`, inline: true })
         .addFields({ name: `Blue Teleop Score:`, value: `${finalMatch.score_breakdown.blue.teleopPoints}`, inline: true })
         .addFields({ name: `Blue Ranking Points:`, value: `${finalMatch.score_breakdown.blue.rp}`, inline: true })
         .addFields({ name: "Blue Endgame Points:", value: `${finalMatch.score_breakdown.blue.endgamePoints}`, inline: true })
+        .addFields({ name: "Blue Penalty Points received", value: `${finalMatch.score_breakdown.blue.foulPoints}`, inline: true })
         .addFields({
             name: "Blue Endgame Levels",
             value: `${finalMatch.score_breakdown.blue.endgameRobot1}, ${finalMatch.score_breakdown.blue.endgameRobot2}, ${finalMatch.score_breakdown.blue.endgameRobot3}`,
             inline: true,
         })
         .addFields({ name: "Blue fouls", value: `${finalMatch.score_breakdown.blue.foulCount}`, inline: true })
-        .addFields({ name: "Blue Technical Fouls", value: `${finalMatch.score_breakdown.blue.techFoulCount}`, inline: true })
-        .addFields({ name: "Blue Penalty Points received", value: `${finalMatch.score_breakdown.blue.foulPoints}`, inline: true });
+        .addFields({ name: "Blue Technical Fouls", value: `${finalMatch.score_breakdown.blue.techFoulCount}`, inline: true });
+        
 
     let row = new ActionRowBuilder();
     if (compLevel == "qm") {
