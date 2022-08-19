@@ -1,6 +1,7 @@
 import env from "dotenv";
 import mongoose from "mongoose";
 import { Client, Collection } from "discord.js";
+import { readdirSync } from "fs";
 //setup dotenv
 env.config();
 //connect to mongoose db
@@ -17,8 +18,8 @@ client.commands = new Collection();
 client.reactionRoles = {};
 export default client;
 //run each handler file
-["Events.js", "Commands.js"].forEach((handler) => {
-    import(`./Handlers/${handler}`).then((file) => file.default(client));
+readdirSync('./build/handlers').forEach((handler) => {
+    import(`./handlers/${handler}`).then((file) => file.default(client));
 });
 //loging client
 client.login(process.env.token);

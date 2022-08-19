@@ -41,12 +41,12 @@ import { readdirSync } from "fs";
 */
 export default async (client: any) => {
     const commandsArry = [];
-    const commandFolders = readdirSync("./build/Commands");
+    const commandFolders = readdirSync("./build/commands");
 
     for (const folder of commandFolders) {
-        const commandFiles = readdirSync(`./build/Commands/${folder}`).filter((files) => files.endsWith(".js"));
+        const commandFiles = readdirSync(`./build/commands/${folder}`).filter((files) => files.endsWith(".js"));
         for (const file of commandFiles) {
-            const commandFile = await import(`../Commands/${folder}/${file}`);
+            const commandFile = await import(`../commands/${folder}/${file}`);
             const command = commandFile.default;
             await client.commands.set(command.data.name, command);
             commandsArry.push(command.data.toJSON());
