@@ -3,11 +3,11 @@
   "version": "2.0.0",
   "description": "Discord Bot illusion for 862 electrical (version 2.0.0)",
   "type": "module",
-  "main": "./build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "listGuilds": "node ./src/util/listGuilds.js"
+    "listGuilds": "node ./dist/util/listGuilds.js"
   },
   "author": "C. Michael",
   "license": "ISC",

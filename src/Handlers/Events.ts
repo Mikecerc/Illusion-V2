@@ -1,10 +1,10 @@
 import { readdirSync } from "fs";
 export default async (client: any) => {
     //list all sub-folders in events folder
-    const eventFolders = readdirSync("./build/events");
+    const eventFolders = readdirSync("./dist/events");
     for (const folder of eventFolders) {
         //lists files in each of the folders
-        const eventFiles = readdirSync(`./build/events/${folder}`).filter((files) => files.endsWith(".js"));
+        const eventFiles = readdirSync(`./dist/events/${folder}`).filter((files) => files.endsWith(".js"));
         for (const file of eventFiles) {
             // imports each file
             const eventFile = await import(`../events/${folder}/${file}`);

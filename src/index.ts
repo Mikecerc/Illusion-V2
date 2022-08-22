@@ -18,7 +18,7 @@ client.commands = new Collection();
 client.reactionRoles = {};
 export default client;
 //run each handler file
-readdirSync('./build/handlers').forEach((handler) => {
+readdirSync('./dist/handlers').forEach((handler) => {
     import(`./handlers/${handler}`).then((file) => file.default(client));
 });
 //loging client
