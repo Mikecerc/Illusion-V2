@@ -51,16 +51,6 @@ export default {
         }
 
         try {
-            /*if (
-                search.includes("youtube.com/watch?v=") &&
-                (search.includes("https://") || search.includes("http://"))
-            ) {
-                //info = await ytdl.getInfo(search);
-                res = await yts(search);
-            } else {
-                res = await yts(search);
-                //info = await ytdl.getInfo(res.videos[0].url);    
-            } **/
             if (ytdl.validateURL(search)) {
                 const res = await ytdl.getInfo(search);
                 const track = new Track({
@@ -131,76 +121,22 @@ export default {
                 await getToken(spotify);
                 const parsed: any = spotifyUri.parse(search);
                 const playlist = await spotify.getPlaylist(parsed.id);
-                let totalSongs = playlist.body.tracks.total;
-                totalSongs -= 1;
-                let tracks = [];
-                for (let offset = 0; offset < totalSongs; ) {
-                    const trackRes = await spotify.getPlaylistTracks(parsed.id, {
-                        offset: offset,
-                        fields: "items",
-                    });
-                    for (const track of trackRes.body.items.map((t) => t.track)) {
-                        tracks.push(track);
-                    }
-                    if (totalSongs - offset > 100) {
-                        offset += 100;
-                    } else {
-                        offset += totalSongs - offset;
-                    }
-                }
-                await interaction.followUp({
-                    embeds: [
-                        new EmbedBuilder()
-                            .setDescription(
-                                `Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)`
-                            )
-                            .setColor("Orange"),
-                    ],
+                handleSpotify(playlist, spotify, interaction, search, parsed, false);
+            } else if (search.startsWith("https://open.spotify.com/album/")) {
+                const spotify = new SpotifyWebApi({
+                    clientId: process.env.spotifyClientId,
+                    clientSecret: process.env.spotifyClientSecret,
                 });
-                for (const track of tracks) {
-                    const trackToEnqueue = new Track({
-                        title: track.name,
-                        duration: {
-                            timestamp: hms((parseInt(track.duration_ms) / 1000).toString()).toString(),
-                            seconds: parseInt(track.duration_ms) / 1000,
-                        },
-                        spotify: true,
-                        artist: track.artists[0].name,
-                        requestedBy: {
-                            text: `Requested by: ${interaction.user.tag}`,
-                            iconURL: interaction.user.displayAvatarURL({
-                                dynamic: true,
-                            }),
-                        },
-                    })
-                    subscription.enqueue(trackToEnqueue);
-                }
-                /** 
-                for (const track of tracks) {
-                    const res = await yts(`${track.name} ${track.artists[0].name}`);
-                    const info = res.videos[0];
-                    const trackToEnqueue = new Track({
-                        url: info.url,
-                        //title: info.videoDetails.title,
-                        title: info.title,
-                        requestedBy: {
-                            text: `Requested by: ${interaction.user.tag}`,
-                            iconURL: interaction.user.displayAvatarURL({
-                                dynamic: true,
-                            }),
-                        },
-                        thumbnail: info.thumbnail,
-                        duration: info.duration,
-                    });
-                    // Enqueue the track and reply a success message to the user
-                    subscription.enqueue(trackToEnqueue);
-                } */
-                
+                await getToken(spotify);
+                const parsed: any = spotifyUri.parse(search);
+                const playlist = await spotify.getAlbum(parsed.id);
+                handleSpotify(playlist, spotify, interaction, search, parsed, true);
             } else {
                 const res = await yts(search);
                 //const audioUrl = ytdl.filterFormats(info.formats, "audioonly");
                 // Attempt to create a Track from the user's video URL
                 const info = res.videos[0];
+                if (!info) return interaction.followUp("No results");
                 const track = new Track({
                     url: info.url,
                     //title: info.videoDetails.title,
@@ -248,11 +184,62 @@ async function getToken(api) {
     await api.clientCredentialsGrant().then((data) => api.setAccessToken(data.body["access_token"]));
 }
 function HmsToSeconds(num: string) {
-    const ary = num.split(':');
-    if (ary.length = 2) {
-        return ((parseInt(ary[0]) * 60) + parseInt(ary[1]))
+    const ary = num.split(":");
+    if ((ary.length = 2)) {
+        return parseInt(ary[0]) * 60 + parseInt(ary[1]);
     }
-    if (ary.length = 3) {
-        return ((parseInt(ary[0]) * 3600) + (parseInt(ary[1]) * 60) + parseInt(ary[2]))
+    if ((ary.length = 3)) {
+        return parseInt(ary[0]) * 3600 + parseInt(ary[1]) * 60 + parseInt(ary[2]);
+    }
+}
+async function handleSpotify(playlist, spotify, interaction, search, parsed, album) {
+    let subscription = await interaction.client.subscriptions.get(interaction.guildId);
+    let totalSongs = playlist.body.tracks.total;
+    totalSongs -= 1;
+    let tracks = [];
+    for (let offset = 0; offset < totalSongs; ) {
+        const trackRes =
+            album === false
+                ? await spotify.getPlaylistTracks(parsed.id, {
+                      offset: offset,
+                      fields: "items",
+                  })
+                : await spotify.getAlbumTracks(parsed.id, {
+                      offset: offset,
+                      fields: "items",
+                  });
+        for (const track of album === false ? trackRes.body.items.map((t) => t.track) : trackRes.body.items.map((t) => t)) {
+            tracks.push(track);
+        }
+        if (totalSongs - offset > 100) {
+            offset += 100;
+        } else {
+            offset += totalSongs - offset;
+        }
+    }
+    await interaction.followUp({
+        embeds: [
+            new EmbedBuilder()
+                .setDescription(`Enqueuing Spotify Playlist:[**${playlist.body.name}**](${search}) (${playlist.body.tracks.total} songs)`)
+                .setColor("Orange"),
+        ],
+    });
+    for (const track of tracks) {
+        const trackToEnqueue = new Track({
+            title: track.name,
+            duration: {
+                timestamp: hms((parseInt(track.duration_ms) / 1000).toString()).toString(),
+                seconds: parseInt(track.duration_ms) / 1000,
+            },
+            spotify: true,
+            artist: track.artists[0].name,
+            requestedBy: {
+                text: `Requested by: ${interaction.user.tag}`,
+                iconURL: interaction.user.displayAvatarURL({
+                    dynamic: true,
+                }),
+            },
+        });
+        subscription.enqueue(trackToEnqueue);
     }
 }

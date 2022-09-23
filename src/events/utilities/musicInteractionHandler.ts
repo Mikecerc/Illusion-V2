@@ -24,15 +24,25 @@ export default {
             }
         } else if (interaction.isSelectMenu()) {
             const data = interaction.customId.split("-");
-            if (data[0] != "42") return;
-            let subscription = await client.subscriptions.get(interaction.guildId);
-            if (!subscription) return noSub(interaction);
-            for (const videoId of interaction.values) {
-                const track = await subscription.queue.find((t) => t.id == videoId);
-                subscription.queue.splice(subscription.queue.indexOf(track), 1);
+            if (data[0] == "42") {
+                let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
+                for (const videoId of interaction.values) {
+                    const track = await subscription.queue.find((t) => t.id == videoId);
+                    subscription.queue.splice(subscription.queue.indexOf(track), 1);
+                }
+
+                //interaction.reply(`${interaction.values.length} track(s) deleted`)
+            } else if (data[0] == "45") {
+                let subscription = await client.subscriptions.get(interaction.guildId);
+                if (!subscription) return noSub(interaction);
+                for (const videoId of interaction.values) {
+                    const track = await subscription.queue.find((t) => t.id == videoId);
+                    subscription.queue.splice(subscription.queue.indexOf(track), 1);
+                    subscription.queue = [track, ...subscription.queue];
+                }
+                updateQueue(interaction, subscription, Number.parseInt(data[2]));
             }
-            updateQueue(interaction, subscription, Number.parseInt(data[2]));
-            //interaction.reply(`${interaction.values.length} track(s) deleted`)
         }
     },
 };
@@ -46,8 +56,9 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
         for (const song in queue) {
             embedFields.push({
                 name: `${Number.parseInt(song) + 1}.`,
-                value: `[${queue[song].title}](${queue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
-                
+                value: `[${queue[song].title}](${queue[song].url}) [${
+                    queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration
+                }]`,
             });
             options.push({
                 label: `${queue[song].title}`,
@@ -74,6 +85,12 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
                 .setOptions(options)
                 .setPlaceholder("Delete a song")
         );
+        const moveToTop = new ActionRowBuilder().addComponents(
+            new SelectMenuBuilder()
+                .setCustomId("45-10-1")
+                .setOptions(options)
+                .setPlaceholder("Move to the top")
+        );
         const refresh = new ActionRowBuilder().addComponents(
             new ButtonBuilder().setCustomId(`43-10-${currentPageIndex}`).setStyle(ButtonStyle.Primary).setLabel("Refresh"),
             new ButtonBuilder().setCustomId(`44-10-${currentPageIndex}`).setStyle(ButtonStyle.Danger).setLabel("Scramble")
@@ -81,7 +98,7 @@ async function updateQueue(interaction: any, subscription: any, currentPageIndex
         if (options.length > 0) {
             await interaction.update({
                 embeds: [embed],
-                components: [dropdown, refresh],
+                components: [dropdown, moveToTop, refresh],
             });
         } else {
             await interaction.update({ embeds: [embed], components: [refresh] });
@@ -120,7 +137,9 @@ async function response(interaction, newIndex, subscription) {
     for (const song in slicedQueue) {
         embedFields.push({
             name: `${Number.parseInt(song) + 1 + newIndex * 25 - 25}.`,
-            value: `[${slicedQueue[song].title}](${slicedQueue[song].url}) [${queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration}]`,
+            value: `[${slicedQueue[song].title}](${slicedQueue[song].url}) [${
+                queue[song].duration.timestamp ? queue[song].duration.timestamp : queue[song].duration
+            }]`,
         });
         options.push({
             label: `${slicedQueue[song].title}`,
@@ -158,10 +177,16 @@ async function response(interaction, newIndex, subscription) {
             .setOptions(options)
             .setPlaceholder("Delete a song")
     );
+    const moveToTop = new ActionRowBuilder().addComponents(
+        new SelectMenuBuilder()
+            .setCustomId(`42-10-${newIndex}`)
+            .setOptions(options)
+            .setPlaceholder("Move to the top")
+    );
     if (options.length > 0) {
         await interaction.update({
             embeds: [embed],
-            components: [dropdown, buttons],
+            components: [dropdown, moveToTop, buttons],
         });
     } else {
         await interaction.update({
@@ -192,6 +217,6 @@ function shuffle(arr: any[]) {
 }
 
 async function noSub(interaction) {
-    const noSubEmbed = new EmbedBuilder().setColor('Orange').setDescription("The bot is not playing in this server.");
+    const noSubEmbed = new EmbedBuilder().setColor("Orange").setDescription("The bot is not playing in this server.");
     interaction.update({ embeds: [noSubEmbed], components: [] });
 }
