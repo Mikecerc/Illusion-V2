@@ -4,7 +4,8 @@ export default {
     data: new ContextMenuCommandBuilder().setName("translate").setDMPermission(false).setType(ApplicationCommandType.Message),
     async execute(interaction) {
         await interaction.deferReply();
-        if(interaction.targetMessage.embeds.length > 0) return interaction.followUp("you cannot translate this")
+        if(interaction.targetMessage.embeds.length > 0) return interaction.followUp("you cannot translate this");
+        if(interaction.targetMessage.length !> 0 ) return interaction.followUp("you cannot translate this");
         const message = interaction.targetMessage.content.slice(0,4999);
         const res: any = await translate(message, { to: "en", autoCorrect: true});
         const Response = new EmbedBuilder()
