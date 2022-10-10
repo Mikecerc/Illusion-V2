@@ -8,7 +8,8 @@ export default {
         if(interaction.targetMessage.length !> 0 ) return interaction.followUp("you cannot translate this");
         if(interaction.targetMessage.attachments.size > 0 ) return interaction.followUp("you cannot translate this");
         const message = interaction.targetMessage.content.slice(0,4999);
-        const res: any = await translate(message, { to: "en", autoCorrect: true});
+        try {
+            const res: any = await translate(message, { to: "en", autoCorrect: true});
         const Response = new EmbedBuilder()
         .setAuthor({
             name: `${interaction.targetMessage.author.username}`,
@@ -25,5 +26,9 @@ export default {
            value: res.text.slice(0,1023),
         });
         return await interaction.followUp({embeds: [Response]});
+        }
+        catch {
+            return await interaction.followUp("oh no! There was an error. Please try again later.")
+        }
     },
 };
