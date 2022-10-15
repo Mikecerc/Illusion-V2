@@ -13,7 +13,7 @@ export default {
         } else {
             pyString = "python3";
         }
-        const process = child_process.spawn(pyString, ["./src/Commands/weather/parse.py"]);
+        const process = child_process.spawn(pyString, ["./src/commands/weather/parse.py"]);
         process.stderr.on("data", (data) => {
             console.log(String.fromCharCode.apply(null, data));
         });
