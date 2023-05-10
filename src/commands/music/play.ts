@@ -30,7 +30,7 @@ export default {
                     }),
                     interaction
                 );
-                subscription.voiceConnection.on("error", console.warn);
+                subscription.voiceConnection.on("error", (error) => console.warn(error));
                 client.subscriptions.set(interaction.guildId, subscription);
             }
         }
